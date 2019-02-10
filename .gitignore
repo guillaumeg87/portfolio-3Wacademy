@@ -1,0 +1,6 @@
+.htaccess
+.idea
+.idea*
+.DS_Store
+*.sql
+App/Connection/DB_param.php
