@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Portfolio</title>
+</head>
+<body>
+    <h1>Installation du projet</h1>
+    <form action="/install/check-install" method="post">
+        <fieldset>
+            <legend>
+                Compte Administrateur
+            </legend>
+            <div>
+                <label for="login">Login</label>
+                <input id="login" name="login" type="text"/>
+            </div>
+            <div>
+                <label for="pwd"">Mot de passe</label>
+                <input id="pwd" name="pwd" type="pwd"/>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>
+                Informations base de données
+            </legend>
+            <div>
+                <label for="name">Nom de la base de donnée</label>
+                <input id="name" name="name" type="text"/>
+            </div>
+            <div>
+                <label for="host">Host</label>
+                <input id="host" name="host" type="text"/>
+            </div>
+            <div>
+                <label for="admin">Admin</label>
+                <input id="admin" name="admin" type="text"/>
+            </div>
+            <div>
+                <label for="password">Mot de passe</label>
+                <input id="password" name="password" type="password"/>
+            </div>
+            <input type="hidden" name="private" value="true">
+            <button type="submit">Installer</button>
+        </fieldset>
+    </form>
+</body>
+</html>

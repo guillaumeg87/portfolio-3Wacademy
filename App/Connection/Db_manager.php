@@ -2,6 +2,9 @@
 
 namespace Connection;
 
+use PDO;
+use App\Connection\DB_conf;
+
 class Db_manager
 {
     /**
@@ -26,11 +29,11 @@ class Db_manager
     /**
      * Db_manager constructor.
      */
-    public function __construct($host, $name, $admin, $pwd){
-        $this->host = $host;
-        $this->name = $name;
-        $this->admin = $admin;
-        $this->pwd = $pwd;
+    public function __construct(DB_conf $conf){
+        $this->host = $conf::HOST;
+        $this->name = $conf::DB_NAME;
+        $this->admin = $conf::ADMIN;
+        $this->pwd = $conf::PWD;
     }
 
     /**
@@ -41,29 +44,9 @@ class Db_manager
 
         $dsn = "mysql:host=" . $this->host . ";dbname=" . $this->name;
         $com_bdd = new PDO($dsn, $this->admin, $this->pwd);
+        $com_bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $com_bdd -> exec("SET NAMES UTF8");
         return $com_bdd;
     }
 
-    /**
-     * Création de la base de donnée
-     */
-    public function database_builder(){
-// Create connection
-        $conn = new mysqli($this->host, $this->admin, $this->pwd);
-// Check connection
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
-
-// Create database
-        $sql = "CREATE DATABASE " . $this->name;
-        if ($conn->query($sql) === TRUE) {
-            echo "Database created successfully";
-        } else {
-            echo "Error creating database: " . $conn->error;
-        }
-
-        $conn->close();
-    }
 }

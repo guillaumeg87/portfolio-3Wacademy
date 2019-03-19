@@ -1,0 +1,13 @@
+HEADER
+<?php
+require_once 'App/Autoload.php';
+
+App\Autoload::register();use Front\Controller\IndexController;
+
+$controller = new IndexController();
+$et = $controller->headerFront();
+
+echo '<h2>' . $et['header'] . '</h2>';
+
+
+?>

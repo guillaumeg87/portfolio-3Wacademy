@@ -1,18 +1,16 @@
-<h1>Debut portfolio</h1>
 <?php
 require_once 'App/Autoload.php';
-use Connection\Db_manager;
-use Router\Router;
-use App\Connection\DB_param as DB;
 App\Autoload::register();
 
-/**
- * Creer une commande de création de la base de donnée avec les datas en options
- * => faire un fichier de constante pour garder ça
- * => mais ne pas commiter le fichier
- */
-$p = new Db_manager(DB::HOST, DB::DB_NAME, DB::ADMIN, DB::PWD);
-// $p->connection();
-$rooter = new Router();
+use Router\Router;
+use App\Admin\Core\DatabaseBuilder ;
+
+$router = new Router();
+$private = false;
+if(!file_exists(DatabaseBuilder::FILE_DB_CONF)) {
+    $private = true;
+}
+$router->path($private);
+    //include('App/Front/Resources/views/main_layout.phtml');
+
 ?>
-<a href="<?= $rooter->path('admin/login') ?>">Admin Login</a>
