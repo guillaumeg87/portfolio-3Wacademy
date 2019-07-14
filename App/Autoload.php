@@ -17,8 +17,16 @@ class Autoload{
      * @param $class string Le nom de la classe à charger
      */
     static function autoload($class){
-        $class = str_replace('\\', '/', $class);
-        $class = str_replace(__NAMESPACE__, strtolower(__NAMESPACE__), $class);
+
+        var_dump('HELLO AUTOLOAD');
+        $nameSpace = explode('\\', $class);
+
+        foreach($nameSpace as $key =>  $value){
+            if(end(array_keys($nameSpace)) !== $key){
+                $nameSpace[$key] = ucfirst($value);
+            }
+        }
+        $class = implode('/', $nameSpace);
         require $class.'.php';
     }
 

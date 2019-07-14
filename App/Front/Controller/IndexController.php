@@ -2,25 +2,17 @@
 
 namespace Front\Controller;
 
-class IndexController
+use Admin\Core\AbstractController;
+
+/**
+ * Class IndexController
+ * @package Front\Controller
+ */
+class IndexController extends AbstractController
 {
-    public function indexFront(){
-        //return 'App/Front/Resources/views/home.phtml';
-        return "App/Admin/Resources/views/admin_login.phtml";
-
-    }
-
-    /**
-     *
-     */
-    public function headerFront(){
-        return ['header' => 'Hello header depuis controller'];
-    }
-
-    /**
-     *
-     */
-    public function footerFront(){
-        return ['footer' => 'Hello footer depuis controller'];
+    public function index(){
+        var_dump('index front');
+        var_dump('bordel l\'autoload marche!!!!!');
+        $this->render("home");
     }
 }
