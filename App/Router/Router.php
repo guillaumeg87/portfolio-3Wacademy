@@ -2,80 +2,34 @@
 
 namespace Router;
 
-use Admin\Controller\LoginController;
-use App\Admin\Core\DatabaseBuilder;
-use App\Admin\Core\InstallController;
-
 class Router
 {
-    /**
-     * @param bool $private
-     */
-    public function path($private = false)
+    const ADMIN_PATH = "Admin/Controller/";
+    const FRONT_PATH = "Front/Controller/";
+    const MATCH_ADMIN = '/[admin::(.*?)]/';
+
+    static public function parse($url, $request)
     {
-        $path = $_SERVER['REQUEST_URI'];
+        $explode_url = explode('/', trim($url));
+        if (preg_match(self::MATCH_ADMIN, $explode_url[1])) {
+            $request->controller = "admin";
+            $request->action = ($explode_url[1] === 'admin')? 'index' : $explode_url[1];
+            $request->path = self::ADMIN_PATH;
+            //$request->action = array_slice(explode('/', $url),2);
+            $request->params = [];
 
-        if(!empty($_POST['private'])){
-            $private = $_POST['private'];
-        }
+        } else {
+            $explode_url = array_slice($explode_url, 2);
 
-        if($private){
-            $this->privatePath($path);
-        }
-        else{
-            $this->publicPath($path);
-        }
-    }
+            $request->action = $explode_url[1];
+            $request->path = self::FRONT_PATH;
 
-    private function publicPath($path){
-
-        switch ($path){
-            case '/':
-                // Add Controller
-                require 'App/Front/Resources/views/main_layout.phtml';
-                break;
-
-            case '/admin/login':
-
-                $controller = new LoginController();
-                return $controller->loginAdmin();
-                break;
-
-            case '/admin/login/check':
-
-                $controller = new LoginController();
-                return $controller->loginAdmin();
-                break;
-
-            default:
-                // Add Controller
-
-                require 'App/Front/Resources/views/404.phtml';
-                break;
-        }
-    }
-
-    private function privatePath($path){
-
-        switch ($path){
-            case '/':
-            case '/install/project':
-
-                $install = new InstallController();
-                $install->installProject();
-                break;
-
-            case '/install/check-install':
-
-                $controller = new DatabaseBuilder();
-                $controller->form();
-                break;
-
-            default:
-                // Add Controller
-
-                require 'App/Front/Resources/views/404.phtml';
-                break;
+            if (null === $explode_url[0]){
+                $explode_url[0] = 'index';
+                $request->action = 'index';
+            }
+            $request->controller = ucfirst($explode_url[0]);
+            $request->params = array_slice($explode_url, 2);
         }
     }
 }

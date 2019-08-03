@@ -2,25 +2,16 @@
 
 namespace Front\Controller;
 
-class IndexController
+use Admin\Core\AbstractController;
+
+/**
+ * Class IndexController
+ * @package Front\Controller
+ */
+class IndexController extends AbstractController
 {
-    public function indexFront(){
-        //return 'App/Front/Resources/views/home.phtml';
-        return "App/Admin/Resources/views/admin_login.phtml";
+    public function index(){
 
-    }
-
-    /**
-     *
-     */
-    public function headerFront(){
-        return ['header' => 'Hello header depuis controller'];
-    }
-
-    /**
-     *
-     */
-    public function footerFront(){
-        return ['footer' => 'Hello footer depuis controller'];
+        $this->render(__NAMESPACE__, "index");
     }
 }
