@@ -27,8 +27,6 @@ class Dispatcher
     {
 
         $name = str_replace('/', '\\', $this->request->path) . ucfirst($this->request->controller . "Controller");
-
-        var_dump($name);
         $controller = new $name();
 
         return $controller;

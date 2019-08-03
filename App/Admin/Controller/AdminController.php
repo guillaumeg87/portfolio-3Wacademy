@@ -2,10 +2,12 @@
 
 namespace Admin\Controller;
 
-class AdminController
+use Admin\Core\AbstractController;
+
+class AdminController extends AbstractController
 {
     public function index()
     {
-        var_dump('hello controller admin');
+        $this->render(__NAMESPACE__, "admin_login");
     }
 }

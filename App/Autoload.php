@@ -18,7 +18,6 @@ class Autoload{
      */
     static function autoload($class){
 
-        var_dump('HELLO AUTOLOAD');
         $nameSpace = explode('\\', $class);
 
         foreach($nameSpace as $key =>  $value){

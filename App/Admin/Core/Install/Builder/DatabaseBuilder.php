@@ -28,7 +28,7 @@ final class DB_conf
      */
     public function form()
     {
-        include('App/Admin/Core/Resources/views/installation_form.phtml');
+        include('App/Admin/Core/Resources/Views/installation_form.phtml');
         if (!empty($_POST)) {
             $data = [];
 

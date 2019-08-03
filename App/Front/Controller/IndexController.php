@@ -11,8 +11,7 @@ use Admin\Core\AbstractController;
 class IndexController extends AbstractController
 {
     public function index(){
-        var_dump('index front');
-        var_dump('bordel l\'autoload marche!!!!!');
-        $this->render("home");
+
+        $this->render(__NAMESPACE__, "index");
     }
 }
