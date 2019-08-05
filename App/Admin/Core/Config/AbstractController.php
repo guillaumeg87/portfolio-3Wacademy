@@ -1,6 +1,6 @@
 <?php
 
-namespace Admin\Core;
+namespace Admin\Core\Config;
 
 class AbstractController
 {
@@ -16,18 +16,18 @@ class AbstractController
      */
     private $vars = [];
 
-    public function set($d)
+    public function addRenderOptions($options)
     {
-        $this->vars = array_merge($this->vars, $d);
+        $this->vars['options'] = array_merge($this->vars, $options);
     }
 
     /**
      * @param $namespace
      * @param $filename
      */
-    public function render($namespace, $filename)
+    public function render($namespace, $filename, $options = [])
     {
-
+        $this->addRenderOptions($options);
         $path = $this->handleNamespace($namespace);
         extract($this->vars);
         ob_start();
@@ -74,6 +74,7 @@ class AbstractController
     }
 
     /**
+     *
      * @param $vars
      * @return string
      */

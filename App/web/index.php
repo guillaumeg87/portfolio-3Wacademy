@@ -6,8 +6,6 @@ use App\Autoload;
 define('WEBROOT', str_replace("web/index.php", "", $_SERVER["SCRIPT_NAME"]));
 define('ROOT', str_replace("web/index.php", "", $_SERVER["SCRIPT_FILENAME"]));
 
- //var_dump(ROOT); //=> /var/www/html/portfolio-3Wacademy/App/
-
 require_once ('../Autoload.php');
 Autoload::register();
 

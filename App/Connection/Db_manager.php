@@ -3,7 +3,7 @@
 namespace Connection;
 
 use PDO;
-use App\Connection\DB_conf;
+use Connection\DB_conf;
 
 class Db_manager
 {

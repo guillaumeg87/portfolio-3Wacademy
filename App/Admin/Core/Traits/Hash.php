@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Admin\Core\Traits;
+namespace Admin\Core\Traits;
 
 trait Hash
 {

@@ -2,12 +2,13 @@
 
 namespace Admin\Controller;
 
-use Admin\Core\AbstractController;
+use Admin\Core\Config\AbstractController;
 
 class AdminController extends AbstractController
 {
-    public function index()
+    public function index($options = [])
     {
-        $this->render(__NAMESPACE__, "admin_login");
+
+        $this->render(__NAMESPACE__, "admin_login", $options);
     }
 }

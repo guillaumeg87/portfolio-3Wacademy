@@ -5,8 +5,15 @@
     <title>Portfolio</title>
 </head>
 <body>
+    <?php
+    if (!empty($this->vars['options']['flash-message'])) { ?>
+        <div class="<?= $this->vars['type-class'] ?>">
+            <p><?= $this->vars['options']['flash-message'] ?></p>
+        </div>
+    <?php } ?>
     <h1>Installation du projet</h1>
-    <form action="/install/check-install" method="post">
+    <form action="/install/checkInstall" method="post">
+        <h2 style="color:#900;">Penser à mettre les champs en required !!</h2>
         <fieldset>
             <legend>
                 Compte Administrateur
