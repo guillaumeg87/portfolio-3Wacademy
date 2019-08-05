@@ -19,7 +19,6 @@ class Autoload{
     static function autoload($class){
 
         $nameSpace = explode('\\', $class);
-
         foreach($nameSpace as $key =>  $value){
             if(end(array_keys($nameSpace)) !== $key){
                 $nameSpace[$key] = ucfirst($value);

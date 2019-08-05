@@ -1,4 +1,11 @@
 <section>
+    <?php
+    if (!empty($this->vars['options']['flash-message'])) { ?>
+        <div class="<?= $this->vars['type-class'] ?>">
+            <p><?= $this->vars['options']['flash-message'] ?></p>
+        </div>
+    <?php } ?>
+
     <h1>Admin login</h1>
     <form action="/admin/login/check" method="post">
         <div>

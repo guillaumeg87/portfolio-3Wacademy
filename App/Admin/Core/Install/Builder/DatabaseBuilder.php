@@ -1,20 +1,25 @@
 <?php
-namespace App\Admin\Core;
-use App\Admin\Core\Traits\Hash;
-use App\Connection\DB_conf;
+
+namespace Admin\Core\Install\Builder;
+
+use Admin\Controller\AdminController;
+use Admin\Controller\InstallController;
+use Admin\Core\Traits\Hash;
+use Connection\Db_conf;
 use Connection\Db_manager;
 use PDO;
 use PDOException;
 use Router\Router;
+use Services\FlashMessages\FlashMessage;
 
 class DatabaseBuilder
 {
     use Hash;
 
     const DB_INSTALL = ['DB_NAME', 'HOST', 'ADMIN', 'PWD'];
-    const FILE_DB_CONF = 'App/Connection/DB_conf.php';
+    const FILE_DB_CONF = '../Connection/DB_conf.php';
     const FILE_START = '<?php 
-namespace App\Connection;
+namespace Connection;
 
 final class DB_conf
 {
@@ -24,11 +29,10 @@ final class DB_conf
 ';
 
     /**
-     *
+     * Get data from Install form
      */
     public function form()
     {
-        include('App/Admin/Core/Resources/Views/installation_form.phtml');
         if (!empty($_POST)) {
             $data = [];
 
@@ -43,10 +47,9 @@ final class DB_conf
             }
 
             // Delete Admin acces before Write database config in file
-            foreach ($admin as $key => $value){
+            foreach ($admin as $key => $value) {
                 unset($data[strtoupper($key)]);
             }
-
             $this->init_param($data, $admin);
         }
 
@@ -59,10 +62,10 @@ final class DB_conf
      */
     public function init_param($param, $admin)
     {
-
         if (!file_exists(self::FILE_DB_CONF)) {
 
             $array_const = array_combine(self::DB_INSTALL, $param);
+            $config_file = [];
 
             foreach ($array_const as $key => $value) {
 
@@ -70,10 +73,10 @@ final class DB_conf
 
             }
 
-            //echo '<pre>' , var_dump($config_file) , '</pre>';
 
             $path_to_wp_config = self::FILE_DB_CONF;
             $handle = fopen($path_to_wp_config, 'w');
+
             fwrite($handle, self::FILE_START);
             foreach ($config_file as $key => $value) {
 
@@ -88,7 +91,7 @@ final class DB_conf
     }
 
     /**
-     *
+     * @param $admin array
      */
     public function prepareBuild($admin)
     {
@@ -105,9 +108,12 @@ final class DB_conf
     /**
      * Création de la base de donnée
      * @param DB_conf $conf
+     * @param $admin array
+     * @return void
      */
     private function builder(DB_conf $conf, $admin)
     {
+        $alert = [];
 // Create connection
         try {
             $connection = new \PDO("mysql:host=" . $conf::HOST, $conf::ADMIN, $conf::PWD);
@@ -121,34 +127,46 @@ final class DB_conf
             $this->saveAdmin($connection, $admin, $conf);
             //echo "DB created successfully";
         } catch (PDOException $e) {
-            echo $sql . "<br>" . $e->getMessage();
+
+            $message = new FlashMessage(
+            'ERROR : ' . '</br>' . $sql . '</br>' . $e->getMessage(),
+                'error'
+            );
+
+            unlink('../Connection/DB_conf.php');
+            $retryInstallation = new InstallController();
+
+            return $retryInstallation->indexForm($message->messageBuilder());
         }
 
 
         /* @TODO : une fois la base créée rediriger vers l'accueil ou la page de login admin */
-       $_SERVER['REQUEST_URI'] = '/admin/login';
-       $_GET['info_db'] = "DB created successfully";
-       $router = new Router();
-       $_POST['private'] = false;
-       return $router->path(false);
+        $message = new FlashMessage(
+            "DB created successfully",
+            'success'
+        );
+
+        $admin = new AdminController();
+        return $admin->index($message->messageBuilder());
+
 
     }
 
     /**
      * @param $connection
-     * @param $admin
-     * @param $conf
+     * @param $admin array
      */
-    public function saveAdmin($connection, $admin, $conf){
+    public function saveAdmin($connection, $admin)
+    {
         //@TODO: A FINIR -> Insersion Admin dans BDD
-        try{
+        try {
             $sql = "INSERT INTO user (login, password) VALUES (:login,:pwd)";
-            $query = $connection -> prepare($sql);
-            $response = $query -> execute([
+            $query = $connection->prepare($sql);
+            $response = $query->execute([
                 'login' => $admin['login'],
-                'pwd'   => $admin['pwd']
+                'pwd' => $admin['pwd']
             ]);
-        }catch (PDOException $e){
+        } catch (PDOException $e) {
             echo $sql . "<br>" . $e->getMessage();
 
         }

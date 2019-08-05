@@ -2,7 +2,7 @@
 
 namespace Front\Controller;
 
-use Admin\Core\AbstractController;
+use Admin\Core\Config\AbstractController;
 
 /**
  * Class IndexController
