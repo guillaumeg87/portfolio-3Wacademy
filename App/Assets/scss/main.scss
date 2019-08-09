@@ -1,0 +1,17 @@
+$midnight-blue : #2c3e5a;
+
+body {
+  background-color: $midnight-blue;
+}
+
+h1{
+  color: orange;
+}
+a{
+  color: orange;
+  transition: 1s ease;
+  text-decoration: none;
+    &:hover{
+      color: pink;
+    }
+  }

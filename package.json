@@ -1,0 +1,45 @@
+{
+  "name": "portfolio-3Wacademy",
+  "version": "1.0.0",
+  "description": "**_Contraintes:_** Projet \"from scratch\" utilisant les 5 langages enseignés à la 3WAcademy:           * HTML           * CSS           * Javascript           * PHP           * MySQL",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "webpack --watch",
+    "start": "webpack-dashboard webpack-dev-server -d --hot --config webpack.config.js --watch",
+    "dev": "webpack",
+    "prod": "NODE_ENV=production webpack --progress"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guillaumeg87/portfolio-3Wacademy.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/guillaumeg87/portfolio-3Wacademy/issues"
+  },
+  "homepage": "https://github.com/guillaumeg87/portfolio-3Wacademy#readme",
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "autoprefixer": "^9.6.1",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.6",
+    "babel-preset-env": "^1.7.0",
+    "css-hot-loader": "^1.4.4",
+    "css-loader": "^3.2.0",
+    "mini-css-extract-plugin": "^0.8.0",
+    "node-sass": "^4.12.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^1.0.0",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6",
+    "webpack-dashboard": "^3.0.7",
+    "webpack-dev-server": "^3.7.2"
+  }
+}
