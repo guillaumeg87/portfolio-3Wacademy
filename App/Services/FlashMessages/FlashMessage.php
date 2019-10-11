@@ -16,7 +16,7 @@ class FlashMessage
     public function messageBuilder()
     {
         return [
-            'flash-message' => $this->message,
+            'message' => $this->message,
             'type-class'    => $this->type
         ];
     }

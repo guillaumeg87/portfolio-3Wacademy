@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Portfolio</title>
-    <link rel="stylesheet" href="./public/main.css">
-</head>
-<body>
-<h1>Index Layout</h1>
-<a href="/admin">ADMIN</a>
+    <head>
+        <meta charset="UTF-8">
+        <title>Portfolio</title>
+        <link rel="stylesheet" href="/public/main.css">
+    </head>
+    <body>
+        <?php
+        if (!empty($this->vars['options']['flash-message'])) { ?>
+            <div class="<?= $this->vars['options']['type-class'] ?>">
+                <p><?= $this->vars['options']['flash-message']['message'] ?></p>
+            </div>
+        <?php } ?>
+        <h1>Index Layout</h1>
+        <a href="/admin">ADMIN</a>
 
-<script src="./public/bundle.js"></script>
+        <script src="./public/bundle.js"></script>
 
-</body>
+    </body>
 </html>
