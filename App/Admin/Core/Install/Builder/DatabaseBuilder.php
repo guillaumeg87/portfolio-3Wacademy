@@ -128,7 +128,7 @@ final class DB_conf
             //echo "DB created successfully";
         } catch (PDOException $e) {
 
-            $message = new FlashMessage(
+            $options['flash-message'] = new FlashMessage(
             'ERROR : ' . '</br>' . $sql . '</br>' . $e->getMessage(),
                 'error'
             );
@@ -136,18 +136,18 @@ final class DB_conf
             unlink('../Connection/DB_conf.php');
             $retryInstallation = new InstallController();
 
-            return $retryInstallation->indexForm($message->messageBuilder());
+            return $retryInstallation->indexForm($options);
         }
 
 
         /* @TODO : une fois la base créée rediriger vers l'accueil ou la page de login admin */
-        $message = new FlashMessage(
+        $options['flash-message'] = new FlashMessage(
             "DB created successfully",
             'success'
         );
 
         $admin = new AdminController();
-        return $admin->index($message->messageBuilder());
+        return $admin->index($options);
 
 
     }

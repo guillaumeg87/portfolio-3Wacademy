@@ -1,21 +1,33 @@
-<section>
-    <?php
-    if (!empty($this->vars['options']['flash-message'])) { ?>
-        <div class="<?= $this->vars['type-class'] ?>">
-            <p><?= $this->vars['options']['flash-message'] ?></p>
-        </div>
-    <?php } ?>
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>Portfolio</title>
+        <link rel="stylesheet" href="/public/main.css">
+    </head>
+    <body>
+        <header>
+            <h1>Admin login</h1>
+        </header>
+        <main>
+            <?php
+            if (!empty($this->vars['options']['flash-message'])) { ?>
+                <div class="<?= $this->vars['options']['flash-message']['type-class'] ?>">
+                    <p><?= $this->vars['options']['flash-message']['message'] ?></p>
+                </div>
+            <?php } ?>
 
-    <h1>Admin login</h1>
-    <form action="/admin/login/check" method="post">
-        <div>
-            <label for="pseudo">Login</label>
-            <input id="pseudo" type="text"/>
-        </div>
-        <div>
-            <label for="password">Mot de passe</label>
-            <input id="password" type="password"/>
-        </div>
-        <button type="submit">Se connecter</button>
-    </form>
-</section>
+            <form action="/admin/login" method="post">
+                <div>
+                    <label for="login">Login</label>
+                    <input id="login" name="login" type="text"/>
+                </div>
+                <div>
+                    <label for="password">Mot de passe</label>
+                    <input id="password" name="password" type="password"/>
+                </div>
+                <button type="submit">Se connecter</button>
+            </form>
+        </main>
+    </body>
+</html>

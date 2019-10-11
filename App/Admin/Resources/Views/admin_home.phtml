@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>Portfolio</title>
+        <link rel="stylesheet" href="/public/main.css">
+    </head>
+    <body>
+        <header>
+            <?php
+            if (!empty($this->vars['options']['flash-message'])) { ?>
+                <div class="<?= $this->vars['options']['type-class'] ?>">
+                    <p><?= $this->vars['options']['flash-message']['message'] ?></p>
+                </div>
+            <?php } ?>
+            <h1>Admin Home</h1>
+            <p>Bienvenue dans le Back Office !!</p>
+            <form action="/admin/logout" method="get">
+                <button type='submit'>DECONNEXION</button>
+            </form>
+        </header>
+        <main>
+
+        </main>
+</body>
+</html>
