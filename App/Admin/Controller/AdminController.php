@@ -24,7 +24,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     *
+     * Main méthod for login in Back office
      */
     public function login()
     {
@@ -61,6 +61,9 @@ class AdminController extends AbstractController
         }
     }
 
+    /**
+     * Main méthod for logout from Back office
+     */
     public function logout(){
 
         if (!empty($_SESSION)){
@@ -74,7 +77,12 @@ class AdminController extends AbstractController
         $this->render(self::FRONT_NAMESPACE, self::FRONT_HOME, $options);
     }
 
-    private function handleSessionFields($data = null)
+    /**
+     * Helper wich handle SESSION array when administrator login
+     * @param null $data
+     * @return mixed
+     */
+    private function handleSessionFields($data = null):?array
     {
         foreach (self::SESSION_FIELDS as $key) {
             $_SESSION[$key] = $data[$key] ?? null;
@@ -82,6 +90,10 @@ class AdminController extends AbstractController
         return $_SESSION;
     }
 
+    /**
+     * Build response when login and pass word are wrong
+     * @param $options
+     */
     private function errorLogin($options){
         $options['flash-message'] = (new FlashMessage(
             'Les accès sont incorrectes.',
