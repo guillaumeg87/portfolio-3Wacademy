@@ -1,0 +1,29 @@
+.flex {
+  display: flex;
+}
+
+.success{
+  background-color: forestgreen;
+  color: #fff;
+}
+
+.error{
+  background-color: #990000;
+  color: #fff;
+}
+
+.warning {
+  background-color: darkorange;
+  color: #fff;
+}
+
+.flash-message {
+  width: 100%;
+  display: block;
+  text-align: center;
+  max-height: 25px;
+  p {
+    margin: 0;
+  }
+}
+
