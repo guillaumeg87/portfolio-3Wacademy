@@ -1,0 +1,46 @@
+.admin-header {
+
+  margin-bottom: 2rem;
+
+  .header-content {
+    padding: 2rem;
+
+    .header-welcome {
+      width: 100%;
+      text-align: center;
+    }
+
+    form{
+      text-align: right;
+
+    }
+  }
+
+}
+.admin-wrapper {
+  background-color: aliceblue;
+  padding: 1rem 2%;
+  flex-wrap: wrap;
+
+  .admin-sidebar {
+    width: 20%;
+
+  }
+
+  .admin-content {
+    width: 80%;
+  }
+
+  h2 {
+    display: block;
+    width: 100%;
+  }
+
+  .widget-admin {
+    display: inline-block;
+    min-width: 300px;
+    background-color: white;
+    margin: 1rem 2%;
+    padding: 1rem 1%;
+  }
+}

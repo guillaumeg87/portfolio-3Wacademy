@@ -29,7 +29,6 @@ class AdminController extends AbstractController
     public function login()
     {
         $options = [];
-        //@TODO : à retirer test gge / toto
         if (!empty($_POST['login']) && !empty($_POST['password'])) {
             $formatedDatas = [];
             foreach (self::SESSION_FIELDS as $key) {
