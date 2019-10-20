@@ -3,53 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <title>Portfolio</title>
+    <link rel="stylesheet" href="/public/main.css">
+
 </head>
 <body>
-    <?php
-    if (!empty($this->vars['options']['flash-message'])) { ?>
-        <div class="<?= $this->vars['options']['flash-message']['type-class'] ?>">
-            <p><?= $this->vars['options']['flash-message']['message'] ?></p>
+<?php
+if (!empty($this->vars['options']['flash-message'])) { ?>
+    <div class="flash-message <?= $this->vars['options']['flash-message']['type-class'] ?>">
+        <p><?= $this->vars['options']['flash-message']['message'] ?></p>
+    </div>
+<?php } ?>
+<h1>Installation du projet</h1>
+<form action="/install/startInstall" method="post">
+    <h2 style="color:#900;">Installation du projet</h2>
+    <fieldset>
+        <legend>
+            Compte Administrateur
+        </legend>
+        <div>
+            <label for="email">Email</label>
+            <input id="email" name="email" type="text" value="<?= (empty($_POST['email']) ? '' : $_POST['email']) ?>"
+                   required/>
+            <p>NOTA : Ce champ est indispensable pour la suite de l'inatallation, il vous permettra d'obtenir le token
+                servant à récupérer le contenu du projet en local via l'API</p>
+
         </div>
-    <?php } ?>
-    <h1>Installation du projet</h1>
-    <form action="/install/checkInstall" method="post">
-        <h2 style="color:#900;">Penser à mettre les champs en required !!</h2>
-        <fieldset>
-            <legend>
-                Compte Administrateur
-            </legend>
-            <div>
-                <label for="login">Login</label>
-                <input id="login" name="login" type="text"/>
-            </div>
-            <div>
-                <label for="pwd"">Mot de passe</label>
-                <input id="pwd" name="pwd" type="pwd"/>
-            </div>
-        </fieldset>
-        <fieldset>
-            <legend>
-                Informations base de données
-            </legend>
-            <div>
-                <label for="name">Nom de la base de donnée</label>
-                <input id="name" name="name" type="text"/>
-            </div>
-            <div>
-                <label for="host">Host</label>
-                <input id="host" name="host" type="text"/>
-            </div>
-            <div>
-                <label for="admin">Admin</label>
-                <input id="admin" name="admin" type="text"/>
-            </div>
-            <div>
-                <label for="password">Mot de passe</label>
-                <input id="password" name="password" type="password"/>
-            </div>
-            <input type="hidden" name="private" value="true">
-            <button type="submit">Installer</button>
-        </fieldset>
-    </form>
+        <div>
+            <label for="login">Login</label>
+            <input id="login" name="login" type="text" value="<?= (empty($_POST['login']) ? '' : $_POST['login']) ?>"
+                   required/>
+        </div>
+        <div>
+            <label for="pwd"">Mot de passe</label>
+            <input id="pwd" name="pwd" type="password" value="<?= (empty($_POST['pwd']) ? '' : $_POST['pwd']) ?>"
+                   required/>
+        </div>
+        <input type="hidden" name="isSuperAdmin" value="true">
+    </fieldset>
+    <fieldset>
+        <legend>
+            Informations base de données
+        </legend>
+        <div>
+            <label for="db_name">Nom de la base de donnée</label>
+            <input id="db_name" name="db_name" type="text" value="<?= (empty($_POST['name']) ? '' : $_POST['name']) ?>"
+                   required/>
+        </div>
+        <div>
+            <label for="db_host">Host</label>
+            <input id="db_host" name="db_host" type="text" value="<?= (empty($_POST['host']) ? '' : $_POST['host']) ?>"
+                   required/>
+        </div>
+        <div>
+            <label for="db_admin">Admin</label>
+            <input id="db_admin" name="db_admin" type="text"
+                   value="<?= (empty($_POST['admin']) ? '' : $_POST['admin']) ?>" required/>
+        </div>
+        <div>
+            <label for="db_password">Mot de passe</label>
+            <input id="db_password" name="db_password" type="password"
+                   value="<?= (empty($_POST['password']) ? '' : $_POST['password']) ?>"/>
+        </div>
+        <input type="hidden" name="private" value="true">
+        <button type="submit">Installer</button>
+    </fieldset>
+</form>
 </body>
 </html>

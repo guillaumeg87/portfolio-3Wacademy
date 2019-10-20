@@ -4,6 +4,7 @@
 .DS_Store
 *.sql
 /App/Connection/DB_conf.php
+/App/Connection/Db_config.json
 /node_modules
 *.min.css
 *.map

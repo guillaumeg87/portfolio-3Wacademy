@@ -4,6 +4,7 @@ namespace Admin\Controller;
 
 use Admin\Core\Config\AbstractController;
 use Admin\Requests\LoginRequest;
+use Connection\Db_manager;
 use Services\FlashMessages\FlashMessage;
 
 class AdminController extends AbstractController
@@ -24,7 +25,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * Main méthod for login in Back office
+     * Main method for login in Back office
      */
     public function login()
     {
@@ -32,15 +33,22 @@ class AdminController extends AbstractController
         if (!empty($_POST['login']) && !empty($_POST['password'])) {
             $formatedDatas = [];
             foreach (self::SESSION_FIELDS as $key) {
-                $formatedDatas[$key] = sha1(htmlspecialchars($_POST[$key]));
+                if($key == 'password'){
+
+                    $formatedDatas[$key] = sha1(htmlspecialchars($_POST[$key]));
+
+                }else{
+
+                    $formatedDatas[$key] = htmlspecialchars($_POST[$key]);
+                }
             }
 
-            $loginCheck = (new LoginRequest())->getLogin($formatedDatas);
+            $loginCheck = new LoginRequest();
+            $isLogged = $loginCheck->getLogin($formatedDatas);
+            if(!empty($isLogged)) {
 
-            if(!empty($loginCheck)) {
-
-                if ($formatedDatas['login'] == $loginCheck['login'] && $formatedDatas['password'] == $loginCheck['password']){
-                    $options['flash-message'] = (new FlashMessage(
+                if ($formatedDatas['login'] == $isLogged['login'] && $formatedDatas['password'] == $isLogged['password']){
+                    $options['flash-message'][] = (new FlashMessage(
                         'Connexion Réussie',
                         'success'
                     ))->messageBuilder();
@@ -61,7 +69,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * Main méthod for logout from Back office
+     * Main method for logout from Back office
      */
     public function logout(){
 
@@ -69,7 +77,7 @@ class AdminController extends AbstractController
 
             $this->handleSessionFields();
         }
-        $options['flash-message'] = (new FlashMessage(
+        $options['flash-message'][] = (new FlashMessage(
             'Déconnexion réussie !',
             'success'
         ))->messageBuilder();
@@ -77,7 +85,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * Helper wich handle SESSION array when administrator login
+     * Helper which handle SESSION array when administrator login
      * @param null $data
      * @return mixed
      */
@@ -94,7 +102,7 @@ class AdminController extends AbstractController
      * @param $options
      */
     private function errorLogin($options){
-        $options['flash-message'] = (new FlashMessage(
+        $options['flash-message'][] = (new FlashMessage(
             'Les accès sont incorrectes.',
             'error'
         ))->messageBuilder();

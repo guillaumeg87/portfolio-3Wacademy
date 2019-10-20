@@ -4,19 +4,20 @@ namespace Admin\Requests;
 
 use PDO;
 
-class LoginRequest
+class LoginRequest extends BaseRequest
 {
     /**
-     *
+     * Get the current user wich want to be connected to the back office
+     * @param $datas
+     * @return mixed
      */
     public function getLogin ($datas) {
 
-        $pdo = new PDO('mysql:host=mysql;dbname=portfolio_db', 'root', '');
-        $query = $pdo->prepare("SELECT login, password FROM user WHERE login = :login");
+        $sql = "SELECT login, password FROM user WHERE login = :login";
+        $query = $this->dbManager->connection()->prepare($sql);
         $query->bindValue(':login', $datas['login'], PDO::PARAM_INT);
         $query->execute();
         $results = $query->fetch();
-        $pdo = null;
 
         return $results;
 
