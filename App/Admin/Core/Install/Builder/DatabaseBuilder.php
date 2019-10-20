@@ -2,33 +2,43 @@
 
 namespace Admin\Core\Install\Builder;
 
+
 use Admin\Controller\AdminController;
 use Admin\Controller\InstallController;
 use Admin\Core\Traits\Hash;
-use Connection\Db_conf;
+use Admin\Requests\InstallRequest;
 use Connection\Db_manager;
+use mysql_xdevapi\Exception;
 use PDO;
 use PDOException;
-use Router\Router;
 use Services\FlashMessages\FlashMessage;
+use Services\Mailer\MailerService;
 
 class DatabaseBuilder
 {
     use Hash;
 
-    const DB_INSTALL = ['DB_NAME', 'HOST', 'ADMIN', 'PWD'];
+    const DB_INSTALL = ['Db_name', 'Db_host', 'Db_admin', 'Db_password'];
+    const USER_FIELDS_TABLE = ['login', 'pwd', 'email', 'isSuperAdmin'];
+    const LABEL_PWD = 'pwd';
     const FILE_DB_CONF = '../Connection/DB_conf.php';
-    const FILE_START = '<?php 
-namespace Connection;
+    const JSON_FILE_DB_CONF = '../Connection/Db_config.json';
 
-final class DB_conf
-{
-';
+    // Two constants below needed for class dynamically
+    const FILE_START = '<?php 
+
+                        namespace Connection;
+                        
+                        final class DB_conf
+                        {
+                        ';
     const FILE_END = '
-}
-';
+                        }
+                        ';
 
     /**
+     * Handle installation form datas
+     * Build two array for each entty needed : admin and db datas
      * Get data from Install form
      */
     public function form()
@@ -37,12 +47,16 @@ final class DB_conf
             $data = [];
 
             foreach ($_POST as $key => $value) {
+                if (in_array($key, self::USER_FIELDS_TABLE)) {
+                    if ($key == self::LABEL_PWD) {
+                        $admin[$key] = $this->hashString($value);
+                    } else {
+                        $admin[$key] = $value;
+                    }
+                }
+
                 if ($key != 'private') {
                     $data[strtoupper($key)] = $value;
-                }
-                if ($key == 'login' || $key == 'pwd') {
-                    $admin[$key] = $this->hashString($value);
-
                 }
             }
 
@@ -50,6 +64,7 @@ final class DB_conf
             foreach ($admin as $key => $value) {
                 unset($data[strtoupper($key)]);
             }
+
             $this->init_param($data, $admin);
         }
 
@@ -57,118 +72,233 @@ final class DB_conf
 
     /**
      * Init params database buildings
-     * Create Class DB_conf.php
+     * Create Class DB_conf.php && handle json configuration file
+     * @param $param
+     * @param $admin
+     */
+    public function init_param(array $param, array $admin)
+    {
+
+        if (!file_exists(Constants::FILE_DB_CONF)) {
+            $db_data = array_combine(self::DB_INSTALL, $param);
+
+            /** PHP CONSTANT CLASS DATABASE CONFIG **/
+            $this->generateConstantClassConf($db_data);
+
+            /** JSON DATABASE CONFIG **/
+            $this->generateJsonConfigFile($db_data);
+
+            $this->prepareBuild($admin, $db_data);
+        }
+
+    }
+
+    /**
+     * Process Installation
+     * Building preparation
+     * @param $admin
+     * @param $db_data
+     */
+    public function prepareBuild(array $admin, array $db_data)
+    {
+
+        try {
+            $this->builder($admin, $db_data);
+
+        } catch (\Exception $e) {
+            $this->installationFailed($e, $db_data);
+        }
+    }
+
+    /**
+     * Process Installation
+     * Creation database
+     * If an error occured, Rollback function are called
      *
-     */
-    public function init_param($param, $admin)
-    {
-        if (!file_exists(self::FILE_DB_CONF)) {
-
-            $array_const = array_combine(self::DB_INSTALL, $param);
-            $config_file = [];
-
-            foreach ($array_const as $key => $value) {
-
-                $config_file[] = "const " . $key . " = '" . $value . "';\r\n";
-
-            }
-
-
-            $path_to_wp_config = self::FILE_DB_CONF;
-            $handle = fopen($path_to_wp_config, 'w');
-
-            fwrite($handle, self::FILE_START);
-            foreach ($config_file as $key => $value) {
-
-                fwrite($handle, $value);
-            }
-            fwrite($handle, self::FILE_END);
-
-            fclose($handle);
-            chmod($path_to_wp_config, 0666);
-            return $this->prepareBuild($admin);
-        }
-    }
-
-    /**
-     * @param $admin array
-     */
-    public function prepareBuild($admin)
-    {
-        $count = 0;
-        do {
-            $count++;
-        } while (!file_exists(self::FILE_DB_CONF));
-
-        if (file_exists(self::FILE_DB_CONF)) {
-            return $this->builder(new DB_conf(), $admin);
-        }
-    }
-
-    /**
-     * Création de la base de donnée
-     * @param DB_conf $conf
      * @param $admin array
      * @return void
      */
-    private function builder(DB_conf $conf, $admin)
+    private function builder($admin, $db_data)
     {
-        $alert = [];
-// Create connection
         try {
-            $connection = new \PDO("mysql:host=" . $conf::HOST, $conf::ADMIN, $conf::PWD);
+            // Create Database
+            $connection = new \PDO("mysql:host=" . $db_data['Db_host'], $db_data['Db_admin'], $db_data['Db_password']);
             $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $sql = "CREATE DATABASE IF NOT EXISTS " . $conf::DB_NAME;
+            $sql = "CREATE DATABASE IF NOT EXISTS " . $db_data['Db_name'];
             $connection->exec($sql);
-            $sql = "use " . $conf::DB_NAME;
-            $connection->exec($sql);
-            $sql = "CREATE TABLE IF NOT EXISTS user ( id int(11) AUTO_INCREMENT NOT NULL PRIMARY KEY, login VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL)";
-            $connection->exec($sql);
-            $this->saveAdmin($connection, $admin, $conf);
-            //echo "DB created successfully";
-        } catch (PDOException $e) {
+            $isCreate = $this->createDataBase($db_data);
+            if ($isCreate) {
+                $dbManager = new Db_manager($db_data);
+                $request = new InstallRequest($dbManager);
 
-            $options['flash-message'] = new FlashMessage(
-            'ERROR : ' . '</br>' . $sql . '</br>' . $e->getMessage(),
-                'error'
-            );
+                $request->createUserTable($db_data);
+                $this->saveAdmin($request, $admin, $db_data);
+            }
 
-            unlink('../Connection/DB_conf.php');
-            $retryInstallation = new InstallController();
+        } catch (\Exception $e) {
 
-            return $retryInstallation->indexForm($options);
+            $this->installationFailed($e, $db_data);
+
         }
 
-
-        /* @TODO : une fois la base créée rediriger vers l'accueil ou la page de login admin */
-        $options['flash-message'] = new FlashMessage(
+        $options['flash-message'][] = (new FlashMessage(
             "DB created successfully",
             'success'
-        );
+        ))->messageBuilder();
+
+        // Send mail
+       /*
+        * @TODO A VOIR PLUS TARD
+        $user = new User();
+        $user->setEmail($admin['email']);
+        $user->setLogin($admin['login']);
+        $user->setPwd($admin['pwd']);
+        $to = $user;
+        $subject = 'TEST MAILER';
+        $message = 'Bonjour,  je teste mon service d\'envoi de mail';
+        $mailer = (new MailerService($to, $subject, $message))->sendMail();
+
+        if($mailer){
+            $options['flash-message'][] = (new FlashMessage(
+                "Le mail a été envoyé",
+                'success'
+            ))->messageBuilder();
+        }else{
+            $options['flash-message'][] = (new FlashMessage(
+                "Le mail n'a pas été envoyé",
+                'error'
+            ))->messageBuilder();
+        }
+        */
 
         $admin = new AdminController();
-        return $admin->index($options);
+        $admin->index($options);
+    }
 
+    /**
+     * Process Installation
+     * Admin account creation
+     * @param InstallRequest $request
+     * @param $admin array
+     * @param array $db_data
+     */
+    public function saveAdmin(InstallRequest $request, array $admin, array $db_data)
+    {
+
+        try {
+            $request->createAdminAccount($admin);
+
+        } catch (PDOException $e) {
+
+            $this->installationFailed($e, $db_data);
+
+        }
+    }
+
+    /**
+     * Process Installation
+     * Rollback function if an error occured
+     *
+     * @param $e
+     * @return void
+     */
+    private function installationFailed(\Exception $e, array $db_data)
+    {
+
+        $sql = "DROP DATABASE " . $db_data['Db_name'];
+        try {
+            $connection = new \PDO("mysql:host=" . $db_data['Db_host'], $db_data['Db_admin'], $db_data['Db_password']);
+            $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $connection->exec($sql);
+        } catch (\Exception $exception) {
+            throw new Exception(
+                'ERROR : ' . '</br>' .
+                'Code : ' . $e->getCode() .
+                'Stack Trace : ' . $e->getTraceAsString() . '</br>' .
+                'Message : ' . $e->getMessage() . '</br>' .
+                'Line : ' . $e->getLine() . '</br>'
+            );
+        }
+
+        $options['flash-message'] = (new FlashMessage(
+            'ERROR : ' . '</br>' .
+            'Code : ' . $e->getCode() .
+            'Stack Trace : ' . $e->getTraceAsString() . '</br>' .
+            'Message : ' . $e->getMessage() . '</br>' .
+            'Line : ' . $e->getLine() . '</br>',
+            'error'
+        ))->messageBuilder();
+        // Deletion of the 2 generated files
+        unlink(Constants::FILE_DB_CONF);
+        unlink(self::JSON_FILE_DB_CONF);
+        $retryInstallation = new InstallController();
+        $retryInstallation->indexForm($options);
+    }
+
+    /**
+     * Process Installation
+     * Use for check keep project configuration in one file
+     * @param $db_data
+     */
+    private function generateJsonConfigFile(array $db_data)
+    {
+        $file = fopen(self::JSON_FILE_DB_CONF, 'w');
+
+        // Keep line above, if need to keep  API acces somewhere
+        //$jsonArray = json_decode($file, true);
+
+        foreach ($db_data as $key => $value) {
+            $jsonArray['Database'][$key] = $db_data[$key];
+        }
+
+        $jsonData = json_encode($jsonArray);
+
+        file_put_contents(self::JSON_FILE_DB_CONF, $jsonData);
+    }
+
+    /**
+     * Process Installation
+     * Fast and easiest than Json encode and decode
+     * @param $param
+     */
+    private function generateConstantClassConf(array $db_data)
+    {
+        $config_file = [];
+
+        foreach ($db_data as $key => $value) {
+
+            $config_file[] = "const " . strtoupper($key) . " = '" . $value . "';\r\n";
+        }
+
+        $path_to_wp_config = self::FILE_DB_CONF;
+        $handle = fopen($path_to_wp_config, 'w');
+        fwrite($handle, self::FILE_START);
+
+        foreach ($config_file as $key => $value) {
+
+            fwrite($handle, $value);
+        }
+
+        fwrite($handle, self::FILE_END);
+        fclose($handle);
+        chmod($path_to_wp_config, 0666);
 
     }
 
     /**
-     * @param $connection
-     * @param $admin array
+     * Process Installation
+     * Hard coded database creation
+     * Avoid error like missing files or configuration
+     * @TODO : Improving this...
+     * @param array $db_data
+     * @return int
      */
-    public function saveAdmin($connection, $admin)
+    private function createDataBase(array $db_data)
     {
-        //@TODO: A FINIR -> Insersion Admin dans BDD
-        try {
-            $sql = "INSERT INTO user (login, password) VALUES (:login,:pwd)";
-            $query = $connection->prepare($sql);
-            $response = $query->execute([
-                'login' => $admin['login'],
-                'pwd' => $admin['pwd']
-            ]);
-        } catch (PDOException $e) {
-            echo $sql . "<br>" . $e->getMessage();
-
-        }
+        $connection = new \PDO("mysql:host=" . $db_data['Db_host'], $db_data['Db_admin'], $db_data['Db_password']);
+        $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "CREATE DATABASE IF NOT EXISTS " . $db_data['Db_name'];
+        return $connection->exec($sql);
     }
+
 }

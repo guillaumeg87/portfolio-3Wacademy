@@ -6,17 +6,20 @@
         <link rel="stylesheet" href="/public/main.css">
     </head>
     <body>
+    <?php
+    if (!empty($this->vars['options']['flash-message'])) { ?>
+        <div class="flash-message <?= $this->vars['options']['flash-message']['type-class'] ?>">
+            <?php
+            foreach ($this->vars['options']['flash-message'] as $key){ ?>
+                <p class="flash-message <?= $key['type-class'] ?>"><?= $key['message'] ?></p>
+            <?php }
+            ?>
+        </div>
+    <?php } ?>
         <header>
             <h1>Admin login</h1>
         </header>
         <main>
-            <?php
-            if (!empty($this->vars['options']['flash-message'])) { ?>
-                <div class="<?= $this->vars['options']['flash-message']['type-class'] ?>">
-                    <p><?= $this->vars['options']['flash-message']['message'] ?></p>
-                </div>
-            <?php } ?>
-
             <form action="/admin/login" method="post">
                 <div>
                     <label for="login">Login</label>
