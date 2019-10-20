@@ -16,16 +16,29 @@ class Router
     const INSTALL_FORM = 'indexForm';
 
 
+    /**
+     * @param $url
+     * @param $request
+     */
     static public function parse($url, $request)
     {
         $explode_url = explode('/', trim($url));
         if (preg_match(self::MATCH_ADMIN_OR_INSTALL, $explode_url[1])) {
 
-            /** $explode_url[1] define the controller */
-            $request->controller = $explode_url[1];
+            /** $explode_url[2] define the controller */
+            if(!empty($explode_url[2])) {
+
+                $request->controller = ucfirst($explode_url[2]);
+
+            }else{
+
+                $request->controller = ucfirst($explode_url[1]);
+
+            }
+
 
             /** $explode_url[1] define the action, call the method */
-            $action = ($explode_url[2] === null) ? self::INDEX : $explode_url[2];
+            $action = ($explode_url[3] === null) ? self::INDEX : $explode_url[3];
             $request->action = explode('?', $action)[0];
             $request->path = self::ADMIN_PATH;
             $request->params = [];
