@@ -3,6 +3,7 @@
 namespace Connection;
 
 use Connection\DB_conf;
+use mysql_xdevapi\Exception;
 use PDO;
 
 class Db_manager
@@ -67,7 +68,7 @@ class Db_manager
             $com_bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $com_bdd->exec("SET NAMES UTF8");
         }catch(\Exception $e){
-            var_dump('ERROR : ' . '</br>' .
+            throw new Exception('ERROR : ' . '</br>' .
                 'Code : ' . $e->getCode() .
                 'Stack Trace : ' . $e->getTraceAsString() . '</br>' .
                 'Message : ' . $e->getMessage() . '</br>' .
