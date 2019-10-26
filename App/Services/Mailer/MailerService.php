@@ -48,14 +48,18 @@ class MailerService
 
     /**
      * Build email header
-     * @return array
+     * @return string
      */
     private function headerBuilder()
     {
-         return [
-            'From' => 'gguillaumemail@gmail.com',
-            'Reply-To' => 'gguillaumemail@gmail.com',
-            'X-Mailer' => 'PHP/' . phpversion()
-        ];
+
+        return 'From: gguillaumemail@gmail.com' . "\r\n" .
+            'Reply-To: gguillaumemail@gmail.com' . "\r\n" .
+            'X-Mailer: PHP/' . phpversion();
+//         return [
+//            'From' => 'gguillaumemail@gmail.com',
+//            'Reply-To' => 'gguillaumemail@gmail.com',
+//            'X-Mailer' => 'PHP/' . phpversion()
+//        ];
     }
 }

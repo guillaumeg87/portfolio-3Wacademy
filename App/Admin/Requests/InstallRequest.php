@@ -3,11 +3,6 @@
 
 namespace Admin\Requests;
 
-
-use Connection\Db_manager;
-use PDO;
-
-
 class InstallRequest extends BaseRequest
 {
 

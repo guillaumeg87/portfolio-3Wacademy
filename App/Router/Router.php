@@ -26,22 +26,20 @@ class Router
         if (preg_match(self::MATCH_ADMIN_OR_INSTALL, $explode_url[1])) {
 
             /** $explode_url[2] define the controller */
-            if(!empty($explode_url[2])) {
+            if (!empty($explode_url[2])) {
 
                 $request->controller = ucfirst($explode_url[2]);
 
-            }else{
+            } else {
 
                 $request->controller = ucfirst($explode_url[1]);
-
             }
-
 
             /** $explode_url[1] define the action, call the method */
             $action = ($explode_url[3] === null) ? self::INDEX : $explode_url[3];
             $request->action = explode('?', $action)[0];
             $request->path = self::ADMIN_PATH;
-            $request->params = [];
+            $request->params[] = (strpos($url, '?') ? self::urlParams($url) :[]);
 
         } elseif (!file_exists(DatabaseBuilder::FILE_DB_CONF)) {
             $request->controller = self::INSTALL;
@@ -63,5 +61,23 @@ class Router
             $request->controller = ucfirst($explode_url[0]);
             $request->params = array_slice($explode_url, 2);
         }
+    }
+
+    /**
+     * Return url's params in array
+     * @param $url
+     * @return array
+     */
+    static function urlParams($url)
+    {
+        $requestParams = [];
+        $explodeUrl = explode('?', trim($url));
+        $explodeParamsList = explode(',', $explodeUrl[1]);
+        foreach ($explodeParamsList as $item) {
+            $param = explode('=', $item);
+            $requestParams[$param[0]] = $param[1];
+        }
+
+        return $requestParams;
     }
 }

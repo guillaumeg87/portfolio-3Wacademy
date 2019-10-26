@@ -5,6 +5,7 @@ namespace Admin\Core\Install\Builder;
 
 use Admin\Controller\AdminController;
 use Admin\Controller\InstallController;
+use Admin\Core\Entity\User;
 use Admin\Core\Traits\Hash;
 use Admin\Requests\InstallRequest;
 use Connection\Db_manager;
@@ -128,9 +129,7 @@ class DatabaseBuilder
             $connection->exec($sql);
             $isCreate = $this->createDataBase($db_data);
             if ($isCreate) {
-                $dbManager = new Db_manager($db_data);
-                $request = new InstallRequest($dbManager);
-
+                $request = new InstallRequest();
                 $request->createUserTable($db_data);
                 $this->saveAdmin($request, $admin, $db_data);
             }
@@ -148,7 +147,10 @@ class DatabaseBuilder
 
         // Send mail
        /*
-        * @TODO A VOIR PLUS TARD
+        * @TODO A VOIR PLUS TARD : a ecxecuter avec npm run watch qui tourne...
+        * https://hub.docker.com/r/djfarrelly/maildev/
+        * */
+/*
         $user = new User();
         $user->setEmail($admin['email']);
         $user->setLogin($admin['login']);
@@ -156,21 +158,31 @@ class DatabaseBuilder
         $to = $user;
         $subject = 'TEST MAILER';
         $message = 'Bonjour,  je teste mon service d\'envoi de mail';
-        $mailer = (new MailerService($to, $subject, $message))->sendMail();
+        try{
+            $mailer = (new MailerService($to, $subject, $message))->sendMail();
+            var_dump($mailer);
+            if($mailer){
+                $options['flash-message'][] = (new FlashMessage(
+                    "Le mail a été envoyé",
+                    'success'
+                ))->messageBuilder();
+            }else{
+                $options['flash-message'][] = (new FlashMessage(
+                    "Le mail n'a pas été envoyé",
+                    'error'
+                ))->messageBuilder();
+            }
+        }catch(\Exception $e){
+            throw new Exception(
+                'ERROR : ' . '</br>' .
+                'Code : ' . $e->getCode() .
+                'Stack Trace : ' . $e->getTraceAsString() . '</br>' .
+                'Message : ' . $e->getMessage() . '</br>' .
+                'Line : ' . $e->getLine() . '</br>'
+            );
 
-        if($mailer){
-            $options['flash-message'][] = (new FlashMessage(
-                "Le mail a été envoyé",
-                'success'
-            ))->messageBuilder();
-        }else{
-            $options['flash-message'][] = (new FlashMessage(
-                "Le mail n'a pas été envoyé",
-                'error'
-            ))->messageBuilder();
         }
-        */
-
+*/
         $admin = new AdminController();
         $admin->index($options);
     }
