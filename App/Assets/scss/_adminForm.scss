@@ -1,0 +1,80 @@
+
+.admin-form {
+
+  display: inline-block;
+  margin-bottom: 2rem;
+  vertical-align: top;
+  width: 60%;
+  padding: 1rem 2%;
+
+  .input-text{
+    margin: 1rem 1%;
+    label{
+      width: 30%;
+
+      display: inline-block;
+    }
+    input{
+      width: 70%;
+      display: inline-block;
+    }
+  }
+
+  .form-btn-submit{
+    display: block;
+    margin: 3rem 1% 0 auto;
+    padding: 1rem 2%;
+    background-color: orange;
+    color: white;
+    min-width: 150px;
+    border: solid 2px orange;
+    transition: 0.4s ease;
+    border-radius: 5px;
+    &:hover{
+      background-color: white;
+      color: orange;
+
+    }
+  }
+}
+.admin-content-widget {
+
+  display: inline-block;
+  width: 40%;
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    thead {
+      td {
+
+        width: 30%;
+      }
+    }
+
+  tbody {
+
+      tr:nth-child(even){
+          background-color: burlywood;
+        }
+      tr:nth-child(odd) {
+          background-color: bisque;
+        }
+      tr{
+        &:hover{
+          opacity: 0.4;
+        }
+        td {
+          padding: 0.5rem 2%;
+
+          a {
+            display: block;
+            color: $midnight-blue;
+            width: 100%;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+
+}

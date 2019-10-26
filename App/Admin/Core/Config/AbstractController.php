@@ -28,10 +28,12 @@ class AbstractController
     public function render($namespace, $filename, $options = [])
     {
         $this->addRenderOptions($options);
+        // @TODO pas utilisé...
         $path = $this->handleNamespace($namespace);
         extract($this->vars);
         ob_start();
         require(ROOT . $this->handleNamespace($namespace)['newDir'] . $filename . '.phtml');
+        // @TODO pas utilisé....
         $content_for_layout = ob_get_clean();
         require(ROOT . $this->chooseDirectory($namespace) . self::VIEWS_PATH . $this->getLayout($filename) . '.phtml');
     }

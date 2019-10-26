@@ -7,16 +7,20 @@
     </head>
     <body>
         <header class="admin-header">
-        <?php
-        if (!empty($this->vars['options']['flash-message'])) { ?>
-            <div class="flash-message <?= $this->vars['options']['flash-message']['type-class'] ?>">
-                <p><?= $this->vars['options']['flash-message']['message'] ?></p>
-            </div>
-        <?php } ?>
+            <?php
+            if (!empty($this->vars['options']['flash-message'])) { ?>
+                <div class="flash-message <?= $this->vars['options']['flash-message']['type-class'] ?>">
+                    <?php
+                    foreach ($this->vars['options']['flash-message'] as $key){ ?>
+                        <p class="flash-message <?= $key['type-class'] ?>"><?= $key['message'] ?></p>
+                    <?php }
+                    ?>
+                </div>
+            <?php } ?>
             <div class="header-content">
                 <div class="header-welcome">
-                    <h1>Admin Home</h1>
-                    <p>Bienvenue dans le Back Office !!</p>
+                    <h1>Technologie</h1>
+                    <p>Ajouter une nouvelle technologie</p>
                 </div>
 
                 <div class="adminLogout">
@@ -28,7 +32,6 @@
             <aside class="admin-sidebar">
                 <div>
                     <h2>Menu</h2>
-                    <a href="/addContentElement">Ajouter un nouveau types de contenu</a>
                     <ul>
                         <li>
                             <a href="/admin/newProject">Ajouter un projet</a>
@@ -64,23 +67,22 @@
 
             </aside>
             <section class="admin-content">
-                    <h2>Vue d'ensemble</h2>
 
-                    <div class="widget-admin">
-                        <h3>Listes des projets</h3>
-                    </div>
-                    <div class="widget-admin">
-                        <h3>Liste des technos</h3>
-                    </div>
-                    <div class="widget-admin">
-                        <h3>Liste des langages</h3>
-                    </div>
-                    <div class="widget-admin">
-                        <h3>Liste des certifications</h3>
-                    </div>
-                    <div class="widget-admin">
-                        <h3>Liste des règles Opquast</h3>
-                    </div>
+                <form action="/admin/newTechnology/saveNewCategory" method="post">
+
+                    <label for="name">Nom de la techno</label>
+                    <input id="name" type="text">
+
+                    <label for="class-color">Couleur de l'étiquette</label>
+                    <select name="class-color" id="class-color">
+                        <option value="test">rouge</option>
+                        <option value="test">bleu</option>
+                        <option value="test">vert</option>
+                        <option value="test">jaune</option>
+                    </select>
+                    <button type="submit">Valider</button>
+                </form>
+
 
             </section>
         </main>
