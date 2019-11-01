@@ -37,7 +37,11 @@ let config = {
         new MiniCssExtractplugin({
             filename: devMode ? '/[name].css' : '[name].min.css',
         }),
-        new DashboardPlugin()
+        new DashboardPlugin(),
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery"
+        })
     ],
     devServer: {
         contentBase: path.join(__dirname, 'dist'),

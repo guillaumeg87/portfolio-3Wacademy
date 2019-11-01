@@ -1,2 +1,7 @@
 require("../scss/main.scss");
-console.log('Webpack first step');
+
+/****************/
+/* FORM BUILDER */
+/****************/
+// formbuilder
+require("../../Services/FormBuilder/js/formBuilderManager.js");

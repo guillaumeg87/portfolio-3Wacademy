@@ -1,0 +1,46 @@
+{
+  "fieldset": {
+    "id": "",
+    "class": []
+    },
+    "legend": {
+      "content": "Choisissez le nom du contenu à créer",
+      "id": "",
+      "class": []
+    },
+    "fields": [
+       {
+        "label": {
+          "content":  "Nom à afficher",
+          "for": "contentDisplayName",
+          "id": "",
+          "class": []
+        },
+        "input": {
+          "type": "text",
+          "name": "contentDisplayName",
+          "id": "",
+          "class": [],
+          "value": "",
+          "placeholder": "Nom du contenu à afficher"
+        }
+      },
+      {
+        "label": {
+          "content":  "Nom technique",
+          "for": "contentTechnicalName",
+          "id": "",
+          "class": []
+        },
+        "input": {
+          "type": "text",
+          "name": "contentTechnicalName",
+          "id": "",
+          "class": [],
+          "value": "",
+          "placeholder": "Nom technique du contenu"
+
+        }
+      }
+    ]
+}
