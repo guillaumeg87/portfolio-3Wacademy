@@ -371,6 +371,10 @@ template {
   .flash-message p {
     margin: 0; }
 
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.4; }
+
 .admin-header {
   margin-bottom: 2rem; }
   .admin-header .header-content {

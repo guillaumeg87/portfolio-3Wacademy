@@ -3,12 +3,11 @@
 namespace Admin\Controller;
 
 use Admin\Core\Config\AbstractController;
-use Admin\Requests\LoginRequest;
-use Connection\Db_manager;
-use Services\FlashMessages\FlashMessage;
+use Admin\Core\Traits\NavigationTrait;
 
 class AdminController extends AbstractController
 {
+    use NavigationTrait;
     //TEMPLATE
     const ADMIN_LOGIN_FORM = 'admin_login';
 

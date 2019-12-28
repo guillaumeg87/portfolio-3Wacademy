@@ -1,0 +1,81 @@
+{
+  "fieldset": {
+    "id": "",
+    "class": ["admin-form"],
+    "group": "formbuilder"
+
+  },
+    "legend": {
+      "content": "Choisissez le nom du contenu à créer",
+      "id": "",
+      "class": [],
+      "group": "admin-form"
+
+    },
+    "fields": [
+       {
+        "label": {
+          "content":  "Nom à afficher",
+          "for": "contentDisplayName",
+          "id": "",
+          "class": [],
+          "group": "admin-form"
+        },
+        "input": {
+          "type": "text",
+          "name": "contentDisplayName",
+          "id": "",
+          "class": [],
+          "value": "",
+          "placeholder": "Nom du contenu à afficher",
+          "group": "admin-form"
+
+        }
+      },
+      {
+        "label": {
+          "content":  "Nom technique",
+          "for": "contentTechnicalName",
+          "id": "",
+          "class": [],
+          "group": "admin-form"
+
+        },
+        "input": {
+          "type": "text",
+          "name": "contentTechnicalName",
+          "id": "",
+          "class": [],
+          "value": "",
+          "placeholder": "Nom technique du contenu",
+          "group": "admin-form"
+
+
+        }
+      }
+    ],
+    "buttons": [
+      {
+        "button": {
+          "type": "submit",
+          "id": " ",
+          "class": ["addNewField"],
+          "content": "Ajouter un nouveau champ",
+          "group": "admin-form",
+          "eventListener": {
+            "type": "click",
+            "callback": "callback_form_addNewField_click_btn"
+          }
+        }
+      },
+      {
+        "button": {
+          "type": "submit",
+          "id": "",
+          "class": ["form-btn-submit"],
+          "content": "Valider",
+          "group": "formbuilder"
+        }
+      }
+    ]
+}

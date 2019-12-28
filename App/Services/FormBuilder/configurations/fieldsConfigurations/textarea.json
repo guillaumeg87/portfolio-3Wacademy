@@ -1,0 +1,12 @@
+{
+  "fieldType": "textarea",
+  "labelDisplay": "",
+  "name": "",
+  "id": "",
+  "class": [],
+  "value": "",
+  "placeholder": "",
+  "rows": 5,
+  "cols": 80,
+  "group": "admin-form"
+}
