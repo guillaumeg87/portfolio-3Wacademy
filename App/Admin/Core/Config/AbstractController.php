@@ -2,6 +2,8 @@
 
 namespace Admin\Core\Config;
 
+use Admin\Core\Traits\NavigationTrait;
+
 class AbstractController
 {
     const REG_CONTROLLER = '/Controller/';
@@ -10,6 +12,7 @@ class AbstractController
     const ADMIN_DIR = 'Admin/';
     const REGEX_IS_ADMIN = '/\b(Admin)\b/';
 
+use NavigationTrait;
 
     /**
      * @var array
@@ -18,6 +21,7 @@ class AbstractController
 
     public function addRenderOptions($options)
     {
+        $options['navigation'] = $this->getNavigation();
         $this->vars['options'] = array_merge($this->vars, $options);
     }
 
@@ -28,13 +32,11 @@ class AbstractController
     public function render($namespace, $filename, $options = [])
     {
         $this->addRenderOptions($options);
-        // @TODO pas utilisé...
-        $path = $this->handleNamespace($namespace);
+
         extract($this->vars);
         ob_start();
         require(ROOT . $this->handleNamespace($namespace)['newDir'] . $filename . '.phtml');
-        // @TODO pas utilisé....
-        $content_for_layout = ob_get_clean();
+        ob_get_clean();
         require(ROOT . $this->chooseDirectory($namespace) . self::VIEWS_PATH . $this->getLayout($filename) . '.phtml');
     }
 
@@ -85,6 +87,7 @@ class AbstractController
         $modVars = str_replace('\\', '/',$vars);
 
         if(preg_match(self::REGEX_IS_ADMIN, $modVars)) {
+
             return self::ADMIN_DIR;
         }
         else{
@@ -92,4 +95,5 @@ class AbstractController
 
         }
     }
+
 }

@@ -1,0 +1,39 @@
+{
+  "fieldset": {
+    "id": "",
+    "class": []
+  },
+  "legend": {
+    "content": "",
+    "id": "",
+    "class": []
+  },
+  "fields": [
+    {
+      "label": {
+        "content":  "",
+        "for": "",
+        "id": "",
+        "class": []
+      },
+      "input": {
+        "type": "",
+        "name": "",
+        "id": "",
+        "class": [],
+        "value": "",
+        "placeholder": ""
+      }
+    }
+  ],
+  "buttons": [
+    {
+      "button": {
+        "type": "",
+        "id": "",
+        "class": [],
+        "value": ""
+      }
+    }
+  ]
+}

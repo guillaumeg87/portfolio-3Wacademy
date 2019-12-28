@@ -8,7 +8,16 @@ Projet "from scratch" utilisant les 5 langages enseignés à la 3WAcademy:
           * Javascript
           * PHP
           * MySQL
-         
+          <!-- https://shields.io/--> 
+          <!-- exemple https://img.shields.io/badge/<LABEL>-<MESSAGE>-<COLOR> -->
+ 
+![project-version](https://img.shields.io/badge/Project_version-0.0-red.svg)
+![status](https://img.shields.io/badge/Status-in_development-blue.svg)
+![php](https://img.shields.io/badge/php-7.3-blueviolet.svg?logo=php)
+![webpack](https://img.shields.io/badge/webpack-4.39-yellow.svg?logo=webpack)
+![sass](https://img.shields.io/badge/css-sass-pink.svg?logo=sass)
+![framework](https://img.shields.io/badge/framework-from_scratch-black.svg)
+
 ## INSTALLATION DU PROJET
 
 Ouvrir le terminal et cloner le projet : 

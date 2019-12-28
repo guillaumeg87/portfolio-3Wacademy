@@ -131,6 +131,7 @@ class DatabaseBuilder
             if ($isCreate) {
                 $request = new InstallRequest();
                 $request->createUserTable($db_data);
+                $request->createMenuEntryTable($db_data);
                 $this->saveAdmin($request, $admin, $db_data);
             }
 
@@ -312,5 +313,4 @@ class DatabaseBuilder
         $sql = "CREATE DATABASE IF NOT EXISTS " . $db_data['Db_name'];
         return $connection->exec($sql);
     }
-
 }

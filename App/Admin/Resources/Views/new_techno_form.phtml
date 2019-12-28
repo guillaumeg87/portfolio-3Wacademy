@@ -32,28 +32,16 @@
             <aside class="admin-sidebar">
                 <div>
                     <h2>Menu</h2>
+                    <a href="/admin/formBuilder/index">Ajouter un nouveau types de contenu</a>
                     <ul>
-                        <li>
-                            <a href="/admin/newProject">Ajouter un projet</a>
-                        </li>
-                        <li>
-                            <a href="/admin/newTechnology">Ajouter une techno</a>
-                        </li>
-                        <li>
-                            <a href="/admin/newLangage">Ajouter un Langage</a>
-                        </li>
-                        <li>
-                            <a href="/admin/newCertification">Ajouter une certification</a>
-                        </li>
-                        <li>
-                            <a href="/admin/newHobby">Ajouter un Hobby</a>
-                        </li>
-                        <li>
-                            <a href="/admin/newOpquastRule">Ajouter une règle Opquast</a>
-                        </li>
-                        <li>
-                            <a href="/admin/handleColors">Gérer les couleurs des étiquettes</a>
-                        </li>
+                        <?php
+                        foreach ($this->vars['options']['navigation'] as $key => $value){?>
+                            <li>
+                                <a href="/admin/content/index?name=<?= $value['contentTechnicalName'] ?>">
+                                    <?= ucfirst($value['contentDisplayName']) ?>
+                                </a>
+                            </li>
+                        <?php } ?>
                     </ul>
                 </div>
                 <div>

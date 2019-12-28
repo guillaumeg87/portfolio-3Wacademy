@@ -39,4 +39,11 @@ class InstallRequest extends BaseRequest
         ]);
     }
 
+    public function createMenuEntryTable(array $db_data)
+    {
+        $sql = "use " . $db_data['Db_name'];
+        $this->dbManager->connection()->exec($sql);
+        $sql = "CREATE TABLE IF NOT EXISTS menu ( id int(11) AUTO_INCREMENT NOT NULL PRIMARY KEY, contentTechnicalName VARCHAR(255) NOT NULL, contentDisplayName VARCHAR(255) NOT NULL, createAt DATE NOT NULL, updatedAt DATE NULL)";
+        return (bool)$this->dbManager->connection()->exec($sql);
+    }
 }
