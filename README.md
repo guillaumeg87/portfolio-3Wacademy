@@ -91,8 +91,14 @@ Minifier les assets pour la prod :
 npm run prod
 ```
 
+### Debug PHP
+J'ai créé un tout petit service de debug qui s'utilise de la façon suivante:
+```
+Dumper::dump($var|'string');
+```
+Ceci permet d'avoir des var_dump mieux formatés et plus lisible pour developer et débuguer
 
-
+#
 __Notes:__ 
 
 Avec Webpack 4 *ExtractTextWebpackPlugin* est déprécié,utiliser [Mini Css Extract Plugin](https://webpack.js.org/plugins/mini-css-extract-plugin/#root)
