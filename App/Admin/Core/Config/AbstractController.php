@@ -3,6 +3,7 @@
 namespace Admin\Core\Config;
 
 use Admin\Core\Traits\NavigationTrait;
+use Services\Templating\Engine\TemplateEngine;
 
 class AbstractController
 {
@@ -33,12 +34,23 @@ use NavigationTrait;
     {
         $this->addRenderOptions($options);
 
+/* ********************************* */
+        /*
+        $engine = $this->getEngine(ROOT . $this->handleNamespace($namespace)['newDir'] . $filename . '.phtml');
+        $engine->setTags('options', $options);
+
+        $engine->engineRender();
+        $engine->replaceTags();
+*/
+/* ********************************* */
+
         extract($this->vars);
         ob_start();
         require(ROOT . $this->handleNamespace($namespace)['newDir'] . $filename . '.phtml');
         ob_get_clean();
         require(ROOT . $this->chooseDirectory($namespace) . self::VIEWS_PATH . $this->getLayout($filename) . '.phtml');
-    }
+
+}
 
     private function secure_input($data)
     {
@@ -47,6 +59,7 @@ use NavigationTrait;
         $data = htmlspecialchars($data);
         return $data;
     }
+
     protected function secure_form($form)
     {
         foreach ($form as $key => $value)
@@ -96,4 +109,12 @@ use NavigationTrait;
         }
     }
 
+    /**
+     * Get Template Engine
+     * @param $file
+     * @return TemplateEngine
+     */
+    private function getEngine($file){
+        return new TemplateEngine($file);
+    }
 }

@@ -1,60 +1,12 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <title>Portfolio</title>
-        <link rel="stylesheet" href="/public/main.css">
-    </head>
+    <?php include("block__admin_head.phtml"); ?>
+
     <body>
-        <header class="admin-header">
-            <?php
-            if (!empty($this->vars['options']['flash-message'])) { ?>
-                <div class="flash-message <?= $this->vars['options']['flash-message']['type-class'] ?>">
-                    <?php
-                    foreach ($this->vars['options']['flash-message'] as $key){ ?>
-                        <p class="flash-message <?= $key['type-class'] ?>"><?= $key['message'] ?></p>
-                    <?php }
-                    ?>
-                </div>
-            <?php } ?>
-            <div class="header-content">
-                <div class="header-welcome">
-                    <h1>Technologie</h1>
-                    <p>Ajouter une nouvelle technologie</p>
-                </div>
+        <?php include("block__admin_header.phtml"); ?>
 
-                <div class="adminLogout">
-                    <a href="/admin/login/logout" title="logout">DECONNEXION</a>
-                    <a href="/" title="logout">Aller au sur le Front</a>
-                </div>
-            </div>
-        </header>
         <main class="admin-wrapper flex">
-            <aside class="admin-sidebar">
-                <div>
-                    <h2>Menu</h2>
-                    <a href="/admin/formBuilder/index">Ajouter un nouveau types de contenu</a>
-                    <ul>
-                        <?php
-                        foreach ($this->vars['options']['navigation'] as $key => $value){?>
-                            <li>
-                                <a href="/admin/content/index?name=<?= $value['contentTechnicalName'] ?>">
-                                    <?= ucfirst($value['contentDisplayName']) ?>
-                                </a>
-                            </li>
-                        <?php } ?>
-                    </ul>
-                </div>
-                <div>
-                    <h2>API</h2>
-                    <ul>
-                        <li>
-                            <a href="/admin/apiDoc">Documentation API</a>
-                        </li>
-                    </ul>
-                </div>
-
-            </aside>
+            <?php include("block__admin_menu.phtml"); ?>
             <section class="admin-content">
                 <form class="admin-form" action="/admin/handleColors/handleContentData" method="post">
 

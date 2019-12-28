@@ -1,0 +1,23 @@
+<header class="admin-header">
+    <?php
+    if (!empty($this->vars['options']['flash-message'])) { ?>
+        <div class="flash-message <?= $this->vars['options']['flash-message']['type-class'] ?>">
+            <?php
+            foreach ($this->vars['options']['flash-message'] as $key){ ?>
+                <p class="flash-message <?= $key['type-class'] ?>"><?= $key['message'] ?></p>
+            <?php }
+            ?>
+        </div>
+    <?php } ?>
+    <div class="header-content">
+        <div class="header-welcome">
+            <h1>FORM BUILDER</h1>
+            <p>Création de formulaires</p>
+        </div>
+
+        <div class="adminLogout">
+            <a href="/admin/login/logout" title="logout">DECONNEXION</a>
+            <a href="/" title="logout">Aller au sur le Front</a>
+        </div>
+    </div>
+</header>

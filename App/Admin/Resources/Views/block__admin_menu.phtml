@@ -1,0 +1,25 @@
+<aside class="admin-sidebar">
+    <div>
+        <h2>Menu</h2>
+        <a href="/admin/formBuilder/index">Ajouter un nouveau types de contenu</a>
+        <ul>
+            <?php
+            foreach ($this->vars['options']['navigation'] as $key => $value){?>
+                <li>
+                    <a href="/admin/content/index?name=<?= $value['contentTechnicalName'] ?>">
+                        <?= ucfirst($value['contentDisplayName']) ?>
+                    </a>
+                </li>
+            <?php } ?>
+        </ul>
+    </div>
+    <div>
+        <h2>API</h2>
+        <ul>
+            <li>
+                <a href="/admin/apiDoc">Documentation API</a>
+            </li>
+        </ul>
+    </div>
+
+</aside>

@@ -30,4 +30,5 @@ class AbstractFields extends AbstractBaseContentEntity
         $this->labelDisplay = $labelDisplay;
         return $this;
     }
+
 }
