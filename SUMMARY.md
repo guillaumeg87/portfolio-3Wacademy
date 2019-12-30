@@ -1,4 +1,4 @@
 # Table of contents
 
-* [Main \[README\]](README.md)
+* [Portfolio 3WAcademy](README.md)
 

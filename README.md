@@ -1,4 +1,4 @@
-# Main \[README\]
+# Portfolio 3WAcademy
 
 _**Ce portfolio est réalisé dans le cadre de ma formation à la**_ [_**3WAcademy**_](https://3wa.fr/)
 
