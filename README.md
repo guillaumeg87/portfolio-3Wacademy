@@ -1,8 +1,4 @@
----
-description: 'Read me du projet Github : https://github.com/guillaumeg87/portfolio-3Wacademy'
----
-
-# Portfolio-3WAcademy
+# Main \[README\]
 
 _**Ce portfolio est réalisé dans le cadre de ma formation à la**_ [_**3WAcademy**_](https://3wa.fr/)
 
