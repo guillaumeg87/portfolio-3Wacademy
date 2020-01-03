@@ -72,7 +72,7 @@ npm install webpack-dashboard --save-dev
 
 ### Utilisation de Webpack pendant le dev
 
-Commande permettant de convertir le SCSS en CSS à haque sauvegarde:
+Commande permettant de convertir le SCSS en CSS à chaque sauvegarde:
 
 ```text
 npm run watch
@@ -106,9 +106,9 @@ Ceci permet d'avoir des var\_dump mieux formatés et plus lisible pour developer
 
 **Notes:**
 
-Avec Webpack 4 _ExtractTextWebpackPlugin_ est déprécié,utiliser [Mini Css Extract Plugin](https://webpack.js.org/plugins/mini-css-extract-plugin/#root)
+Avec Webpack 4 _ExtractTextWebpackPlugin_ est déprécié, utiliser [Mini Css Extract Plugin](https://webpack.js.org/plugins/mini-css-extract-plugin/#root)
 
-Ajout du fichier Webpack 4 [.babelrc](https://stackoverflow.com/questions/52092739/upgrade-to-babel-7-cannot-read-property-bindings-of-null/52092788)
+Ajout du fichier Webpack 4 [_**.babelrc**_](https://stackoverflow.com/questions/52092739/upgrade-to-babel-7-cannot-read-property-bindings-of-null/52092788)_\*\*\*\*_
 
 **Sources à conserver pour webpack:**
 
