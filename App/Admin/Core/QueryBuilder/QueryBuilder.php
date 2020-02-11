@@ -2,8 +2,6 @@
 
 namespace Admin\Core\QueryBuilder;
 
-use Services\Dumper\Dumper;
-
 class QueryBuilder
 {
     /**

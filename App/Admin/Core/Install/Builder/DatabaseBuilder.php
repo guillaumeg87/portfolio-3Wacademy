@@ -2,13 +2,10 @@
 
 namespace Admin\Core\Install\Builder;
 
-
 use Admin\Controller\AdminController;
 use Admin\Controller\InstallController;
-use Admin\Core\Entity\User;
 use Admin\Core\Traits\Hash;
 use Admin\Requests\InstallRequest;
-use Connection\Db_manager;
 use mysql_xdevapi\Exception;
 use PDO;
 use PDOException;

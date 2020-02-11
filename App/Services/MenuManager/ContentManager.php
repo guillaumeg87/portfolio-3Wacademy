@@ -4,7 +4,6 @@ namespace Services\MenuManager;
 use Services\FlashMessages\FlashMessage;
 use Services\MenuManager\Requests\ContentRequest;
 
-
 class ContentManager
 {
 

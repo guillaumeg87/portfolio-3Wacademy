@@ -3,7 +3,6 @@
 namespace Router;
 
 use Admin\Core\Install\Builder\DatabaseBuilder;
-use Services\Dumper\Dumper;
 
 class Router
 {
