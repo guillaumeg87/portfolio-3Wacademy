@@ -10,5 +10,4 @@ require("./tools/tools");
 /****************/
 // formbuilder
 require("../../Services/FormBuilder/js/formBuilderManager.js");
-require("../../Services/FormBuilder/js/formBuilderManager.js");
 require("../../Services/FormBuilder/js/EventsCallback/ListenersCallback.js");

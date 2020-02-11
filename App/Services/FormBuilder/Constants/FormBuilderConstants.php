@@ -6,6 +6,10 @@ namespace Services\FormBuilder\Constants;
 
 final class FormBuilderConstants
 {
+    const KEY_FIELD_TYPE = 'fieldType';
+    const CUSTOM_CONFIG_DIRECTORY = '../Services/FormBuilder/configurations/custom/';
+    const CUSTOM_TEMPORARY_CONFIG_DIRECTORY = '../Services/FormBuilder/configurations/custom/temp/';
+
     const  MENU_LABEL_COLLECTIONS = [self::DISPLAY_NAME, self::TECHNICAL_NAME];
     const DISPLAY_NAME = 'contentDisplayName';
     const TECHNICAL_NAME = 'contentTechnicalName';
@@ -14,11 +18,15 @@ final class FormBuilderConstants
     const FIELDS_ENTITY_PATH = 'Services\FormBuilder\Core\Entity\\';
     const FIELD_CLASS_SUFFIX = 'Fields';
 
-    // Fields class names
+    // Fields Class names
     const INPUT = 'InputFields';
     const TEXTEREA = 'TextareaFields';
     const SELECT = 'SelectFields';
     const RADIO = 'RadioFields';
     const CHECKBOX = 'CheckboxFields';
 
+    // Json file config
+    const CONTENT_FORM_CLASS_WRAPPER = 'admin-form';
+    const CONTENT_FORM_GROUP_WRAPPER = 'formbuilder-load';
+    const CONTENT_FORM_CLASS_BTN_SUBMIT = 'form-btn-submit';
 }

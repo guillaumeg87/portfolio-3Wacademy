@@ -3,6 +3,7 @@
 namespace Router;
 
 use Admin\Core\Install\Builder\DatabaseBuilder;
+use Services\Dumper\Dumper;
 
 class Router
 {
@@ -73,7 +74,9 @@ class Router
         $requestParams = [];
         $explodeUrl = explode('?', trim($url));
         $explodeParamsList = explode(',', $explodeUrl[1]);
-        foreach ($explodeParamsList as $item) {
+        $paramsList = explode('&', $explodeParamsList[0]);
+
+        foreach ($paramsList as $item) {
             $param = explode('=', $item);
             $requestParams[$param[0]] = $param[1];
         }

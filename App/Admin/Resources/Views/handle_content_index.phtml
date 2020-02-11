@@ -9,64 +9,59 @@
 
             <?php include("block__admin_menu.phtml"); ?>
             <section class="admin-content">
-                <form class="admin-form" action="/admin/handleColors/handleContentData" method="post">
 
-                    <h3>ICI LE NOM DU CONTENT</h3>
-                    <div class="input-text">
-                        <label for="color">Nom de la techno</label><!--
-                        --><input name="color" type="text" value="<?= (!empty($this->vars['options']['response']['color']) ? $this->vars['options']['response']['color'] : '') ?>">
+                <h3>CONTENT INDEX</h3>
+                <?php
+                if (!empty($this->vars['options']['response']['id'])){ ?>
+                    <input name="id" type="hidden" value="<?= $this->vars['options']['response']['id'] ?>">
+                <?php } ?>
 
-                    </div>
-                    <div class="input-text">
-                        <label for="class-color">Classe css à appliquer</label><!--
-                        --><input name="class-color" type="text" value="<?= (!empty($this->vars['options']['response']['classColor']) ? $this->vars['options']['response']['classColor'] : '') ?>">
-
-                    </div>
-
-                    <?php
-                    if (!empty($this->vars['options']['response']['id'])){ ?>
-                        <input name="id" type="hidden" value="<?= $this->vars['options']['response']['id'] ?>">
-                    <?php } ?>
-
-                    <button class="form-btn-submit" type="submit">Valider</button>
-                </form><!--
                 <?php if (!empty($this->vars['options']['list'])) { ?>
-                    --><div class="admin-content-widget">
-                    <h3>ICI CONTENT LIST</h3>
+                    <div class="admin-content-widget">
+                    <h3>CONTENT LIST : <?= ucfirst($this->vars['options']['labels']['displayName']) ?></h3>
                         <table>
                             <thead>
+                            <?php
+                            foreach ($this->vars['options']['header'] as $item){ ?>
                                 <td>
-                                    Nom
+                                    <?= $item ?>
                                 </td>
-                                <td>
-                                    Classe CSS
-                                </td>
-                                <td>
-                                    Action
-                                </td>
+                            <?php
+
+                            }
+                            ?>
                             </thead>
                             <tbody>
-                            <?php foreach ($this->vars['options']['list'] as $key){ ?>
+                            <?php
+                            foreach ($this->vars['options']['list'] as $item){ ?>
                                 <tr>
+                                <?php foreach ($item as $key => $value){
+                                    if ($key === 'id'){
+                                        $id = $value;
+                                    }  ?>
                                     <td>
-                                        <a href="/admin/handleColors/edit?id=<?= $key['id'] ?>" ><?= $key['color'] ?></a>
+                                        <a href="/admin/content/formContent?id=<?= $id ?>&content_name=<?= $this->vars['options']['labels']['technicalName'] ?>&isEdit=true&content_type=<?= $this->vars['options']['content_name'] ?>&content_id=<?= $this->vars['options']['id'] ?>" ><?= $value ?></a>
                                     </td>
+
+                                <?php } ?>
                                     <td>
-                                        <?= $key['classColor'] ?>
-                                    </td>
-                                    <td>
-                                        <a href="/admin/handleColors/delete?id=<?= $key['id'] ?>" >Supprimer</a>
+                                        <a href="/admin/content/delete?id=<?= $id ?>&content_name=<?= $this->vars['options']['labels']['technicalName'] ?>" >Supprimer</a>
                                     </td>
                                 </tr>
-                            <?php } ?>
+                            <?php }
+                            ?>
                             </tbody>
                         </table>
                     </div>
-                <?php }else{ ?>
                     <div>
+
+                <?php } else{ ?>
                         <p>Pas de liste d'élément pour le moment...</p>
-                    </div>
+
                 <?php } ?>
+                        <a href="/admin/content/formContent?content_name=<?= $this->vars['options']['labels']['technicalName']?>&id=<?= $this->vars['options']['id']?>">Créer un <?= $this->vars['options']['name'] ?? 'contenu' ?></a>
+                    </div>
+
 
             </section>
         </main>

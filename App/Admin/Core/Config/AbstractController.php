@@ -2,7 +2,11 @@
 
 namespace Admin\Core\Config;
 
+
+use Admin\Core\QueryBuilder\QueryBuilder;
 use Admin\Core\Traits\NavigationTrait;
+use Services\Widget\AdminWidgetManager;
+use Services\FormBuilder\Core\FormBuilderManager;
 use Services\Templating\Engine\TemplateEngine;
 
 class AbstractController
@@ -43,9 +47,9 @@ use NavigationTrait;
         $engine->replaceTags();
 */
 /* ********************************* */
-
         extract($this->vars);
         ob_start();
+
         require(ROOT . $this->handleNamespace($namespace)['newDir'] . $filename . '.phtml');
         ob_get_clean();
         require(ROOT . $this->chooseDirectory($namespace) . self::VIEWS_PATH . $this->getLayout($filename) . '.phtml');
@@ -116,5 +120,30 @@ use NavigationTrait;
      */
     private function getEngine($file){
         return new TemplateEngine($file);
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    public function getQueryBuilder(): QueryBuilder
+    {
+        return new QueryBuilder();
+    }
+
+    /**
+     * @return FormBuilderManager
+     */
+    public function getFormBuilderManager($params):FormBuilderManager
+    {
+        return new FormBuilderManager($params);
+    }
+
+    /**
+     * @param $contentName
+     * @return AdminWidgetManager
+     */
+    public function getAdminWidget($contentName):AdminWidgetManager
+    {
+        return new AdminWidgetManager($contentName);
     }
 }
