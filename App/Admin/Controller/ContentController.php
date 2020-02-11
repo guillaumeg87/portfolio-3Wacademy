@@ -3,9 +3,7 @@ namespace Admin\Controller;
 
 use Admin\Core\Config\AbstractController;
 use Admin\Core\QueryBuilder\QueryBuilder;
-use Admin\Requests\Content\ColorsRequest;
 use Admin\Requests\Content\ContentRequest;
-use Services\Dumper\Dumper;
 use Services\FlashMessages\FlashMessage;
 
 class ContentController extends AbstractController

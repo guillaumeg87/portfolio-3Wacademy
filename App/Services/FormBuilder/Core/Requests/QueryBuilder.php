@@ -3,7 +3,6 @@
 
 namespace Services\FormBuilder\Core\Requests;
 
-
 use Services\FormBuilder\Constants\FormBuilderConstants;
 
 class QueryBuilder

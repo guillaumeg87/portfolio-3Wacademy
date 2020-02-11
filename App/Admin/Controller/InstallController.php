@@ -3,8 +3,6 @@
 
 namespace Admin\Controller;
 
-
-
 use Admin\Core\Config\AbstractController;
 use Admin\Core\Install\Builder\DatabaseBuilder;
 use Services\FlashMessages\FlashMessage;
