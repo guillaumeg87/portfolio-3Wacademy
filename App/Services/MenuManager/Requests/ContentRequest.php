@@ -22,6 +22,7 @@ class ContentRequest extends BaseRequest
     {
         $sql = "INSERT INTO " . self::TABLE_NAME . " (contentTechnicalName, contentDisplayName, createAt) VALUES (:technical, :display, :createAt)";
         $query = $this->dbManager->connection()->prepare($sql);
+
         return $query->execute([
             'technical' => $data['contentTechnicalName'],
             'display'   => $data['contentDisplayName'],

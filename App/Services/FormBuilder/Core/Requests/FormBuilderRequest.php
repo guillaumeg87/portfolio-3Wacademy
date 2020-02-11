@@ -21,7 +21,6 @@ class FormBuilderRequest extends BaseRequest
 
         $dbName = "use " . DB_conf::DB_NAME;
         $this->dbManager->connection()->exec($dbName);
-        // $query = "SELECT * FROM information_schema.tables WHERE table_schema = " . DB_conf::DB_NAME . " AND table_name = " . $name['contentTechnicalName'];
         $query = "SHOW TABLES LIKE '" . $name['contentTechnicalName'] . "'";
         $result = $this->dbManager->connection()->prepare($query);
         $result->execute();

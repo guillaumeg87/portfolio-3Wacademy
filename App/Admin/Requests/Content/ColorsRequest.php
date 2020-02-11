@@ -8,7 +8,7 @@ use PDO;
 
 class ColorsRequest extends BaseRequest
 {
-    const TABLE_NAME = 'content_color';
+    const TABLE_NAME = 'content_test';
 
     /**‡
      * Request which create the color table
@@ -94,6 +94,7 @@ class ColorsRequest extends BaseRequest
      */
     public function delete($params)
     {
+
         $sql = "DELETE FROM " . self::TABLE_NAME . " WHERE id = :id";
         $query = $this->dbManager->connection()->prepare($sql);
         return $query->execute([

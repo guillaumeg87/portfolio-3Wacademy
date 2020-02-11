@@ -24,22 +24,48 @@ const FormBuilderManager = {
     },
 
     selectors: {
-        $formBuilderBlock: document.getElementsByClassName('formbuilder')
+        $formBuilder__buildNewForm : document.getElementsByClassName('form-init'),
+        $formBuilder__loadConfiguration : document.getElementsByClassName('formbuilder-load'),
+        $formBuilder__updateConfiguration : document.getElementsByClassName('update_form'),
+
     },
 
     data: {
         countNewfield : 0
     },
+    regex: {
+        getClass : 'getConf-*',
+    },
 
     /**
      * Initialize formbuilder
      */
-    init() {
+    init: function () {
         this.log('form', 'init');
-        if (this.selectors.$formBuilderBlock.length > 0) {
+        if (this.selectors.$formBuilder__buildNewForm.length > 0) {
             let json = require('../configurations/init-builder.json');
             this.fieldsBuilder(json);
         }
+        if (this.selectors.$formBuilder__loadConfiguration.length > 0 && this.selectors.$formBuilder__updateConfiguration.length === 0) {
+
+            let contentType = this.getConfigurationFile(this.selectors.$formBuilder__loadConfiguration);
+            if (contentType === '') {
+                 this.showError();
+            }else{
+                let json = require(`../configurations/custom/${contentType}.json`);
+                this.fieldsBuilder(json);
+            }
+        }
+        if (this.selectors.$formBuilder__loadConfiguration.length > 0 && this.selectors.$formBuilder__updateConfiguration.length > 0) {
+            let contentType = this.getConfigurationFile(this.selectors.$formBuilder__loadConfiguration);
+            if (contentType === '') {
+                this.showError();
+            }else{
+                let json = require(`../configurations/custom/temp/${contentType}.json`);
+                this.fieldsBuilder(json);
+            }
+        }
+
     },
     /**
      * Event on button 'Add new field' and add fields wich help us to add a new custom field in form
@@ -93,6 +119,7 @@ const FormBuilderManager = {
     setSimpleField(type, data) {
 
         let inDom = document.createElement(type);
+
         if (data.id) {
             inDom.setAttribute('id', data.id);
         }
@@ -127,10 +154,8 @@ const FormBuilderManager = {
 
         for (obj of data) {
             for (let field in obj) {
-
                 if (obj.hasOwnProperty(field)) {
                     inDom = document.createElement(field);
-
                     if (obj[field].id) {
                         inDom.setAttribute('id', obj[field].id);
                     }
@@ -144,7 +169,14 @@ const FormBuilderManager = {
                         inDom.setAttribute('type', obj[field].type);
                     }
                     if (obj[field].value) {
-                        inDom.setAttribute('value', obj[field].value);
+                        switch(field) {
+                            case 'textarea':
+                                inDom.innerHTML = obj[field].value;
+                                break;
+
+                            default:
+                                inDom.setAttribute('value', obj[field].value);
+                        }
                     }
                     if (obj[field].placeholder) {
                         inDom.setAttribute('placeholder', obj[field].placeholder);
@@ -163,11 +195,14 @@ const FormBuilderManager = {
                     } else {
                         console.error(`Error : can't insert element ${field} in  DOM`);
                     }
+                    if (field === 'label' && obj[field].labelDisplay) {
+                        inDom.innerHTML = obj[field].labelDisplay;
+
+                    }
                     if(obj[field].eventListener){
                         this.addElementListener(obj[field].eventListener, inDom);
                     }
                 }
-
             }
         }
         if (type === 'select'){
@@ -392,6 +427,29 @@ const FormBuilderManager = {
             inDom.addEventListener(elt.type, callback);
         }
     },
+
+    /**
+     * Get content type from css class
+     * @param form
+     * @returns {string}
+     */
+    getConfigurationFile(form){
+        let contentType = '';
+        var regex = RegExp(this.regex.getClass);
+        form[0].classList.forEach( function (elt){
+            if(regex.test(elt)){
+                let chunks = elt.split('-');
+                contentType = chunks[1];
+            }
+        });
+
+        return contentType;
+    },
+    /**
+     * @TODO fonction à écrire dans le cas où il n'y a pas de contenu
+     * afficher l'erreur dans le DOM => flash message
+     */
+    showError(){},
 };
 
 /* Class could be import from any other file like this :

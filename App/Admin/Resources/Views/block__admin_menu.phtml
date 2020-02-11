@@ -6,7 +6,7 @@
             <?php
             foreach ($this->vars['options']['navigation'] as $key => $value){?>
                 <li>
-                    <a href="/admin/content/index?name=<?= $value['contentTechnicalName'] ?>">
+                    <a href="/admin/content/index?content_name=<?= $value['contentTechnicalName'] ?>&id=<?= $value['id'] ?>">
                         <?= ucfirst($value['contentDisplayName']) ?>
                     </a>
                 </li>

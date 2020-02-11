@@ -3,6 +3,7 @@
 namespace Services\FormBuilder\Core;
 
 use mysql_xdevapi\Exception;
+use Services\Dumper\Dumper;
 use Services\FlashMessages\FlashMessage;
 use Services\FormBuilder\Constants\FormBuilderConstants;
 use Services\FormBuilder\Core\Entity\InputFields;
@@ -12,9 +13,6 @@ use Services\FormBuilder\Core\Requests\QueryBuilder;
 
 class FormBuilderManager
 {
-
-    const KEY_FIELD_TYPE = 'fieldType';
-    const CUSTOM_CONFIG_DIRECTORY = '../Services/FormBuilder/configurations/custom/';
     /**
      * @var $data array
      */
@@ -70,7 +68,7 @@ class FormBuilderManager
 
                 if (array_key_exists($index, $suffix)) {
 
-                    if ($explode[0] == self::KEY_FIELD_TYPE) {
+                    if ($explode[0] == FormBuilderConstants::KEY_FIELD_TYPE) {
 
                         $fieldItem = htmlspecialchars($value);
                         $suffix[$index][$value] = [];
@@ -106,6 +104,7 @@ class FormBuilderManager
         }
 
         if (!is_array($isTableExist)) {
+
             try {
                 /**
                  * This function return int (number of affected rows) or false
@@ -117,18 +116,30 @@ class FormBuilderManager
                     $query);
 
                 if ($isTableCreated !== false) {
-                    $this->writeJsonConfigFile($datas, $reformatedDatas['labels']);
+
+                    $this->writeJsonConfigFile(
+                        $this->additionnalFields($datas, $reformatedDatas['labels']),
+                        $reformatedDatas['labels']
+                    );
                 }
+
             } catch (\Exception $exception) {
                 throw new Exception();
             }
-            return $reformatedDatas['labels'];
+
+            return [
+                'labels' => $reformatedDatas['labels'],
+                'toMenu' => true
+            ];
 
         } else {
             $flashMessage = (new FlashMessage('Ce contenu existe déjà, il n\'a donc pas été créé en doublon',
                 'error')
             )->messageBuilder();
-            return $flashMessage;
+            return [
+                'flash-message' => $flashMessage,
+                'toMenu' => false
+            ];
         }
     }
 
@@ -141,8 +152,8 @@ class FormBuilderManager
     public function setLabel(array $field, $type): array
     {
         $formated = [];
-        $formated[$type] = $field[$type];
         $formated['label'] = $field[$type];
+        $formated[$type] = $field[$type];
 
         unset($formated['label']['type']);
         unset($formated['label']['placeholder']);
@@ -159,16 +170,15 @@ class FormBuilderManager
     public function writeJsonConfigFile(array $datas, array $labels)
     {
 
-        if (!is_dir(self::CUSTOM_CONFIG_DIRECTORY)) {
+        if (!is_dir(FormBuilderConstants::CUSTOM_CONFIG_DIRECTORY)) {
 
-            mkdir(self::CUSTOM_CONFIG_DIRECTORY);
+            mkdir(FormBuilderConstants::CUSTOM_CONFIG_DIRECTORY);
         }
 
-        $path = self::CUSTOM_CONFIG_DIRECTORY . $labels[FormBuilderConstants::TECHNICAL_NAME] . '.json';
+        $path = FormBuilderConstants::CUSTOM_CONFIG_DIRECTORY . $labels[FormBuilderConstants::TECHNICAL_NAME] . '.json';
 
         $json = json_encode($datas);
         file_put_contents($path, $json);
-
     }
 
     /**
@@ -224,5 +234,75 @@ class FormBuilderManager
     private function getFormBuilderRequest()
     {
         return new FormBuilderRequest();
+    }
+
+    /** Add usual fields needed for each forms :
+     * - wrapper for all the fields
+     * - submit button
+     *
+     * @param $datas
+     * @param $labels
+     * @return array
+     */
+    private function additionnalFields($datas, $labels)
+    {
+        $configJson = $this->addWrapperFields($labels);
+        $configJson['fields'] = $datas;
+        $configJson['buttons'][] = $this->addSubmitButton();
+
+        return $configJson;
+    }
+
+
+    /**
+     * Move the fields in the wrapper
+     * @param array $labels
+     * @return array
+     */
+    private function addWrapperFields(array $labels): array
+    {
+        return [
+            'fieldset' => [
+                'id' => '',
+                'class' => [FormBuilderConstants::CONTENT_FORM_CLASS_WRAPPER],
+                'group' => FormBuilderConstants::CONTENT_FORM_GROUP_WRAPPER
+            ],
+            'legend' => [
+                'content' => 'Nouveau ' . strtolower($labels[FormBuilderConstants::DISPLAY_NAME]),
+                'id' => '',
+                'class' => [],
+                'group' => FormBuilderConstants::CONTENT_FORM_CLASS_WRAPPER
+            ]
+        ];
+    }
+
+    /**
+     * Add the submit button
+     * @return array
+     */
+    private function addSubmitButton()
+    {
+        return [
+            'button' => [
+                'type' => 'submit',
+                'id' => '',
+                'class' => [FormBuilderConstants::CONTENT_FORM_CLASS_BTN_SUBMIT],
+                'content' => 'validez',
+                'group' => FormBuilderConstants::CONTENT_FORM_GROUP_WRAPPER
+            ]
+        ];
+    }
+
+    public function updateContentdata()
+    {
+        if(!empty($this->data)){
+             return $this->getformHydrator($this->data)->buildTemporaryConfiguration();
+        }
+        return null;
+    }
+
+    private function getformHydrator($datas)
+    {
+        return new FormHydrator($datas);
     }
 }
