@@ -36,6 +36,16 @@ class InputFields extends AbstractFields
     private $contentRef;
 
     /**
+     * @var string $path
+     */
+    private $path;
+
+    /**
+     * @var string $url
+     */
+    private $url;
+
+    /**
      * Get Name
      * @return string
      */
@@ -146,6 +156,44 @@ class InputFields extends AbstractFields
     public function setContentRef(int $contentRef): InputFields
     {
         $this->contentRef = $contentRef;
+        return $this;
+    }
+
+    /**
+     * Get Path
+     * @return string
+     */
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
+    /**
+     * @param string $path
+     * @return InputFields
+     */
+    public function setPath(string $path): InputFields
+    {
+        $this->path = $path;
+        return $this;
+    }
+
+    /**
+     * Get Url
+     * @return string
+     */
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param string $url
+     * @return InputFields
+     */
+    public function setUrl(string $url): InputFields
+    {
+        $this->url = $url;
         return $this;
     }
 

@@ -10,3 +10,4 @@
 *.map
 /App/Services/FormBuilder/configurations/custom/*
 /App/Services/FormBuilder/configurations/custom/temp/*
+/App/web/uploads/*

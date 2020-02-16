@@ -3,5 +3,6 @@
   "select": "",
   "checkbox": "",
   "radio": "",
-  "textarea":""
+  "textarea":"",
+  "file": ""
 }

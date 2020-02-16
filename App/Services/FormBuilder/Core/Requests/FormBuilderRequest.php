@@ -3,6 +3,7 @@ namespace Services\FormBuilder\Core\Requests;
 
 use Admin\Requests\BaseRequest;
 use Connection\DB_conf;
+use PDO;
 
 class FormBuilderRequest extends BaseRequest
 {
@@ -25,7 +26,7 @@ class FormBuilderRequest extends BaseRequest
         $result = $this->dbManager->connection()->prepare($query);
         $result->execute();
 
-        return $result->fetch();
+        return $result->fetch(PDO::FETCH_ASSOC);
     }
 
     /**

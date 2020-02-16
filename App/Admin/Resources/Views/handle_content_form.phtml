@@ -9,10 +9,13 @@
             <?php include("block__admin_menu.phtml"); ?>
             <section class="admin-content">
                 <h6>CONTENT FORM</h6>
-                <form class="formbuilder-load getConf-<?= $this->vars['options']['content_name'] ?? '' ?> <?= $this->vars['options']['form-selector'] ?? '' ?>" action="/admin/content/<?=  $this->vars['options']['action']?>" method="post">
+                <form class="formbuilder-load getConf-<?= $this->vars['options']['content_name'] ?? '' ?> <?= $this->vars['options']['form-selector'] ?? '' ?>"
+                      action="/admin/content/<?=  $this->vars['options']['action']?>"
+                      method="post"
+                      enctype="multipart/form-data">
 
-                    <input type="hidden" name="content_name" value="<?= $this->vars['options']['content_name'] ?>">
-                    <input type="hidden" name="content_id" value="<?= $this->vars['options']['content_id'] ?>">
+                    <input type="hidden" name="content_name" value="<?= $this->vars['options']['content_name'] ?? '' ?>">
+                    <input type="hidden" name="content_id" value="<?= $this->vars['options']['content_id'] ?? '' ?>">
 
                 </form>
             </section>

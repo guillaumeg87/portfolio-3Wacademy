@@ -405,21 +405,19 @@ template {
     margin: 1rem 2%;
     padding: 1rem 1%; }
 
-.admin-form {
+.admin-form, .admin-content {
   display: inline-block;
   margin-bottom: 2rem;
   vertical-align: top;
-  width: 60%;
+  width: 100%;
   padding: 1rem 2%; }
-  .admin-form .input-text {
-    margin: 1rem 1%; }
-    .admin-form .input-text label {
-      width: 30%;
-      display: inline-block; }
-    .admin-form .input-text input {
-      width: 70%;
-      display: inline-block; }
-  .admin-form .form-btn-submit {
+  .admin-form label, .admin-content label {
+    width: 30%;
+    display: block; }
+  .admin-form input, .admin-content input {
+    width: 70%;
+    display: block; }
+  .admin-form .form-btn-submit, .admin-content .form-btn-submit {
     display: block;
     margin: 3rem 1% 0 auto;
     padding: 1rem 2%;
@@ -429,7 +427,7 @@ template {
     border: solid 2px orange;
     transition: 0.4s ease;
     border-radius: 5px; }
-    .admin-form .form-btn-submit:hover {
+    .admin-form .form-btn-submit:hover, .admin-content .form-btn-submit:hover {
       background-color: white;
       color: orange; }
 

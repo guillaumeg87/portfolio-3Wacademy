@@ -1,23 +1,19 @@
 
-.admin-form {
+.admin-form, .admin-content{
 
   display: inline-block;
   margin-bottom: 2rem;
   vertical-align: top;
-  width: 60%;
+  width: 100%;
   padding: 1rem 2%;
 
-  .input-text{
-    margin: 1rem 1%;
-    label{
-      width: 30%;
-
-      display: inline-block;
-    }
-    input{
-      width: 70%;
-      display: inline-block;
-    }
+  label{
+    width: 30%;
+    display: block;
+  }
+  input{
+    width: 70%;
+    display: block;
   }
 
   .form-btn-submit{
