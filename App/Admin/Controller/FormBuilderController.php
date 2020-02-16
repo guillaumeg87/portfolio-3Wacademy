@@ -35,7 +35,7 @@ class FormBuilderController extends AbstractController
         }
         $formData = $_POST;
 
-        $formBuilderManager = new FormBuilderManager($formData);
+        $formBuilderManager = $this->getServiceManager()->getFormBuilderManager($formData);
         $suffix = $formBuilderManager->buildIndex($formData);
         $formatedDatas = $formBuilderManager->sortFormdata($formData, $suffix);
 

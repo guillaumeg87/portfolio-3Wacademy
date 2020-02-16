@@ -35,7 +35,7 @@ class InstallController extends AbstractController
 
         }
         else {
-            $options['flash-message'] = (new FlashMessage(
+            $options['flash-message'] = ($this->getServiceManager()->getFlashMessage(
                 'L\'adresse mail est incorrecte, veuillez vérifier',
                 'error'
             ))->messageBuilder();

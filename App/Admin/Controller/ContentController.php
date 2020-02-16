@@ -29,7 +29,7 @@ class ContentController extends AbstractController
                 if($options['content_name'] || $options['widget']){
                     $content_name = $options['content_name'] ?? $options['widget']['content_name'];
 
-                    $widget = $this->getAdminWidget($content_name);
+                    $widget = $this->getServiceManager()->getAdminWidget($content_name);
                     $options['labels'] = $this->getContentLabels($content_name);
                     $options['list'] = $widget->getElementList();
                     if (!empty($widget->getElementList()) && is_array($widget->getElementList())) {
@@ -51,7 +51,7 @@ class ContentController extends AbstractController
             // @TODO au lieu de create ici retourner un message d'erreur
             $options['action'] = $options['isEdit'] ? self::EDIT_LABEL : self::CREATE_LABEL;
 
-            $form = $this->getFormBuilderManager($options)->updateContentdata();
+            $form = $this->getServiceManager()->getFormBuilderManager($options)->updateContentdata();
             if(!empty($form) && $options['action'] === self::EDIT_LABEL){
                 $options['form-selector'] = self::CONTENT_FORM_UPDATE;
 
@@ -60,7 +60,7 @@ class ContentController extends AbstractController
                 $options['form-selector'] = self::CONTENT_FORM_CREATE;
             }
             else {
-                $options['flash-message'][] = (new FlashMessage(
+                $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
                   'Une erreur est survenue lors de la récupération du contenue.',
                     'error'
                 ))->messageBuilder();
@@ -131,7 +131,7 @@ class ContentController extends AbstractController
                     $options['content'] = $isUpdated;
 
 
-                    $options['flash-message'][] = (new FlashMessage(
+                    $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
                         "Le contenu a bien été modifié!",
                         'success'
                     ))->messageBuilder();
@@ -141,7 +141,7 @@ class ContentController extends AbstractController
 
             } catch (\Exception $e) {
 
-                $options['flash-message'][] = (new FlashMessage(
+                $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
                     'ERROR : ' . '</br>' .
                     'Code : ' . $e->getCode() .
                     'Stack Trace : ' . $e->getTraceAsString() . '</br>' .
@@ -170,13 +170,13 @@ class ContentController extends AbstractController
                 $isDeleted = $query->delete($options, $sql);
 
                 if ($isDeleted) {
-                    $options['flash-message'][] = (new FlashMessage(
+                    $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
                         "Le contenu a bien été supprimée!",
                         'success'
                     ))->messageBuilder();
 
                     if($options['content_name']){
-                        $widget = $this->getAdminWidget($options['content_name']);
+                        $widget = $this->getServiceManager()->getAdminWidget($options['content_name']);
                         $options['labels'] = $this->getContentLabels($options['content_name']);
                         $options['list'] = $widget->getElementList();
 
@@ -189,7 +189,7 @@ class ContentController extends AbstractController
                 }
 
             } catch (\Exception $e) {
-                $options['flash-message'][] = (new FlashMessage(
+                $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
                     'ERROR : ' . '</br>' .
                     'Code : ' . $e->getCode() .
                     'Stack Trace : ' . $e->getTraceAsString() . '</br>' .
@@ -233,20 +233,20 @@ class ContentController extends AbstractController
 
             if ($isSaved) {
 
-                $flash_message = (new FlashMessage(
+                $flash_message = ($this->getServiceManager()->getFlashMessage(
                     "Le contenu a bien été sauvegardée",
                     'success'
                 ))->messageBuilder();
 
 
             } else {
-                $flash_message = (new FlashMessage(
+                $flash_message = ($this->getServiceManager()->getFlashMessage(
                     "Le contenu n'a pas été sauvegardée",
                     'error'
                 ))->messageBuilder();
             }
         } catch (\Exception $e) {
-            $flash_message = (new FlashMessage(
+            $flash_message = ($this->getServiceManager()->getFlashMessage(
                 'ERROR : ' . '</br>' .
                 'Code : ' . $e->getCode() .
                 'Stack Trace : ' . $e->getTraceAsString() . '</br>' .
@@ -282,12 +282,12 @@ class ContentController extends AbstractController
         foreach ($files as $key => $value){
 
             if($files[$key]['size'] !== 0){
-
-                $isUploaded = $this->getImageManager()->imageHandler($files['file']);
+                $imageManager = $this->getServiceManager()->getImageManager();
+                $isUploaded = $imageManager->imageHandler($files['file']);
                 if ($isUploaded) {
 
-                    $formDatas['url'] = $this->getImageManager()->getFileUrl($files[$key]['name'])['url'];
-                    $formDatas['path'] = $this->getImageManager()->getFileUrl($files[$key]['name'])['path'];
+                    $formDatas['url'] = $imageManager->getFileUrl($files[$key]['name'])['url'];
+                    $formDatas['path'] = $imageManager->getFileUrl($files[$key]['name'])['path'];
 
                 }
             }
