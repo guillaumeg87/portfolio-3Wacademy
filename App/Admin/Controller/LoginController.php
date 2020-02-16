@@ -42,7 +42,7 @@ class LoginController extends AbstractController
             if(!empty($isLogged)) {
 
                 if ($formatedDatas['login'] == $isLogged['login'] && $formatedDatas['password'] == $isLogged['password']){
-                    $options['flash-message'][] = (new FlashMessage(
+                    $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
                         'Connexion Réussie',
                         'success'
                     ))->messageBuilder();
@@ -71,7 +71,7 @@ class LoginController extends AbstractController
 
             $this->handleSessionFields();
         }
-        $options['flash-message'][] = (new FlashMessage(
+        $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
             'Déconnexion réussie !',
             'success'
         ))->messageBuilder();
@@ -97,7 +97,7 @@ class LoginController extends AbstractController
      * @param $options
      */
     private function errorLogin($options){
-        $options['flash-message'][] = (new FlashMessage(
+        $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
             'Les accès sont incorrectes.',
             'error'
         ))->messageBuilder();
