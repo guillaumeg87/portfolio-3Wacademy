@@ -55,7 +55,6 @@ class FormBuilderManager
     public function sortFormdata(array $formData, array $suffix): array
     {
         $reformatedDatas = $this->splitDatas($formData);
-
         $fieldItem = '';
 
         foreach ($reformatedDatas['reformatedEntry'] as $key => $value) {
@@ -66,13 +65,17 @@ class FormBuilderManager
             if (!empty($index) && preg_match('/[' . $index . ']$/', $key)) {
 
                 if (array_key_exists($index, $suffix)) {
-
                     if ($explode[0] == FormBuilderConstants::KEY_FIELD_TYPE) {
 
                         $fieldItem = htmlspecialchars($value);
                         $suffix[$index][$value] = [];
                     } else {
+                        if ($reformatedDatas['reformatedEntry'][$key] === 'file') {
+                            $suffix[$index][$fieldItem] = array_merge($suffix[$index][$fieldItem], $this->addFileFields());
+                        }
                         $suffix[$index][$fieldItem][$explode[0]] = htmlspecialchars($value);
+
+
 
                     }
                 }
@@ -98,8 +101,8 @@ class FormBuilderManager
         try {
             $isTableExist = $this->getFormBuilderRequest()->isTableExist($reformatedDatas['labels']);
 
-        } catch (\Exception $exception) {
-            throw new Exception();
+        } catch (\PDOException $exception) {
+            throw new \PDOException();
         }
 
         if (!is_array($isTableExist)) {
@@ -115,15 +118,14 @@ class FormBuilderManager
                     $query);
 
                 if ($isTableCreated !== false) {
-
-                    $this->writeJsonConfigFile(
+                        $this->writeJsonConfigFile(
                         $this->additionnalFields($datas, $reformatedDatas['labels']),
                         $reformatedDatas['labels']
                     );
                 }
 
-            } catch (\Exception $exception) {
-                throw new Exception();
+            } catch (\PDOException $exception) {
+                throw new \PDOException();
             }
 
             return [
@@ -135,6 +137,7 @@ class FormBuilderManager
             $flashMessage = (new FlashMessage('Ce contenu existe déjà, il n\'a donc pas été créé en doublon',
                 'error')
             )->messageBuilder();
+
             return [
                 'flash-message' => $flashMessage,
                 'toMenu' => false
@@ -159,6 +162,11 @@ class FormBuilderManager
         $formated['label']['for'] = $field[$type]['name'];
         unset($formated['label']['name']);
 
+        if ($field[$type]['type'] === 'file') {
+            unset($formated['label']['url']);
+            unset($formated['label']['path']);
+        }
+
         return $formated;
     }
 
@@ -181,16 +189,16 @@ class FormBuilderManager
     }
 
     /**
-     * @param $field
-     * @param $type
+     * @param array $field
+     * @param string $type
      * @return Entity\AbstractBaseContentEntity|InputFields
      */
-    public function toObject($field, $type)
+    public function toObject(array $field, string $type)
     {
-        $name = FormBuilderConstants::FIELDS_ENTITY_PATH . ucfirst($type) . FormBuilderConstants::FIELD_CLASS_SUFFIX;
+        $name = $this->getEntityType($field, $type);
 
         try {
-            if (class_exists($name)) {
+            if ($name !== null && class_exists($name)) {
                 $class = new $name();
 
                 if ($class instanceof $name) {
@@ -303,5 +311,41 @@ class FormBuilderManager
     private function getformHydrator($datas)
     {
         return new FormHydrator($datas);
+    }
+
+    /**
+     * Add the field for file field
+     * @return array
+     */
+    private function addFileFields():array
+    {
+
+        return [
+            'path'  => '',
+            'url'   => ''
+        ];
+    }
+
+    /**
+     * @param array $field
+     * @param string $type
+     * @return string|null
+     */
+    private function getEntityType(array $field, string $type)
+    {
+        $name = null;
+        switch ($field[$type]['type']){
+
+            case 'file':
+                $name = FormBuilderConstants::FIELDS_ENTITY_PATH . ucfirst('files') . FormBuilderConstants::FIELD_CLASS_SUFFIX;
+                break;
+
+            default:
+            case 'text':
+                $name = FormBuilderConstants::FIELDS_ENTITY_PATH . ucfirst($type) . FormBuilderConstants::FIELD_CLASS_SUFFIX;
+
+        }
+
+        return $name;
     }
 }

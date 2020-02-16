@@ -24,6 +24,7 @@ final class FormBuilderConstants
     const SELECT = 'SelectFields';
     const RADIO = 'RadioFields';
     const CHECKBOX = 'CheckboxFields';
+    const FILES = 'FilesFields';
 
     // Json file config
     const CONTENT_FORM_CLASS_WRAPPER = 'admin-form';

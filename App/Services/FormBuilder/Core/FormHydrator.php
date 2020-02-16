@@ -25,6 +25,7 @@ class FormHydrator
 
     /**
      * @return bool
+     * @throws \Exception
      */
     public function buildTemporaryConfiguration(): bool
     {
@@ -42,7 +43,7 @@ class FormHydrator
                 }
             }
         } catch (\Exception $e) {
-            // @TODO
+            throw new \Exception();
         }
         return false;
     }
@@ -54,21 +55,28 @@ class FormHydrator
     private function generateTemporaryJson($contentData): ?string
     {
         $json = file_get_contents(FormBuilderConstants::CUSTOM_CONFIG_DIRECTORY . $this->content['content_name'] . '.json');
-
         $jsonToArray = null;
         if ($json) {
             $jsonToArray = json_decode($json);
 
             $jsonToArray = $this->hiddenFieldId($contentData['id'], $jsonToArray);
+
             foreach ($jsonToArray->fields as $item) {
 
                 foreach ($item as $index => $arrayField) {
-
                     if ($arrayField->name) {
 
                         $arrayField->value = $contentData[strtolower($arrayField->name)];
                     }
+                    if (isset($arrayField->url)) {
 
+                        $arrayField->url = $contentData['url'];
+                    }
+                    if (isset($arrayField->path)) {
+
+                        $arrayField->path = $contentData['path'];
+                        $arrayField->value = 'bbang.jpeg';
+                    }
                 }
             }
         }

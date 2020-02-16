@@ -82,9 +82,10 @@ class ContentController extends AbstractController
 
     public function create($options = [])
     {
-        if (empty($_SESSION)) {
 
+        if (empty($_SESSION)) {
             $formDatas = $this->verifyDatasFromForm($_POST);
+            $formDatas = $this->getFilesData($formDatas, $_FILES);
 
             $options['widget'] = [
                 'id'            => $formDatas['content_id'],
@@ -109,7 +110,9 @@ class ContentController extends AbstractController
      */
     public function edit ($options)
     {
+
         $formDatas = $this->verifyDatasFromForm($_POST);
+        $formDatas = $this->getFilesData($formDatas, $_FILES);
         $options['widget'] = [
             'id'            => $formDatas['content_id'],
             'content_name'  => $formDatas['content_name']
@@ -129,7 +132,7 @@ class ContentController extends AbstractController
 
 
                     $options['flash-message'][] = (new FlashMessage(
-                        "La contenu a bien été modifiée!",
+                        "Le contenu a bien été modifié!",
                         'success'
                     ))->messageBuilder();
 
@@ -268,4 +271,27 @@ class ContentController extends AbstractController
         ];
     }
 
+    /**
+     * Add files datas in formated datas array
+     * @param $formDatas
+     * @param $files
+     * @return array
+     */
+    private function getFilesData($formDatas, $files):array
+    {
+        foreach ($files as $key => $value){
+
+            if($files[$key]['size'] !== 0){
+
+                $isUploaded = $this->getImageManager()->imageHandler($files['file']);
+                if ($isUploaded) {
+
+                    $formDatas['url'] = $this->getImageManager()->getFileUrl($files[$key]['name'])['url'];
+                    $formDatas['path'] = $this->getImageManager()->getFileUrl($files[$key]['name'])['path'];
+
+                }
+            }
+        }
+        return $formDatas;
+    }
 }

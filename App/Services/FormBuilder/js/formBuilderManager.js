@@ -69,7 +69,6 @@ const FormBuilderManager = {
     },
     /**
      * Event on button 'Add new field' and add fields wich help us to add a new custom field in form
-     * @param
      */
     addNewField() {
 
@@ -185,6 +184,16 @@ const FormBuilderManager = {
                         inDom.innerHTML = obj[field].content;
                     }
                     if (obj[field].class !== []) {
+                        for (let i of obj[field].class) {
+                            inDom.classList.add(i);
+                        }
+                    }
+                    if (obj[field].fileUrl) {
+                        for (let i of obj[field].class) {
+                            inDom.classList.add(i);
+                        }
+                    }
+                    if (obj[field].filePath) {
                         for (let i of obj[field].class) {
                             inDom.classList.add(i);
                         }
@@ -313,6 +322,7 @@ const FormBuilderManager = {
         let newInput;
         let newLabel;
 
+        let inputType = null;
         switch(type){
             case 'labelDisplay':
             case 'type':
@@ -322,6 +332,8 @@ const FormBuilderManager = {
             case 'class':
             case 'value':
             case 'placeholder':
+            case 'fileUrl':
+            case 'filePath':
 
                 newLabel = document.createElement('label');
                 newLabel.setAttribute('for', `${type}_${rank}`);
@@ -330,6 +342,10 @@ const FormBuilderManager = {
                 newInput = document.createElement('input');
                 newInput.setAttribute('name', `${type}_${rank}`);
                 newInput.setAttribute('type', 'text');
+
+                if (type === 'type') {
+                    newInput.setAttribute('value', this.getInputType(datas));
+                }
                 newInput.setAttribute('placeholder', Tools.camelCaseToString(type));
 
                 wrapper.appendChild(newLabel);
@@ -450,6 +466,15 @@ const FormBuilderManager = {
      * afficher l'erreur dans le DOM => flash message
      */
     showError(){},
+
+    /**
+     * Return input type
+     * @param datas {Object}
+     * @returns {string}
+     */
+    getInputType(datas) {
+        return  datas.fieldType === 'input' ? datas.type : '';
+    }
 };
 
 /* Class could be import from any other file like this :
