@@ -26,9 +26,14 @@ class SelectFields extends AbstractFields
     private $group;
 
     /**
-     * @var int $contentRef
+     * @var string $labelRef
      */
-    private $contentRef;
+    private $labelRef;
+
+    /**
+     * @var int $idRef
+     */
+    private $idRef;
 
     /**
      * Get Name
@@ -107,21 +112,40 @@ class SelectFields extends AbstractFields
     }
 
     /**
-     * Get ContentRef
-     * @return int
+     * Get LabelRef
+     * @return string
      */
-    public function getContentRef(): int
+    public function getlabelRef(): int
     {
-        return $this->contentRef;
+        return $this->labelRef;
     }
 
     /**
-     * @param int $contentRef
+     * @param string $labelRef
      * @return SelectFields
      */
-    public function setContentRef(int $contentRef): SelectFields
+    public function setLabelRef(string $labelRef): SelectFields
     {
-        $this->contentRef = $contentRef;
+        $this->labelRef = $labelRef;
+        return $this;
+    }
+
+    /**
+     * Get IdRef
+     * @return int
+     */
+    public function getIdRef(): int
+    {
+        return $this->idRef;
+    }
+
+    /**
+     * @param int $idRef
+     * @return SelectFields
+     */
+    public function setIdRef(int $idRef): SelectFields
+    {
+        $this->idRef = $idRef;
         return $this;
     }
 

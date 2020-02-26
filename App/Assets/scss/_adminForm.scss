@@ -8,11 +8,19 @@
   padding: 1rem 2%;
 
   label{
-    width: 30%;
+    //width: 30%;
+    display: inline-block;
+  }
+  input[type='text']{
+    width: 50%;
     display: block;
   }
-  input{
-    width: 70%;
+  input[type='checkbox']{
+  margin-left: 2rem;
+    display: inline-block;
+  }
+
+  .addNewField{
     display: block;
   }
 

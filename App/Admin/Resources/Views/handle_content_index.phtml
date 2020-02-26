@@ -17,38 +17,41 @@
                 <?php } ?>
 
                 <?php if (!empty($this->vars['options']['list'])) { ?>
-                    <div class="admin-content-widget">
+                <div class="admin-content-widget">
                     <h3>CONTENT LIST : <?= ucfirst($this->vars['options']['labels']['displayName']) ?></h3>
-                        <table>
-                            <thead>
-                            <?php
-                            foreach ($this->vars['options']['header'] as $item){ ?>
+                    <table>
+                        <thead>
+                        <?php
+                        if (!empty($this->vars['options']['header'])) {
+                            foreach ($this->vars['options']['header'] as $item) { ?>
                                 <td>
                                     <?= $item ?>
                                 </td>
-                            <?php
-
+                                <?php
                             }
-                            ?>
-                            </thead>
-                            <tbody>
-                            <?php
-                            foreach ($this->vars['options']['list'] as $item){ ?>
-                                <tr>
-                                <?php foreach ($item as $key => $value){
-                                    if ($key === 'id'){
+                        }
+                        ?>
+                        </thead>
+                        <tbody>
+                        <?php
+                        if (!empty($this->vars['options']['list'])) {
+                        foreach ($this->vars['options']['list'] as $item) { ?>
+                            <tr>
+                                <?php foreach ($item as $key => $value) {
+                                    if ($key === 'id') {
                                         $id = $value;
-                                    }  ?>
+                                    } ?>
                                     <td>
-                                        <a href="/admin/content/formContent?id=<?= $id ?>&content_name=<?= $this->vars['options']['labels']['technicalName'] ?>&isEdit=true&content_type=<?= $this->vars['options']['content_name'] ?>&content_id=<?= $this->vars['options']['id'] ?>" ><?= $value ?></a>
+                                        <a href="/admin/content/formContent?id=<?= $id ?>&content_name=<?= $this->vars['options']['labels']['technicalName'] ?>&isEdit=true&content_type=<?= $this->vars['options']['content_name'] ?>&content_id=<?= $this->vars['options']['id'] ?>"><?= $value ?></a>
                                     </td>
 
                                 <?php } ?>
-                                    <td>
-                                        <a href="/admin/content/delete?id=<?= $id ?>&content_name=<?= $this->vars['options']['labels']['technicalName'] ?>" >Supprimer</a>
-                                    </td>
-                                </tr>
-                            <?php }
+                                <td>
+                                    <a href="/admin/content/delete?id=<?= $id ?>&content_name=<?= $this->vars['options']['labels']['technicalName'] ?>">Supprimer</a>
+                                </td>
+                            </tr>
+                        <?php }
+                        }
                             ?>
                             </tbody>
                         </table>

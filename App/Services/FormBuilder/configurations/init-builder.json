@@ -49,8 +49,24 @@
           "value": "",
           "placeholder": "Nom technique du contenu",
           "group": "admin-form"
+        }
+      },
+      {
+        "label": {
+          "content":  "Taxonomy",
+          "for": "isTaxonomy",
+          "id": "",
+          "class": [],
+          "group": "admin-form"
 
-
+        },
+        "input": {
+          "type": "checkbox",
+          "name": "isTaxonomy",
+          "id": "",
+          "class": [],
+          "value": "",
+          "group": "admin-form"
         }
       }
     ],

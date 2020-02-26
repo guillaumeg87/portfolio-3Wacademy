@@ -2,6 +2,8 @@
 
 namespace Admin\Core\QueryBuilder;
 
+use Connection\DB_conf;
+
 class QueryBuilder
 {
     /**
@@ -23,14 +25,15 @@ class QueryBuilder
 
         $sql = null;
 
-        if (!empty($table_name)) {
+        unset($params['id']);
 
+        if (!empty($table_name)) {
             switch($method){
 
                 case 'create':
                     $dataHandler = $this->getCreateColumnsAndAliases($params);
                     if (!empty($dataHandler)) {
-                        $sql = "INSERT INTO " . $table_name . " (" . $dataHandler['columns'] . ") VALUES (" . $dataHandler['aliases'] . ")" ;
+                        $sql = "INSERT INTO " .  DB_conf::DB_NAME . '.'. $table_name . " (" . $dataHandler['columns'] . ") VALUES (" . $dataHandler['aliases'] . ")" ;
 
                     }
                     break;
@@ -38,14 +41,14 @@ class QueryBuilder
                     $dataHandler = $this->getSelectOne($params);
                     if (!empty($dataHandler)) {
 
-                        $sql = "SELECT * FROM " . $table_name . " WHERE id = :id;";
+                        $sql = "SELECT * FROM " .  DB_conf::DB_NAME . '.'. $table_name . " WHERE id = :id;";
 
                     }
                     break;
 
                 case 'select_all':
 
-                    $sql = "SELECT * FROM " . $table_name . " WHERE -1";
+                    $sql = "SELECT * FROM " . DB_conf::DB_NAME . '.'. $table_name . " WHERE -1";
                     break;
 
                 case 'update':
@@ -53,12 +56,12 @@ class QueryBuilder
 
                     if (!empty($dataHandler)) {
 
-                        $sql = "UPDATE " . $table_name . " " . $dataHandler . " WHERE id = :id;";
+                        $sql = "UPDATE " .  DB_conf::DB_NAME . '.'. $table_name . " " . $dataHandler . " WHERE id = :id;";
                     }
                     break;
 
                 case 'delete':
-                    $sql = "DELETE FROM " . $table_name . " WHERE id = :id";
+                    $sql = "DELETE FROM " .  DB_conf::DB_NAME . '.'. $table_name . " WHERE id = :id";
                     break;
                 default:
                     throw new \Exception('Unexpected value');

@@ -4,7 +4,8 @@ namespace Admin\Controller;
 use Admin\Core\Config\AbstractController;
 use Admin\Core\QueryBuilder\QueryBuilder;
 use Admin\Requests\Content\ContentRequest;
-use Services\FlashMessages\FlashMessage;
+use Services\Dumper\Dumper;
+
 
 class ContentController extends AbstractController
 {
@@ -33,7 +34,10 @@ class ContentController extends AbstractController
                     $options['labels'] = $this->getContentLabels($content_name);
                     $options['list'] = $widget->getElementList();
                     if (!empty($widget->getElementList()) && is_array($widget->getElementList())) {
-                        $options['header'] = array_keys($widget->getElementList()[0]);
+                        if (!empty($widget->getElementList()[0])){
+                            $options['header'] = array_keys($widget->getElementList()[0]);
+
+                        }
                     }
                 }
 
@@ -52,6 +56,8 @@ class ContentController extends AbstractController
             $options['action'] = $options['isEdit'] ? self::EDIT_LABEL : self::CREATE_LABEL;
 
             $form = $this->getServiceManager()->getFormBuilderManager($options)->updateContentdata();
+            // Sleep needed for temporary Json configuration file
+            sleep(1);
             if(!empty($form) && $options['action'] === self::EDIT_LABEL){
                 $options['form-selector'] = self::CONTENT_FORM_UPDATE;
 
@@ -279,11 +285,14 @@ class ContentController extends AbstractController
      */
     private function getFilesData($formDatas, $files):array
     {
+        $key = array_keys($files);
+        $mainIndex = $key[0];
         foreach ($files as $key => $value){
 
             if($files[$key]['size'] !== 0){
+
                 $imageManager = $this->getServiceManager()->getImageManager();
-                $isUploaded = $imageManager->imageHandler($files['file']);
+                $isUploaded = $imageManager->imageHandler($files[$mainIndex]);
                 if ($isUploaded) {
 
                     $formDatas['url'] = $imageManager->getFileUrl($files[$key]['name'])['url'];

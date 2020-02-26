@@ -35,7 +35,7 @@ class AdminWidgetManager
 
             $request = new ContentRequest();
 
-            $isList = $request->selectAll($params, $sql);
+            $isList = $request->selectAll($sql);
 
             if($isList){
                 $results = $isList;
