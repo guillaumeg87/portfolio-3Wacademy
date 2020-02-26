@@ -1,10 +1,12 @@
 {
+  "fieldType": "select",
   "labelDisplay": "",
   "name": "",
   "id": "",
   "class": [],
-  "value": "",
-  "defaultField": "",
-  "options": "",
+  "defaultField": "-- Choisissez une options --",
+  "labelRef": "",
+  "idRef": "",
+  "option": [],
   "group": "admin-form"
 }

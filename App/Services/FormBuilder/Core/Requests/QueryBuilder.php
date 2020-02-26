@@ -3,6 +3,7 @@
 
 namespace Services\FormBuilder\Core\Requests;
 
+use Services\Dumper\Dumper;
 use Services\FormBuilder\Constants\FormBuilderConstants;
 use Services\FormBuilder\Core\Entity\FilesFields;
 use Services\FormBuilder\Core\Entity\InputFields;
@@ -44,8 +45,8 @@ class QueryBuilder
                     break;
 
                 case FormBuilderConstants::SELECT :
-                    //@TODO
-                    //$toQuery = $this->formatColumnName($field->getName()) . " VARCHAR(255) NOT NULL";
+                    $toQuery = $this->formatColumnName($field->getName()) . " int(11) NOT NULL";
+
                     break;
 
                 case FormBuilderConstants::RADIO :

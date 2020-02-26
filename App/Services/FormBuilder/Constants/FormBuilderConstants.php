@@ -30,4 +30,12 @@ final class FormBuilderConstants
     const CONTENT_FORM_CLASS_WRAPPER = 'admin-form';
     const CONTENT_FORM_GROUP_WRAPPER = 'formbuilder-load';
     const CONTENT_FORM_CLASS_BTN_SUBMIT = 'form-btn-submit';
+
+    // Taxonomy
+    const TAXONOMY_CONFIG_DIRECTORY = '../Services/FormBuilder/configurations/custom/taxonomy';
+    const TAXO_TABLE_SUFFIX = "_taxo";
+
+    const DEFAULT_VALUES = [
+        'name' => '-- Choisissez une option --'
+    ];
 }

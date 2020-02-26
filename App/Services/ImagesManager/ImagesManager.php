@@ -16,7 +16,11 @@ class ImagesManager
         $targetDirectory = $this->getTargetDirectoryPath(getcwd(), $extension);
 
         if($data['error'] === 0 && in_array($extension, ImagesConstant::IMAGE_FORMATS)){
-            if ($data['size'] < ImagesConstant::IMAGE_SIZE) {
+
+            $size = (int)$data['size'];
+
+
+            if ($size < ImagesConstant::IMAGE_SIZE) {
                 $image = new Image($data);
 
                 return move_uploaded_file($image->getTmpName(), $targetDirectory . $image->getName());
@@ -67,7 +71,6 @@ class ImagesManager
     private function getTargetDirectoryPath($path, $extension)
     {
         $target = $extension === ImagesConstant::LABEL_PDF ? ImagesConstant::DOC_DIR : ImagesConstant::IMAGE_DIR;
-
         if (!file_exists($path . ImagesConstant::IMAGE_TARGET_PATH_DIR)) {
 
             mkdir($path . ImagesConstant::IMAGE_TARGET_PATH_DIR . $target, 0777, true);

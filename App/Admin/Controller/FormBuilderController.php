@@ -40,9 +40,9 @@ class FormBuilderController extends AbstractController
         $formatedDatas = $formBuilderManager->sortFormdata($formData, $suffix);
 
         if ($formatedDatas['toMenu']) {
-
+            $isTaxonomy = $formatedDatas['isTaxonomy'] ?? false;
             $contentMgr = new ContentManager();
-            $options['flash-message'][] = $contentMgr->addEntry($formatedDatas['labels']);
+            $options['flash-message'][] = $contentMgr->addEntry($formatedDatas['labels'], $isTaxonomy);
 
         } else {
             $options['flash-message'][] = $formatedDatas['flash-message'];

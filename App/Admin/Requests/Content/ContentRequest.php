@@ -5,6 +5,7 @@ namespace Admin\Requests\Content;
 use Admin\Requests\BaseRequest;
 use Connection\DB_conf;
 use PDO;
+use Services\Dumper\Dumper;
 
 
 class ContentRequest extends BaseRequest
@@ -35,8 +36,8 @@ class ContentRequest extends BaseRequest
      */
     public function createContent(array $data, string $sql)
     {
-
-        unset( $data['content_name']);
+        unset($data['content_name']);
+        unset($data['id']);
         $query = $this->dbManager->connection()->prepare($sql);
 
         return $query->execute($data);
@@ -63,9 +64,9 @@ class ContentRequest extends BaseRequest
      * @param string $sql
      * @return array
      */
-    public function selectAll(array $data, string $sql)
+    public function selectAll(string $sql)
     {
-        $sql = "SELECT * FROM " . $this->getTable($data) . " WHERE -1";
+
         $query = $this->dbManager->connection()->prepare($sql);
         $query->execute();
 

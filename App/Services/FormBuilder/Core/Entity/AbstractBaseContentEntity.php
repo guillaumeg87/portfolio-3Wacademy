@@ -2,6 +2,8 @@
 
 namespace Services\FormBuilder\Core\Entity;
 
+use Services\Dumper\Dumper;
+
 class AbstractBaseContentEntity
 {
     /**
@@ -113,8 +115,8 @@ class AbstractBaseContentEntity
         foreach ($datas as $key => $value){
 
             $method = $type . ucfirst($key);
-
             if(method_exists($this, $method)){
+
                 $this->$method($value);
             }
         }

@@ -412,10 +412,14 @@ template {
   width: 100%;
   padding: 1rem 2%; }
   .admin-form label, .admin-content label {
-    width: 30%;
+    display: inline-block; }
+  .admin-form input[type='text'], .admin-content input[type='text'] {
+    width: 50%;
     display: block; }
-  .admin-form input, .admin-content input {
-    width: 70%;
+  .admin-form input[type='checkbox'], .admin-content input[type='checkbox'] {
+    margin-left: 2rem;
+    display: inline-block; }
+  .admin-form .addNewField, .admin-content .addNewField {
     display: block; }
   .admin-form .form-btn-submit, .admin-content .form-btn-submit {
     display: block;

@@ -42,29 +42,36 @@ const FormBuilderManager = {
      */
     init: function () {
         this.log('form', 'init');
+        let emptySelectValue = true;
         if (this.selectors.$formBuilder__buildNewForm.length > 0) {
             let json = require('../configurations/init-builder.json');
-            this.fieldsBuilder(json);
+            this.fieldsBuilder(json, emptySelectValue);
         }
-        if (this.selectors.$formBuilder__loadConfiguration.length > 0 && this.selectors.$formBuilder__updateConfiguration.length === 0) {
+        if ((this.selectors.$formBuilder__loadConfiguration.length > 0 && this.selectors.$formBuilder__updateConfiguration.length === 0) ||
+            (this.selectors.$formBuilder__loadConfiguration.length > 0 && this.selectors.$formBuilder__updateConfiguration.length > 0)) {
 
             let contentType = this.getConfigurationFile(this.selectors.$formBuilder__loadConfiguration);
             if (contentType === '') {
                  this.showError();
             }else{
-                let json = require(`../configurations/custom/${contentType}.json`);
-                this.fieldsBuilder(json);
+                emptySelectValue = !this.selectors.$formBuilder__updateConfiguration.length > 0;
+                let json = require(`../configurations/custom/temp/${contentType}.json`);
+                this.fieldsBuilder(json, emptySelectValue);
             }
         }
+        /*
         if (this.selectors.$formBuilder__loadConfiguration.length > 0 && this.selectors.$formBuilder__updateConfiguration.length > 0) {
             let contentType = this.getConfigurationFile(this.selectors.$formBuilder__loadConfiguration);
+            emptySelectValue = false;
             if (contentType === '') {
                 this.showError();
             }else{
                 let json = require(`../configurations/custom/temp/${contentType}.json`);
-                this.fieldsBuilder(json);
+                this.fieldsBuilder(json, emptySelectValue);
             }
         }
+        */
+
 
     },
     /**
@@ -88,8 +95,9 @@ const FormBuilderManager = {
     /**
      * Sort the field sets in Json configuration file and build the field and add them in DOM.
      * @param json
+     * @param {boolean } emptySelectValue
      */
-    fieldsBuilder(json) {
+    fieldsBuilder(json, emptySelectValue) {
 
         let keys = Object.keys(json);
 
@@ -98,13 +106,13 @@ const FormBuilderManager = {
                 case 'fieldset':
                 case 'legend':
 
-                    this.setSimpleField(field, json[field]);
+                    this.setSimpleField(field, json[field], emptySelectValue);
                     break;
 
                 case 'fields':
                 case 'select':
                 case 'buttons':
-                    this.setArrayField(field, json[field]);
+                    this.setArrayField(field, json[field], emptySelectValue);
                     break;
             }
         }
@@ -114,8 +122,9 @@ const FormBuilderManager = {
      * Build simple field
      * @param type
      * @param data
+     * @param {boolean} emptySelectValue
      */
-    setSimpleField(type, data) {
+    setSimpleField(type, data, emptySelectValue) {
 
         let inDom = document.createElement(type);
 
@@ -130,7 +139,8 @@ const FormBuilderManager = {
         }
 
         if (data.content) {
-            inDom.innerHTML = data.content;
+
+            inDom.innerHTML = emptySelectValue ? '' : data.content;
         }
 
         if (data.group) {
@@ -145,16 +155,19 @@ const FormBuilderManager = {
      * Set field collection (in array)
      * @param type
      * @param data
+     * @param {boolean} emptySelectValue
      */
-    setArrayField(type, data) {
+    setArrayField(type, data, emptySelectValue) {
 
         let obj;
         let inDom;
-
+        let previewImage = null;
         for (obj of data) {
             for (let field in obj) {
                 if (obj.hasOwnProperty(field)) {
+
                     inDom = document.createElement(field);
+
                     if (obj[field].id) {
                         inDom.setAttribute('id', obj[field].id);
                     }
@@ -170,11 +183,12 @@ const FormBuilderManager = {
                     if (obj[field].value) {
                         switch(field) {
                             case 'textarea':
-                                inDom.innerHTML = obj[field].value;
+                                inDom.innerHTML = emptySelectValue ? '' : obj[field].value;
                                 break;
 
                             default:
-                                inDom.setAttribute('value', obj[field].value);
+                                let value =  emptySelectValue ? '' : obj[field].value;
+                                inDom.setAttribute('value', value);
                         }
                     }
                     if (obj[field].placeholder) {
@@ -188,19 +202,24 @@ const FormBuilderManager = {
                             inDom.classList.add(i);
                         }
                     }
-                    if (obj[field].fileUrl) {
-                        for (let i of obj[field].class) {
-                            inDom.classList.add(i);
-                        }
+                    if (obj[field].url) {
+                        // add preview if url is not true (empty)
+                        previewImage = document.createElement('img');
+                        previewImage.setAttribute('src', obj[field].url);
+                        inDom.innerHTML = obj[field].url;
                     }
-                    if (obj[field].filePath) {
-                        for (let i of obj[field].class) {
-                            inDom.classList.add(i);
-                        }
+                    if (obj[field].path) {
+                        inDom.innerHTML = obj[field].path;
+                    }
+                    if (obj[field].option){
+                        this.addSelectOptions(obj, inDom,  emptySelectValue);
                     }
                     if (obj[field].group) {
                         let target = document.getElementsByClassName(obj[field].group);
                         target[0].appendChild(inDom);
+                        if(previewImage !== null) {
+                            target[0].appendChild(previewImage);
+                        }
                     } else {
                         console.error(`Error : can't insert element ${field} in  DOM`);
                     }
@@ -214,9 +233,6 @@ const FormBuilderManager = {
                 }
             }
         }
-        if (type === 'select'){
-            this.addSelectOptions(obj, inDom);
-        }
     },
 
     /**
@@ -229,7 +245,6 @@ const FormBuilderManager = {
         for (let child in parent) {
 
             if (parent.hasOwnProperty(child)) {
-
                 if (parent[child].id) {
                     inDom.setAttribute('id', parent[child].id);
                 }
@@ -253,18 +268,37 @@ const FormBuilderManager = {
                     }
                 }
 
-                if (parent[child].options) {
-                    let path = parent[child].options;
-                    let json = require(`../configurations/${path}.json`);
+                if (parent[child].option) {
+                    let json;
+                    // select init form
+                    if (parent[child].option === 'fields-list' ) {
+                        // From configuration file init form
+                        let path = parent[child].option;
+                        json = require(`../configurations/${path}.json`);
+                        for (let item in json) {
 
-                    for (let item in json) {
-
-                        if (json.hasOwnProperty(item)) {
+                            if (json.hasOwnProperty(item)) {
 
                                 let option = document.createElement('option');
                                 option.setAttribute('value', item);
                                 option.innerHTML = item;
                                 inDom.appendChild(option);
+                            }
+                        }
+                    }
+                    // from config file when we create a content type or update
+                    else if (Array.isArray(parent[child].option)) {
+                        // From select form
+                        for (let item of parent[child].option[0]) {
+                            let option = document.createElement('option');
+
+                            if (parent[child].value === item.id) {
+                                option.setAttribute('selected', 'selected');
+                            }
+                            option.setAttribute('name', item.name);
+                            option.setAttribute('value', item.id);
+                            option.innerHTML = item.name;
+                            inDom.appendChild(option);
                         }
                     }
                 }
@@ -321,8 +355,7 @@ const FormBuilderManager = {
         let wrapper = this.fieldWrapper();
         let newInput;
         let newLabel;
-
-        let inputType = null;
+        let imagePreview = null;
         switch(type){
             case 'labelDisplay':
             case 'type':
@@ -341,7 +374,6 @@ const FormBuilderManager = {
 
                 newInput = document.createElement('input');
                 newInput.setAttribute('name', `${type}_${rank}`);
-                newInput.setAttribute('type', 'text');
 
                 if (type === 'type') {
                     newInput.setAttribute('value', this.getInputType(datas));
@@ -350,7 +382,44 @@ const FormBuilderManager = {
 
                 wrapper.appendChild(newLabel);
                 wrapper.appendChild(newInput);
-            break;
+                break;
+
+            case 'labelRef':
+
+                newLabel = document.createElement('label');
+                newLabel.setAttribute('for', `${type}_${rank}`);
+                newLabel.innerHTML = Tools.camelCaseToString('Entité référence');
+
+                newInput = document.createElement('select');
+                newInput.setAttribute('name', `${type}_${rank}`);
+
+                // Default field
+                let defaultField = document.createElement('option');
+                defaultField.setAttribute('value', '');
+                defaultField.innerHTML = datas.defaultField;
+                newInput.appendChild(defaultField);
+
+                let jsonOptions = require(`../configurations/custom/taxonomy/taxonomy_list.json`);
+                let option;
+                for(let elt in jsonOptions){
+                    option = document.createElement('option');
+                    option.setAttribute('value', `${elt}_${jsonOptions[elt]}`);
+                    option.innerHTML = Tools.ucFirst(jsonOptions[elt]);
+                    newInput.appendChild(option);
+                }
+
+                wrapper.appendChild(newLabel);
+                wrapper.appendChild(newInput);
+
+                break;
+            case 'idRef' :
+                newInput = document.createElement('input');
+                newInput.setAttribute('name', `${type}_${rank}`);
+                newInput.setAttribute('type', 'hidden');
+
+                wrapper.appendChild(newInput);
+
+                break;
 
             case 'fieldType':
             case 'group':

@@ -17,9 +17,8 @@
         "name": "chooseField",
         "id": "chooseField",
         "class": [],
-        "value": "",
-        "defaultField": "Choisissez un champ",
-        "options": "fields-list",
+        "defaultField": "-- Choisissez un champ --",
+        "option": "fields-list",
         "group": "form_field_choice"
       }
     }

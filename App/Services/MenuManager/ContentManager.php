@@ -12,13 +12,13 @@ class ContentManager
         return (new ContentRequest())->getMenuEntryList();
     }
 
-    public function addEntry(array $datas)
+    public function addEntry(array $datas, bool $isTaxonomy)
     {
 
         $isContentExist = (new ContentRequest())->isExist($datas);
 
         if(empty($isContentExist)){
-            $result = (new ContentRequest())->createMenuEntry($datas);
+            $result = (new ContentRequest())->createMenuEntry($datas, $isTaxonomy);
             if($result){
 
                 return (new FlashMessage(

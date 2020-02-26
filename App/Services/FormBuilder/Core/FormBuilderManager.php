@@ -3,11 +3,13 @@
 namespace Services\FormBuilder\Core;
 
 use mysql_xdevapi\Exception;
+use Services\Dumper\Dumper;
 use Services\FlashMessages\FlashMessage;
 use Services\FormBuilder\Constants\FormBuilderConstants;
 use Services\FormBuilder\Core\Entity\InputFields;
 use Services\FormBuilder\Core\Requests\FormBuilderRequest;
 use Services\FormBuilder\Core\Requests\QueryBuilder;
+use stdClass;
 
 
 class FormBuilderManager
@@ -54,8 +56,10 @@ class FormBuilderManager
      */
     public function sortFormdata(array $formData, array $suffix): array
     {
+        $isTaxonomy  = $this->isTaxonomy($formData);
         $reformatedDatas = $this->splitDatas($formData);
         $fieldItem = '';
+        $idRef = '';
 
         foreach ($reformatedDatas['reformatedEntry'] as $key => $value) {
 
@@ -69,19 +73,46 @@ class FormBuilderManager
 
                         $fieldItem = htmlspecialchars($value);
                         $suffix[$index][$value] = [];
+
                     } else {
                         if ($reformatedDatas['reformatedEntry'][$key] === 'file') {
-                            $suffix[$index][$fieldItem] = array_merge($suffix[$index][$fieldItem], $this->addFileFields());
+                            //manage input type file
+                            $suffix[$index][$fieldItem] = array_merge($suffix[$index][$fieldItem],
+                                $this->addFileFields());
+                            $suffix[$index][$fieldItem][$explode[0]] = htmlspecialchars($value);
+
                         }
-                        $suffix[$index][$fieldItem][$explode[0]] = htmlspecialchars($value);
 
+                        else if (preg_match('/labelRef_'. $index .'/', $key)){
+                            // manage select field
+                            $splitRef = explode('_', $value);
+                            $idRef = (int) $splitRef[0];
+                            array_shift($splitRef);
+                            $labelRef = '';
+                            $end = end($splitRef);
+                            foreach ($splitRef as $k => $v) {
 
+                                if($k != $end){
+                                    $labelRef .= '_' . $v;
 
+                                }else{
+                                    $labelRef .= $v;
+                                }
+                            }
+                            $suffix[$index][$fieldItem][$explode[0]] = htmlspecialchars($labelRef);
+                        }
+                        else if (!empty($idRef) && preg_match('/idRef_'. $index .'/', $key)) {
+
+                            $suffix[$index][$fieldItem][$explode[0]] = (int) htmlspecialchars($idRef);
+                        }
+                        else{
+                            $suffix[$index][$fieldItem][$explode[0]] = htmlspecialchars($value);
+
+                       }
                     }
                 }
             }
         }
-
         /** Reformated Array */
         $datas = [];
         $instancesCart = [];
@@ -99,7 +130,7 @@ class FormBuilderManager
         $query = $queryManager->buildSqlRequest($instancesCart);
 
         try {
-            $isTableExist = $this->getFormBuilderRequest()->isTableExist($reformatedDatas['labels']);
+            $isTableExist = $this->getFormBuilderRequest()->isTableExist($reformatedDatas['labels'], $isTaxonomy);
 
         } catch (\PDOException $exception) {
             throw new \PDOException();
@@ -115,12 +146,22 @@ class FormBuilderManager
                  * https://www.php.net/manual/en/pdo.exec.php
                  */
                 $isTableCreated = $this->getFormBuilderRequest()->createContentTable($reformatedDatas['labels'][FormBuilderConstants::TECHNICAL_NAME],
-                    $query);
+                   $query,$isTaxonomy);
 
                 if ($isTableCreated !== false) {
-                        $this->writeJsonConfigFile(
+                    if ($isTaxonomy) {
+                        $isTaxonomySaved = $this->handleTaxonomy($reformatedDatas['labels']);
+                        if (!$isTaxonomySaved){
+                            $flashMessage = (new FlashMessage('La taxonomy n\'a pas été créée dans le fichier de configuration',
+                                'error')
+                            )->messageBuilder();
+                        }
+
+                    }
+                    $this->writeJsonConfigFile(
                         $this->additionnalFields($datas, $reformatedDatas['labels']),
-                        $reformatedDatas['labels']
+                        $reformatedDatas['labels'],
+                        $isTaxonomy
                     );
                 }
 
@@ -129,11 +170,14 @@ class FormBuilderManager
             }
 
             return [
-                'labels' => $reformatedDatas['labels'],
-                'toMenu' => true
+                'labels'        => $reformatedDatas['labels'],
+                'toMenu'        => true,
+                'flash-message' => $flashMessage,
+                'isTaxonomy'    => $isTaxonomy
             ];
 
         } else {
+
             $flashMessage = (new FlashMessage('Ce contenu existe déjà, il n\'a donc pas été créé en doublon',
                 'error')
             )->messageBuilder();
@@ -174,15 +218,15 @@ class FormBuilderManager
      * Write json configuration in a json file
      * @param $datas
      */
-    public function writeJsonConfigFile(array $datas, array $labels)
+    public function writeJsonConfigFile(array $datas, array $labels, $isTaxonomy)
     {
-
+        $fileName = $isTaxonomy ? $labels[FormBuilderConstants::TECHNICAL_NAME] . FormBuilderConstants::TAXO_TABLE_SUFFIX : $labels[FormBuilderConstants::TECHNICAL_NAME];
         if (!is_dir(FormBuilderConstants::CUSTOM_CONFIG_DIRECTORY)) {
 
             mkdir(FormBuilderConstants::CUSTOM_CONFIG_DIRECTORY);
         }
 
-        $path = FormBuilderConstants::CUSTOM_CONFIG_DIRECTORY . $labels[FormBuilderConstants::TECHNICAL_NAME] . '.json';
+        $path = FormBuilderConstants::CUSTOM_CONFIG_DIRECTORY . $fileName . '.json';
 
         $json = json_encode($datas);
         file_put_contents($path, $json);
@@ -221,6 +265,7 @@ class FormBuilderManager
     private function splitDatas($datas)
     {
         $labelsDatas = [];
+
         foreach ($datas as $key => $value) {
             if (in_array($key, FormBuilderConstants::MENU_LABEL_COLLECTIONS)) {
                 $labelsDatas[$key] = ($key === FormBuilderConstants::DISPLAY_NAME) ?
@@ -228,6 +273,7 @@ class FormBuilderManager
                 unset($datas[$key]);
             }
         }
+
         return [
             'labels' => $labelsDatas,
             'reformatedEntry' => $datas
@@ -302,8 +348,9 @@ class FormBuilderManager
 
     public function updateContentdata()
     {
-        if(!empty($this->data)){
-             return $this->getformHydrator($this->data)->buildTemporaryConfiguration();
+
+        if (!empty($this->data)) {
+            return $this->getformHydrator($this->data)->buildTemporaryConfiguration();
         }
         return null;
     }
@@ -317,12 +364,12 @@ class FormBuilderManager
      * Add the field for file field
      * @return array
      */
-    private function addFileFields():array
+    private function addFileFields(): array
     {
 
         return [
-            'path'  => '',
-            'url'   => ''
+            'path' => '',
+            'url' => ''
         ];
     }
 
@@ -334,7 +381,7 @@ class FormBuilderManager
     private function getEntityType(array $field, string $type)
     {
         $name = null;
-        switch ($field[$type]['type']){
+        switch ($field[$type]['type']) {
 
             case 'file':
                 $name = FormBuilderConstants::FIELDS_ENTITY_PATH . ucfirst('files') . FormBuilderConstants::FIELD_CLASS_SUFFIX;
@@ -345,7 +392,41 @@ class FormBuilderManager
                 $name = FormBuilderConstants::FIELDS_ENTITY_PATH . ucfirst($type) . FormBuilderConstants::FIELD_CLASS_SUFFIX;
 
         }
-
         return $name;
+    }
+
+    /**
+     * @param array $data
+     * @return bool
+     */
+    private function isTaxonomy(array $data):bool
+    {
+        return isset($data['isTaxonomy']) ? true : false;
+    }
+
+    /**
+     * Add technicalname (as table name) in taxonomy list configuration
+     * @param $labels
+     * @return false|int
+     */
+    public function handleTaxonomy($labels)
+    {
+        $path = FormBuilderConstants::TAXONOMY_CONFIG_DIRECTORY . '/taxonomy_list.json';
+        if (!is_dir(FormBuilderConstants::TAXONOMY_CONFIG_DIRECTORY)) {
+
+            mkdir(FormBuilderConstants::TAXONOMY_CONFIG_DIRECTORY);
+
+            if (!file_exists($path)){
+
+                $json  = json_encode (new stdClass, true);
+                file_put_contents($path,$json);
+            }
+        }
+
+        $fileContent = json_decode(file_get_contents($path), true);
+        $index = is_array($fileContent) && count($fileContent) === 0 ? 1 : count($fileContent) + 1;
+        $fileContent[$index] = $labels['contentTechnicalName'] . FormBuilderConstants::TAXO_TABLE_SUFFIX;
+
+        return file_put_contents($path, json_encode($fileContent, true));
     }
 }
