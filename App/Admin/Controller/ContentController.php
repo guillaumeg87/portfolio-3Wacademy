@@ -4,7 +4,6 @@ namespace Admin\Controller;
 use Admin\Core\Config\AbstractController;
 use Admin\Core\QueryBuilder\QueryBuilder;
 use Admin\Requests\Content\ContentRequest;
-use Services\Dumper\Dumper;
 
 
 class ContentController extends AbstractController

@@ -2,7 +2,6 @@
 
 namespace Services\FormBuilder\Core\Entity;
 
-use Services\Dumper\Dumper;
 
 class AbstractBaseContentEntity
 {

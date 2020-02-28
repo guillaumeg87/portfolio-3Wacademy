@@ -21,8 +21,10 @@
   width: 100%;
   display: block;
   text-align: center;
-  max-height: 25px;
+  max-height: 100px;
+  overflow: scroll;
   p {
+    padding: 0.5rem 2%;
     margin: 0;
   }
 }

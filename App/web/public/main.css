@@ -369,8 +369,10 @@ template {
   width: 100%;
   display: block;
   text-align: center;
-  max-height: 25px; }
+  max-height: 100px;
+  overflow: scroll; }
   .flash-message p {
+    padding: 0.5rem 2%;
     margin: 0; }
 
 .disabled {

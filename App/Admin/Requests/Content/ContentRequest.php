@@ -5,7 +5,6 @@ namespace Admin\Requests\Content;
 use Admin\Requests\BaseRequest;
 use Connection\DB_conf;
 use PDO;
-use Services\Dumper\Dumper;
 
 
 class ContentRequest extends BaseRequest
@@ -99,8 +98,8 @@ class ContentRequest extends BaseRequest
      */
     public function delete($data, $sql)
     {
-
         $query = $this->dbManager->connection()->prepare($sql);
+
         return $query->execute([
             'id' => $data['id']
         ]);
@@ -118,5 +117,34 @@ class ContentRequest extends BaseRequest
         }
 
         return $tableName;
+    }
+
+    /**
+     * @param $sql string
+     * @return bool
+     */
+    public function dropTable(string $sql)
+    {
+        $query = $this->dbManager->connection()->prepare($sql);
+
+        return $query->execute();
+    }
+
+    /**
+     * Select one content Element
+     *
+     * @param array $data
+     * @param string $sql
+     * @return array
+     */
+    public function selectOneInMenu(array $data, string $sql)
+    {
+
+        $query = $this->dbManager->connection()->prepare($sql);
+        $query->execute([
+            'contentTechnicalName' => $data['contentTechnicalName']
+        ]);
+
+        return $query->fetch(PDO::FETCH_ASSOC);
     }
 }
