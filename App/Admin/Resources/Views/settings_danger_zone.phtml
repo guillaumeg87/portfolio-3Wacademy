@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <?php include("block__admin_head.phtml"); ?>
+
+    <body>
+        <?php include("block__admin_header.phtml"); ?>
+
+        <main class="admin-wrapper flex">
+
+            <?php include("block__admin_menu.phtml"); ?>
+            <section class="admin-content">
+
+                <h2>Danger Zone</h2>
+
+
+                <?php if (!empty($this->vars['options']['list'])) { ?>
+                <div class="admin-content-widget">
+                    <h3>Suppression des types de contenus</h3>
+                    <ul>
+                        <li>Attention pas de récupération possible</li>
+                        <li>Si on supprime une taxo, tous les contenus liés seront cassés</li>
+                    </ul>
+                    <table>
+                        <thead>
+                                <td>Type de contenu</td>
+                                <td>Action</td>
+                        </thead>
+                        <tbody>
+                        <?php
+                        if (!empty($this->vars['options']['list'])) {
+                            foreach ($this->vars['options']['list'] as $item) { ?>
+                                <tr>
+                                    <?php foreach ($item as $key => $value) {
+                                    if ($key === 'id') {
+                                        $id = $value;
+                                    } ?>
+                                    <td>
+                                        <?= str_replace('_',' ', ucfirst($value)) ?>
+                                    </td>
+
+                                    <?php } ?>
+                                    <td>
+                                        <a href="/admin/settings/delete?id=<?= $value ?>">Supprimer</a>
+                                    </td>
+                                </tr>
+                            <?php }
+                                }
+                            }   ?>
+                            </tbody>
+                        </table>
+                    </div>
+            </section>
+
+        </main>
+</body>
+</html>

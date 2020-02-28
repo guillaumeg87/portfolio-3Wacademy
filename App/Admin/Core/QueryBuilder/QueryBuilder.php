@@ -63,8 +63,25 @@ class QueryBuilder
                 case 'delete':
                     $sql = "DELETE FROM " .  DB_conf::DB_NAME . '.'. $table_name . " WHERE id = :id";
                     break;
+
+                case 'select_one_in_menu':
+                    $sql =  $sql = "SELECT * FROM " .  DB_conf::DB_NAME . '.'. $table_name . " WHERE contentTechnicalName = :contentTechnicalName;";
+                    break;
+
+                case 'drop_table':
+                    $sql = 'DROP TABLE ' . DB_conf::DB_NAME . '.' . $table_name;
+
+                    break;
                 default:
                     throw new \Exception('Unexpected value');
+            }
+        } else {
+            switch($method){
+
+                case 'select_table_list':
+                    $sql = 'show tables from ' . DB_conf::DB_NAME;
+                    break;
+
             }
         }
         return $sql;

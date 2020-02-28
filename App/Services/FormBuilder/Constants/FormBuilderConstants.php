@@ -7,6 +7,7 @@ namespace Services\FormBuilder\Constants;
 final class FormBuilderConstants
 {
     const KEY_FIELD_TYPE = 'fieldType';
+    const CUSTOM_APP_PATH = '/var/www/html/portfolio-3Wacademy/App';
     const CUSTOM_CONFIG_DIRECTORY = '../Services/FormBuilder/configurations/custom/';
     const CUSTOM_TEMPORARY_CONFIG_DIRECTORY = '../Services/FormBuilder/configurations/custom/temp/';
 
