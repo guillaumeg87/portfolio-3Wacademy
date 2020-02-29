@@ -22,61 +22,60 @@ class ContentController extends AbstractController
 
     public function index($options = [])
     {
-        if (empty($_SESSION)) {
+        $this->isSessionActive();
 
-            if (!empty($options)) {
+        if (!empty($options)) {
 
-                if($options['content_name'] || $options['widget']){
-                    $content_name = $options['content_name'] ?? $options['widget']['content_name'];
+            if($options['content_name'] || $options['widget']){
+                $content_name = $options['content_name'] ?? $options['widget']['content_name'];
 
-                    $widget = $this->getServiceManager()->getAdminWidget($content_name);
-                    $options['labels'] = $this->getContentLabels($content_name);
-                    $options['list'] = $widget->getElementList();
-                    if (!empty($widget->getElementList()) && is_array($widget->getElementList())) {
-                        if (!empty($widget->getElementList()[0])){
-                            $options['header'] = array_keys($widget->getElementList()[0]);
+                $widget = $this->getServiceManager()->getAdminWidget($content_name);
+                $options['labels'] = $this->getContentLabels($content_name);
+                $options['list'] = $widget->getElementList();
+                if (!empty($widget->getElementList()) && is_array($widget->getElementList())) {
+                    if (!empty($widget->getElementList()[0])){
+                        $options['header'] = array_keys($widget->getElementList()[0]);
 
-                        }
                     }
                 }
-
-                // @TODO = regarder si $widget->getElementList(); ne retourne pas de flash message
             }
 
-            $this->render(__NAMESPACE__, self::HANDLE_CONTENT_INDEX, $options);
+            // @TODO = regarder si $widget->getElementList(); ne retourne pas de flash message
         }
+
+        $this->render(__NAMESPACE__, self::HANDLE_CONTENT_INDEX, $options);
     }
 
     public function formContent($options = [])
     {
+        $this->isSessionActive();
 
-        if (empty($_SESSION)) {
-            // @TODO au lieu de create ici retourner un message d'erreur
-            $options['action'] = $options['isEdit'] ? self::EDIT_LABEL : self::CREATE_LABEL;
+        // @TODO au lieu de create ici retourner un message d'erreur
+        $options['action'] = $options['isEdit'] ? self::EDIT_LABEL : self::CREATE_LABEL;
 
-            $form = $this->getServiceManager()->getFormBuilderManager($options)->updateContentdata();
-            // Sleep needed for temporary Json configuration file
-            sleep(1);
-            if(!empty($form) && $options['action'] === self::EDIT_LABEL){
-                $options['form-selector'] = self::CONTENT_FORM_UPDATE;
+        $form = $this->getServiceManager()->getFormBuilderManager($options)->updateContentdata();
+        // Sleep needed for temporary Json configuration file
+        sleep(1);
+        if(!empty($form) && $options['action'] === self::EDIT_LABEL){
+            $options['form-selector'] = self::CONTENT_FORM_UPDATE;
 
-            }
-            elseif ($options['action'] === self::CREATE_LABEL){
-                $options['form-selector'] = self::CONTENT_FORM_CREATE;
-            }
-            else {
-                $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
-                  'Une erreur est survenue lors de la récupération du contenue.',
-                    'error'
-                ))->messageBuilder();
-            }
-
-            $this->render(__NAMESPACE__, self::HANDLE_CONTENT_FORM, $options);
         }
+        elseif ($options['action'] === self::CREATE_LABEL){
+            $options['form-selector'] = self::CONTENT_FORM_CREATE;
+        }
+        else {
+            $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
+                'Une erreur est survenue lors de la récupération du contenue.',
+                'error'
+            ))->messageBuilder();
+        }
+
+        $this->render(__NAMESPACE__, self::HANDLE_CONTENT_FORM, $options);
     }
 
     private function verifyDatasFromForm($data): array
     {
+
         $formDatas = [];
 
         foreach ($_POST as $key => $value) {
@@ -87,27 +86,27 @@ class ContentController extends AbstractController
 
     public function create($options = [])
     {
+        $this->isSessionActive();
 
-        if (empty($_SESSION)) {
-            $formDatas = $this->verifyDatasFromForm($_POST);
-            $formDatas = $this->getFilesData($formDatas, $_FILES);
 
-            $options['widget'] = [
-                'id'            => $formDatas['content_id'],
-                'content_name'  => $formDatas['content_name']
-            ];
-            unset($formDatas['content_id']);
+        $formDatas = $this->verifyDatasFromForm($_POST);
+        $formDatas = $this->getFilesData($formDatas, $_FILES);
 
-            try {
-                $options['flash-message'][] = $this->saveContent(self::CREATE_LABEL, $formDatas);
-            } catch (\Exception $e) {
-                // @TODO
-            }
+        $options['widget'] = [
+            'id'            => $formDatas['content_id'],
+            'content_name'  => $formDatas['content_name']
+        ];
+        unset($formDatas['content_id']);
 
-            $options['form-selector'] = $options['content_name'];
-
-            $this->index($options);
+        try {
+            $options['flash-message'][] = $this->saveContent(self::CREATE_LABEL, $formDatas);
+        } catch (\Exception $e) {
+            // @TODO
         }
+
+        $options['form-selector'] = $options['content_name'];
+
+        $this->index($options);
     }
 
     /**
@@ -115,6 +114,8 @@ class ContentController extends AbstractController
      */
     public function edit ($options)
     {
+        $this->isSessionActive();
+
 
         $formDatas = $this->verifyDatasFromForm($_POST);
         $formDatas = $this->getFilesData($formDatas, $_FILES);
@@ -166,6 +167,7 @@ class ContentController extends AbstractController
      */
     public function delete($options)
     {
+        $this->isSessionActive();
 
         if (!empty($options) && !empty($options['id'])) {
             try {
@@ -214,7 +216,7 @@ class ContentController extends AbstractController
      * @return array
      * @throws \Exception
      */
-    public function saveContent($method, $params)
+    private function saveContent($method, $params)
     {
 
         try {
