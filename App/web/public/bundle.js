@@ -160,7 +160,7 @@ eval("module.exports = JSON.parse(\"{\\\"fieldset\\\":{\\\"id\\\":\\\"\\\",\\\"c
 /*! exports provided: default */
 /***/ (function(module) {
 
-eval("module.exports = JSON.parse(\"{}\");\n\n//# sourceURL=webpack:///./App/Services/FormBuilder/configurations/custom/taxonomy/taxonomy_list.json?");
+eval("module.exports = JSON.parse(\"[]\");\n\n//# sourceURL=webpack:///./App/Services/FormBuilder/configurations/custom/taxonomy/taxonomy_list.json?");
 
 /***/ }),
 
