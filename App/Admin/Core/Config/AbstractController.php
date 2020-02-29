@@ -3,8 +3,10 @@
 namespace Admin\Core\Config;
 
 
+use Admin\Controller\AdminController;
 use Admin\Core\QueryBuilder\QueryBuilder;
 use Admin\Core\Traits\NavigationTrait;
+use Services\Dumper\Dumper;
 use Services\ServiceManager\ServiceManager;
 
 
@@ -15,6 +17,7 @@ class AbstractController
     const FRONT_DIR = 'Front/';
     const ADMIN_DIR = 'Admin/';
     const REGEX_IS_ADMIN = '/\b(Admin)\b/';
+    const ADMIN_CONTROLLER_NAMESPACE = 'Admin/Controller/';
 
 use NavigationTrait;
 
@@ -126,5 +129,23 @@ use NavigationTrait;
     public function getQueryBuilder(): QueryBuilder
     {
         return new QueryBuilder();
+    }
+
+    /**
+     *
+     */
+    public function isSessionActive()
+    {
+        session_start();
+
+        if (empty($_SESSION)) {
+            $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
+                'Veuillez vous connecter pour accéder à l\'admin.',
+                'error'
+            ))->messageBuilder();
+
+            $this->render(self::ADMIN_CONTROLLER_NAMESPACE, AdminController::ADMIN_LOGIN_FORM, $options);
+            exit;
+        }
     }
 }

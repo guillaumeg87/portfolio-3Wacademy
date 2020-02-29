@@ -22,16 +22,14 @@ class SettingsController extends AbstractController
 
     public function mainSettings($options = [])
     {
-        if (empty($_SESSION)) {
-            $this->render(__NAMESPACE__, self::ADMIN_HOME, $options);
-        }
+        $this->isSessionActive();
+
     }
 
     public function dangerZone($options = [])
     {
-        /*if(empty($_SESSION)) {
-            $this->render(__NAMESPACE__, self::ADMIN_HOME, $options);
-        }*/
+        $this->isSessionActive();
+
 
         $results = $this->getTableList();
 
@@ -49,11 +47,9 @@ class SettingsController extends AbstractController
      */
     public function delete($options)
     {
+        $this->isSessionActive();
 
-        /*if(empty($_SESSION)) {
-            $this->render(__NAMESPACE__, self::ADMIN_HOME, $options);
-        }
-*/
+
         try {
             if (!empty($options['id'])) {
                 $tableName = htmlspecialchars($options['id']);

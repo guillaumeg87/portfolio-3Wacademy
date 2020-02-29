@@ -15,22 +15,21 @@ class FormBuilderController extends AbstractController
 
     public function index($options = [])
     {
+        $this->isSessionActive();
 
-        if (empty($_SESSION)) {
-            //@TODO: DANS L'AUTRE CAS IL FAUDRA PASSER UPDATE
-            if (!array_key_exists('form-selector', $options)) {
-                $options['form-selector'] = 'form-init';
-            }
-
-            $this->render(__NAMESPACE__, self::FORM_BUILDER_INDEX, $options);
+        if (!array_key_exists('form-selector', $options)) {
+            $options['form-selector'] = 'form-init';
         }
+
+        $this->render(__NAMESPACE__, self::FORM_BUILDER_INDEX, $options);
+
     }
 
     public function validator($options = [])
     {
+        $this->isSessionActive();
 
-        // @TODO $_POST n'est jamais vide mais les champs peuvent l'être
-        if (empty($_POST)) {
+        if (empty(array_keys($_POST))) {
             $this->render(__NAMESPACE__, self::FORM_BUILDER_INDEX, $options);
         }
         $formData = $_POST;
@@ -53,6 +52,8 @@ class FormBuilderController extends AbstractController
 
     public function updateContent($options = [])
     {
+        $this->isSessionActive();
+
         $this->render(__NAMESPACE__, self::FORM_BUILDER_INDEX, $options);
     }
 }

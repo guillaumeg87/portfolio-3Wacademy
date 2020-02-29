@@ -6,6 +6,7 @@ namespace Admin\Controller;
 
 use Admin\Core\Config\AbstractController;
 use Admin\Requests\LoginRequest;
+use Services\Dumper\Dumper;
 
 
 class LoginController extends AbstractController
@@ -27,7 +28,7 @@ class LoginController extends AbstractController
         if (!empty($_POST['login']) && !empty($_POST['password'])) {
             $formatedDatas = [];
             foreach (self::SESSION_FIELDS as $key) {
-                if($key == 'password'){
+                if($key === 'password'){
 
                     $formatedDatas[$key] = sha1(htmlspecialchars($_POST[$key]));
 
@@ -38,10 +39,10 @@ class LoginController extends AbstractController
             }
 
             $loginCheck = new LoginRequest();
-            $isLogged = $loginCheck->getLogin($formatedDatas);
-            if(!empty($isLogged)) {
+            $isExist = $loginCheck->getLogin($formatedDatas);
+            if(!empty($isExist)) {
 
-                if ($formatedDatas['login'] == $isLogged['login'] && $formatedDatas['password'] == $isLogged['password']){
+                if ($formatedDatas['login'] == $isExist['login'] && $formatedDatas['password'] == $isExist['password']){
                     $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
                         'Connexion Réussie',
                         'success'
@@ -67,7 +68,9 @@ class LoginController extends AbstractController
      */
     public function logout(){
 
+        session_start();
         if (!empty($_SESSION)){
+            session_destroy();
 
             $this->handleSessionFields();
         }
@@ -76,7 +79,8 @@ class LoginController extends AbstractController
             'success'
         ))->messageBuilder();
 
-        return (new AdminController())->index($options);
+        $this->render(__NAMESPACE__, self::ADMIN_LOGIN_FORM, $options);
+        die;
     }
 
     /**
@@ -89,6 +93,7 @@ class LoginController extends AbstractController
         foreach (self::SESSION_FIELDS as $key) {
             $_SESSION[$key] = $data[$key] ?? null;
         }
+
         return $_SESSION;
     }
 
