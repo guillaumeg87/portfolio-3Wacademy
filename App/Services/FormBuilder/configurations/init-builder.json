@@ -53,19 +53,56 @@
       },
       {
         "label": {
-          "content":  "Taxonomy",
-          "for": "isTaxonomy",
+          "content":  "Contenu",
+          "for": "option_type",
           "id": "",
           "class": [],
           "group": "admin-form"
 
         },
         "input": {
-          "type": "checkbox",
-          "name": "isTaxonomy",
+          "type": "radio",
+          "name": "option_type",
           "id": "",
           "class": [],
-          "value": "",
+          "value": "content",
+          "checked": "checked",
+          "group": "admin-form"
+        }
+      },
+      {
+        "label": {
+          "content":  "Taxonomy",
+          "for": "option_type",
+          "id": "",
+          "class": [],
+          "group": "admin-form"
+
+        },
+        "input": {
+          "type": "radio",
+          "name": "option_type",
+          "id": "",
+          "class": [],
+          "value": "taxonomy",
+          "group": "admin-form"
+        }
+      },
+      {
+        "label": {
+          "content":  "Settings",
+          "for": "option_type",
+          "id": "",
+          "class": [],
+          "group": "admin-form"
+
+        },
+        "input": {
+          "type": "radio",
+          "name": "option_type",
+          "id": "",
+          "class": [],
+          "value": "settings",
           "group": "admin-form"
         }
       }

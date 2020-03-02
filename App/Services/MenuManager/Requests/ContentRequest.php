@@ -16,12 +16,12 @@ class ContentRequest extends BaseRequest
         $query = $this->dbManager->connection()->prepare($sql);
         $query->execute();
 
-        return $query->fetchAll();
+        return $query->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public function createMenuEntry(array $data, bool $isTaxonomy)
+    public function createMenuEntry(array $data, string $contentType)
     {
-        $contentTechnicalName = $isTaxonomy ? $data['contentTechnicalName'] . FormBuilderConstants::TAXO_TABLE_SUFFIX : $data['contentTechnicalName'];
+        $contentTechnicalName = $contentType !== '' ? $data['contentTechnicalName'] . '_' . $contentType : $data['contentTechnicalName'];
         $sql = "INSERT INTO " . self::TABLE_NAME . " (contentTechnicalName, contentDisplayName, createAt) VALUES (:technical, :display, :createAt)";
         $query = $this->dbManager->connection()->prepare($sql);
 
