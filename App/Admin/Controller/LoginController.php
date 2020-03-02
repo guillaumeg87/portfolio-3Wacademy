@@ -6,7 +6,6 @@ namespace Admin\Controller;
 
 use Admin\Core\Config\AbstractController;
 use Admin\Requests\LoginRequest;
-use Services\Dumper\Dumper;
 
 
 class LoginController extends AbstractController
@@ -14,8 +13,6 @@ class LoginController extends AbstractController
     //TEMPLATE
     const ADMIN_LOGIN_FORM = 'admin_login';
     const ADMIN_HOME = 'admin_home';
-    const FRONT_NAMESPACE = 'Front\Controller';
-    const FRONT_HOME = 'index';
 
     const SESSION_FIELDS = ['login', 'password'];
 

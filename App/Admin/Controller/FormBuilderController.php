@@ -4,7 +4,6 @@ namespace Admin\Controller;
 
 use Admin\Core\Config\AbstractController;
 use Admin\Core\Traits\NavigationTrait;
-use Services\FormBuilder\Core\FormBuilderManager;
 use Services\MenuManager\ContentManager;
 
 class FormBuilderController extends AbstractController
@@ -39,9 +38,9 @@ class FormBuilderController extends AbstractController
         $formatedDatas = $formBuilderManager->sortFormdata($formData, $suffix);
 
         if ($formatedDatas['toMenu']) {
-            $isTaxonomy = $formatedDatas['isTaxonomy'] ?? false;
+            $contentType = $formatedDatas['option_type'] ?? false;
             $contentMgr = new ContentManager();
-            $options['flash-message'][] = $contentMgr->addEntry($formatedDatas['labels'], $isTaxonomy);
+            $options['flash-message'][] = $contentMgr->addEntry($formatedDatas['labels'], $contentType);
 
         } else {
             $options['flash-message'][] = $formatedDatas['flash-message'];

@@ -14,7 +14,7 @@ class LoginRequest extends BaseRequest
     public function getLogin (array $datas)
     {
 
-        $sql = "SELECT login, password FROM user WHERE login = :login";
+        $sql = "SELECT * FROM user WHERE login = :login";
         $query = $this->dbManager->connection()->prepare($sql);
         $query->bindValue(':login', $datas['login'], PDO::PARAM_INT);
         $query->execute();

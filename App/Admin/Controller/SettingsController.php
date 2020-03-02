@@ -7,7 +7,6 @@ use Admin\Core\QueryBuilder\QueryBuilder;
 use Admin\Core\Traits\NavigationTrait;
 use Admin\Requests\Content\ContentRequest;
 use mysql_xdevapi\Exception;
-use Services\Dumper\Dumper;
 use Services\FlashMessages\FlashMessage;
 use Services\FormBuilder\Constants\FormBuilderConstants;
 
@@ -15,16 +14,8 @@ class SettingsController extends AbstractController
 {
     use NavigationTrait;
     //TEMPLATE
-    const ADMIN_HOME = 'admin_home';
-    const ADMIN_SETTINGS_MAIN = 'settings_main';
     const ADMIN_SETTINGS_DANGER_ZONE = 'settings_danger_zone';
-    const TAXONOMY_TEMP_FILE = '/taxonomy_list.json';
 
-    public function mainSettings($options = [])
-    {
-        $this->isSessionActive();
-
-    }
 
     public function dangerZone($options = [])
     {
@@ -49,28 +40,11 @@ class SettingsController extends AbstractController
     {
         $this->isSessionActive();
 
-
         try {
             if (!empty($options['id'])) {
                 $tableName = htmlspecialchars($options['id']);
                 $tableList = $this->getTableList();
                 $isTaxoConfUpdate = null;
-
-                if (preg_match('/_taxo$/', $tableName)){
-
-                    $isTaxoConfUpdate = $this->handleTaxonomyConfiguration($tableName);
-                    if($isTaxoConfUpdate){
-                        $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
-                            'La configuration des taxonomy a bien été mise à jour.',
-                            'success'
-                        ))->messageBuilder();
-                    }else{
-                        $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
-                        'La configuration des taxonomy n\'a pas été mise à jour.',
-                            'success'
-                        ))->messageBuilder();;
-                    }
-                }
 
                 if ($this->isTableExist($tableList, $tableName) && $isTaxoConfUpdate !== false) {
 
@@ -204,24 +178,5 @@ class SettingsController extends AbstractController
             }
         }
         return $isConfDeleted || ($isConfDeleted && $isTempDeleted);
-    }
-
-    /**
-     * @param $tableName
-     * @return bool
-     */
-    private function handleTaxonomyConfiguration($tableName):bool
-    {
-        // remove the .. in the path with start with ../Services/.. and after we have /Services/
-        $noDot = str_replace('..', '',FormBuilderConstants::TAXONOMY_CONFIG_DIRECTORY);
-        $tempTaxoConfFilePath = FormBuilderConstants::CUSTOM_APP_PATH . $noDot . self::TAXONOMY_TEMP_FILE;
-
-        $taxoConfig = json_decode(file_get_contents($tempTaxoConfFilePath), true);
-        foreach ($taxoConfig as $key => $value) {
-            if ($value === $tableName){
-                unset($taxoConfig[$key]);
-            }
-        }
-        return is_int(file_put_contents($tempTaxoConfFilePath, json_encode($taxoConfig)));
     }
 }

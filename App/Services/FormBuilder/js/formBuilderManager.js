@@ -24,9 +24,11 @@ const FormBuilderManager = {
     },
 
     selectors: {
+        $formBuilder : document.querySelector('.formbuilder'),
         $formBuilder__buildNewForm : document.getElementsByClassName('form-init'),
         $formBuilder__loadConfiguration : document.getElementsByClassName('formbuilder-load'),
         $formBuilder__updateConfiguration : document.getElementsByClassName('update_form'),
+        $formBuilder__settings : document.getElementsByClassName('settings'),
 
     },
 
@@ -35,6 +37,7 @@ const FormBuilderManager = {
     },
     regex: {
         getClass : 'getConf-*',
+        settings : 'settings-*'
     },
 
     /**
@@ -43,6 +46,8 @@ const FormBuilderManager = {
     init: function () {
         this.log('form', 'init');
         let emptySelectValue = true;
+        let contentType = null;
+
         if (this.selectors.$formBuilder__buildNewForm.length > 0) {
             let json = require('../configurations/init-builder.json');
             this.fieldsBuilder(json, emptySelectValue);
@@ -50,7 +55,7 @@ const FormBuilderManager = {
         if ((this.selectors.$formBuilder__loadConfiguration.length > 0 && this.selectors.$formBuilder__updateConfiguration.length === 0) ||
             (this.selectors.$formBuilder__loadConfiguration.length > 0 && this.selectors.$formBuilder__updateConfiguration.length > 0)) {
 
-            let contentType = this.getConfigurationFile(this.selectors.$formBuilder__loadConfiguration);
+            contentType = this.getConfigurationFile(this.selectors.$formBuilder__loadConfiguration);
             if (contentType === '') {
                  this.showError();
             }else{
@@ -59,20 +64,18 @@ const FormBuilderManager = {
                 this.fieldsBuilder(json, emptySelectValue);
             }
         }
-        /*
-        if (this.selectors.$formBuilder__loadConfiguration.length > 0 && this.selectors.$formBuilder__updateConfiguration.length > 0) {
-            let contentType = this.getConfigurationFile(this.selectors.$formBuilder__loadConfiguration);
-            emptySelectValue = false;
-            if (contentType === '') {
-                this.showError();
-            }else{
-                let json = require(`../configurations/custom/temp/${contentType}.json`);
-                this.fieldsBuilder(json, emptySelectValue);
-            }
+        if (this.selectors.$formBuilder__settings.length > 0) {
+            let regex = RegExp(this.regex.settings);
+            this.selectors.$formBuilder.classList.forEach( function (elt){
+                if(regex.test(elt)){
+                    contentType = elt;
+                }
+            });
+
+            emptySelectValue = !this.selectors.$formBuilder__updateConfiguration.length > 0;
+            let json = require(`../configurations/${contentType}.json`);
+            this.fieldsBuilder(json, emptySelectValue);
         }
-        */
-
-
     },
     /**
      * Event on button 'Add new field' and add fields wich help us to add a new custom field in form
@@ -183,13 +186,22 @@ const FormBuilderManager = {
                     if (obj[field].value) {
                         switch(field) {
                             case 'textarea':
+
                                 inDom.innerHTML = emptySelectValue ? '' : obj[field].value;
+                                break;
+
+                            case 'input':
+
+                                    inDom.setAttribute('value', obj[field].value);
                                 break;
 
                             default:
                                 let value =  emptySelectValue ? '' : obj[field].value;
                                 inDom.setAttribute('value', value);
                         }
+                    }
+                    if (obj[field].checked) {
+                        inDom.setAttribute('checked', obj[field].checked);
                     }
                     if (obj[field].placeholder) {
                         inDom.setAttribute('placeholder', obj[field].placeholder);
@@ -267,7 +279,9 @@ const FormBuilderManager = {
                         inDom.classList.add(i);
                     }
                 }
-
+                if (parent[child].checked) {
+                    inDom.setAttribute('checked', parent[child].checked);
+                }
                 if (parent[child].option) {
                     let json;
                     // select init form

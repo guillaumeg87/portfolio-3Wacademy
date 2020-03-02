@@ -35,8 +35,8 @@ class FormHydrator
         try {
             $sql = $queryBuilder->buildSql($this->content, ContentController::SELECT_ONE_LABEL);
             $request = new ContentRequest();
-            $contentData = $request->selectOne($this->content, $sql);
 
+            $contentData = $request->selectOne($this->content, $sql);
             $tempFile = $this->generateTemporaryJson($contentData);
 
             if (!empty($tempFile)) {
@@ -57,10 +57,10 @@ class FormHydrator
      */
     private function generateTemporaryJson($contentData): ?string
     {
-        $json = file_get_contents(FormBuilderConstants::CUSTOM_CONFIG_DIRECTORY . $this->content['content_name'] . '.json');
+        $json = \file_get_contents(FormBuilderConstants::CUSTOM_CONFIG_DIRECTORY . $this->content['content_name'] . '.json');
         $jsonToArray = null;
         if ($json) {
-            $jsonToArray = json_decode($json, true);
+            $jsonToArray = \json_decode($json, true);
 
             $jsonToArray = $this->hiddenFieldId($contentData['id'], $jsonToArray);
 
@@ -87,7 +87,7 @@ class FormHydrator
                     }
                     if ($arrayField['name']) {
 
-                        $jsonToArray['fields'][$item][$index]['value'] = $contentData[strtolower($arrayField['name'])];
+                        $jsonToArray['fields'][$item][$index]['value'] = $contentData[\strtolower($arrayField['name'])];
                     }
                     if (isset($arrayField['url'])) {
 
@@ -105,7 +105,7 @@ class FormHydrator
         }
 
         if (!empty($jsonToArray)) {
-            return json_encode($jsonToArray);
+            return \json_encode($jsonToArray);
         }
         return $jsonToArray;
     }
@@ -131,7 +131,7 @@ class FormHydrator
                 'group' => 'admin-form',
             ]
         ];
-        array_push($jsonToArray['fields'], $hidden);
+        \array_push($jsonToArray['fields'], $hidden);
         return $jsonToArray;
     }
 
@@ -141,13 +141,13 @@ class FormHydrator
      */
     private function fileGeneration($fileData): bool
     {
-        if (!file_exists(FormBuilderConstants::CUSTOM_TEMPORARY_CONFIG_DIRECTORY)) {
-            mkdir(FormBuilderConstants::CUSTOM_TEMPORARY_CONFIG_DIRECTORY, 0777, true);
+        if (!\file_exists(FormBuilderConstants::CUSTOM_TEMPORARY_CONFIG_DIRECTORY)) {
+            \mkdir(FormBuilderConstants::CUSTOM_TEMPORARY_CONFIG_DIRECTORY, 0777, true);
         }
         $path = FormBuilderConstants::CUSTOM_TEMPORARY_CONFIG_DIRECTORY . $this->content['content_name'] . '.json';
 
-        $isCreated = file_put_contents($path, $fileData);
-        return (is_int($isCreated) ?? false);
+        $isCreated = \file_put_contents($path, $fileData);
+        return (\is_int($isCreated) ?? false);
     }
 
     /**
@@ -156,7 +156,7 @@ class FormHydrator
      */
     private function addDefaultValue(array $options):array
     {
-        array_unshift($options, FormBuilderConstants::DEFAULT_VALUES);
+        \array_unshift($options, FormBuilderConstants::DEFAULT_VALUES);
 
         return $options;
     }
@@ -167,6 +167,6 @@ class FormHydrator
      */
     private function toBase64(string $url):string
     {
-        return base64_encode(file_get_contents($url));
+        return \base64_encode(\file_get_contents($url));
     }
 }

@@ -4,32 +4,26 @@
         <a href="/admin/formBuilder/index">Ajouter un nouveau types de contenu</a>
         <ul>
             <?php
-            foreach ($this->vars['options']['navigation'] as $key => $value){?>
-                <li>
-                    <a href="/admin/content/index?content_name=<?= $value['contentTechnicalName'] ?>&id=<?= $value['id'] ?>">
-                        <?= ucfirst($value['contentDisplayName']) ?>
-                    </a>
-                </li>
+            foreach ($this->vars['options']['navigation'] as $key => $item) {
+                ?>
+                <h3><?= ucfirst($key) ?></h3>
+                <?php foreach ($item as $key => $value) { ?>
+                    <?php if ($value['contentTechnicalName'] !== 'danger_zone') { ?>
+                        <li>
+                            <a href="/admin/content/index?content_name=<?= $value['contentTechnicalName'] ?>&id=<?= $value['id'] ?>">
+                                <?= ucfirst($value['contentDisplayName']) ?>
+                            </a>
+                        </li>
+                    <?php } else { ?>
+                        <li>
+                            <a href="/admin/settings/<?= $value['controller'] ?>">
+                                <?= ucfirst($value['contentDisplayName']) ?>
+                            </a>
+                        </li>
+
+                <?php }
+                    } ?>
             <?php } ?>
-        </ul>
-    </div>
-    <div>
-        <h2>API</h2>
-        <ul>
-            <li>
-                <a href="/admin/apiDoc">Documentation API</a>
-            </li>
-        </ul>
-    </div>
-    <div>
-        <h2>Réglages</h2>
-        <ul>
-            <li>
-                <a href="/admin/settings/mainSettings">Réglages du site</a>
-            </li>
-            <li>
-                <a href="/admin/settings/dangerZone">Danger Zone</a>
-            </li>
         </ul>
     </div>
 </aside>

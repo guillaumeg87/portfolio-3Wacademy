@@ -6,7 +6,6 @@ namespace Admin\Core\Config;
 use Admin\Controller\AdminController;
 use Admin\Core\QueryBuilder\QueryBuilder;
 use Admin\Core\Traits\NavigationTrait;
-use Services\Dumper\Dumper;
 use Services\ServiceManager\ServiceManager;
 
 

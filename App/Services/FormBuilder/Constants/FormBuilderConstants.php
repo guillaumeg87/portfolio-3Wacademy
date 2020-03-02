@@ -32,9 +32,10 @@ final class FormBuilderConstants
     const CONTENT_FORM_GROUP_WRAPPER = 'formbuilder-load';
     const CONTENT_FORM_CLASS_BTN_SUBMIT = 'form-btn-submit';
 
-    // Taxonomy
-    const TAXONOMY_CONFIG_DIRECTORY = '../Services/FormBuilder/configurations/custom/taxonomy';
-    const TAXO_TABLE_SUFFIX = "_taxo";
+    // CONTENT TYPE SUFFIX
+    const CONTENT_TABLE_SUFFIX = "_content";
+    const TAXO_TABLE_SUFFIX = "_taxonomy";
+    const SETTINGS_TABLE_SUFFIX = "_settings";
 
     const DEFAULT_VALUES = [
         'name' => '-- Choisissez une option --'
