@@ -15,7 +15,7 @@ class ImagesManager
         $extension = $this->getFileExtension($data['name']);
         $targetDirectory = $this->getTargetDirectoryPath(getcwd(), $extension);
 
-        if($data['error'] === 0 && in_array($extension, ImagesConstant::IMAGE_FORMATS)){
+        if ($data['error'] === 0 && in_array($extension, ImagesConstant::IMAGE_FORMATS)) {
 
             $size = (int)$data['size'];
 
@@ -25,13 +25,15 @@ class ImagesManager
 
                 return move_uploaded_file($image->getTmpName(), $targetDirectory . $image->getName());
 
-            }else{
+            }
+            else {
                 $flashMessage = (new FlashMessage(
                     'Le poids de l\'image est trop importante (inf à '. $this->getMaxSize() .') ' ,
                     'error'
                 ))->messageBuilder();
             }
-        }else{
+        }
+        else {
             $flashMessage = (new FlashMessage(
                 'Le format de l\'image n\'est aps pris en compte (jpeg, jpg, png, pff)',
                 'error'

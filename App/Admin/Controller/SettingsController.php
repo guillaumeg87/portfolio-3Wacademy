@@ -7,6 +7,7 @@ use Admin\Core\QueryBuilder\QueryBuilder;
 use Admin\Core\Traits\NavigationTrait;
 use Admin\Requests\Content\ContentRequest;
 use mysql_xdevapi\Exception;
+use Services\Dumper\Dumper;
 use Services\FlashMessages\FlashMessage;
 use Services\FormBuilder\Constants\FormBuilderConstants;
 
@@ -72,7 +73,8 @@ class SettingsController extends AbstractController
                                 'success'
                             ))->messageBuilder();
                         }
-                    }else {
+                    }
+                    else {
                         throw new Exception();
                     }
                 }
@@ -173,7 +175,8 @@ class SettingsController extends AbstractController
 
         if (file_exists($pathConfigFiles)) {
             $isConfDeleted = unlink($pathConfigFiles);
-            if(file_exists($pathTempConfig)){
+
+            if (file_exists($pathTempConfig)){
                 $isTempDeleted = unlink($pathTempConfig);
             }
         }

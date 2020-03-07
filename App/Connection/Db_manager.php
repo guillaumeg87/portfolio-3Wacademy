@@ -2,7 +2,7 @@
 
 namespace Connection;
 
-use Connection\DB_conf;
+
 use mysql_xdevapi\Exception;
 use PDO;
 
@@ -34,6 +34,7 @@ class Db_manager
 
     /**
      * Db_manager constructor.
+     * @param array $param
      */
     public function __construct($param = []){
 
@@ -62,17 +63,20 @@ class Db_manager
     public function connection()
     {
         $com_bdd = null;
-        try{
-            $dsn = "mysql:host=" . $this->host . ";dbname=" . $this->name;
-            $com_bdd = new PDO($dsn, $this->admin, $this->pwd);
-            $com_bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $com_bdd->exec("SET NAMES UTF8");
-        }catch(\Exception $e){
-            throw new Exception('ERROR : ' . '</br>' .
-                'Code : ' . $e->getCode() .
-                'Stack Trace : ' . $e->getTraceAsString() . '</br>' .
-                'Message : ' . $e->getMessage() . '</br>' .
-                'Line : ' . $e->getLine() . '</br>');
+
+        if(!empty($this->host) && !empty($this->admin) && !empty($this->name)){
+            try{
+                $dsn = "mysql:host=" . $this->host . ";dbname=" . $this->name;
+                $com_bdd = new PDO($dsn, $this->admin, $this->pwd);
+                $com_bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $com_bdd->exec("SET NAMES UTF8");
+            }catch(\Exception $e){
+                throw new Exception('ERROR : ' . '</br>' .
+                    'Code : ' . $e->getCode() .
+                    'Stack Trace : ' . $e->getTraceAsString() . '</br>' .
+                    'Message : ' . $e->getMessage() . '</br>' .
+                    'Line : ' . $e->getLine() . '</br>');
+            }
         }
         return $com_bdd;
     }

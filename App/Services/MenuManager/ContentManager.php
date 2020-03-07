@@ -22,7 +22,6 @@ class ContentManager
         $menuKeys = $this->getContentKey($itemsMenu);
         $sorting = $this->sortEntryInMenu($itemsMenu, $menuKeys);
         return $this->addDangerZone($sorting);
-
     }
 
     /**
@@ -35,7 +34,7 @@ class ContentManager
         $flashMessage = '';
         $isContentExist = (new ContentRequest())->isExist($datas);
 
-        if(empty($isContentExist)){
+        if (empty($isContentExist)) {
             $result = (new ContentRequest())->createMenuEntry($datas, $contentType);
             if($result){
 
@@ -44,7 +43,8 @@ class ContentManager
                     'success'
                 ))->messageBuilder();
             }
-        }else{
+        }
+        else {
 
             $flashMessage =  (new FlashMessage(
         'Le contenu saisi comporte un nom technique (technical name) déjà utilisé.',
@@ -62,19 +62,22 @@ class ContentManager
     private function getContentKey($param):array
     {
         $menuKeys = [];
-        foreach ($param as $item) {
+        if (!empty($param)){
+            foreach ($param as $item) {
 
-            foreach ($item as $key => $value){
+                foreach ($item as $key => $value){
 
-                if ($key === 'contentTechnicalName') {
-                    $chunk = explode('_', $value);
+                    if ($key === 'contentTechnicalName') {
+                        $chunk = explode('_', $value);
 
-                    if (!in_array($chunk[1], $menuKeys)){
-                        $menuKeys[$chunk[1]] = [];
+                        if (!in_array($chunk[1], $menuKeys)){
+                            $menuKeys[$chunk[1]] = [];
+                        }
                     }
                 }
             }
         }
+
         return $menuKeys;
     }
 
@@ -113,7 +116,8 @@ class ContentManager
     {
         if (!in_array('settings', $menuKeys)){
             $menuKeys['settings'][] = self::DANGER_ZONE;
-        }else {
+        }
+        else {
             $menuKeys['settings'] = self::DANGER_ZONE;
         }
         return $menuKeys;

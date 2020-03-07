@@ -10,13 +10,20 @@ class ContentRequest extends BaseRequest
     use RequestDateTrait;
     const TABLE_NAME = 'menu';
 
-    public function getMenuEntryList()
+    /**
+     * @return array|null
+     */
+    public function getMenuEntryList():?array
     {
         $sql = "SELECT * FROM " . self::TABLE_NAME . " WHERE -1";
-        $query = $this->dbManager->connection()->prepare($sql);
-        $query->execute();
+        $connection = $this->dbManager->connection();
+        if($connection){
+            $query = $connection->prepare($sql) ;
+            $query->execute();
 
-        return $query->fetchAll(\PDO::FETCH_ASSOC);
+            return $query->fetchAll(\PDO::FETCH_ASSOC);
+        }
+        return null;
     }
 
     public function createMenuEntry(array $data, string $contentType)

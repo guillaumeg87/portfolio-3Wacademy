@@ -4,6 +4,7 @@
 namespace Services\FormBuilder\Core\Requests;
 
 use Services\FormBuilder\Constants\FormBuilderConstants;
+use Services\FormBuilder\Core\Entity\CheckboxFields;
 use Services\FormBuilder\Core\Entity\FilesFields;
 use Services\FormBuilder\Core\Entity\InputFields;
 
@@ -29,7 +30,11 @@ class QueryBuilder
 
                     if ($field instanceof InputFields){
 
-                        $toQuery = $this->formatColumnName($field->getName()) . " VARCHAR(255)";
+                    $toQuery = $this->formatColumnName($field->getName()) . " VARCHAR(255)";
+                    }
+                    if ($field->getType() === 'checkbox'){
+
+                        $toQuery = $this->formatColumnName($field->getName()) . " BOOLEAN NOT NULL";
                     }
 
                     break;
@@ -55,7 +60,7 @@ class QueryBuilder
 
                 case FormBuilderConstants::CHECKBOX :
                     // @TODO
-                    // $toQuery = $this->formatColumnName($field->getName()) . " VARCHAR(255) NOT NULL";
+                    $toQuery = $this->formatColumnName($field->getName()) . " BOOLEAN NOT NULL";
                     break;
             }
 
@@ -78,10 +83,9 @@ class QueryBuilder
      */
     private function formatColumnName($label): string
     {
-        return str_replace(' ', '_', strtolower(
-                trim(
-                    htmlspecialchars($label)
-                )
+        return str_replace(' ', '_',
+            trim(
+                htmlspecialchars($label)
             )
         );
     }

@@ -7,6 +7,7 @@ namespace Services\FormBuilder\Core;
 use Admin\Controller\ContentController;
 use Admin\Core\QueryBuilder\QueryBuilder;
 use Admin\Requests\Content\ContentRequest;
+use Services\Dumper\Dumper;
 use Services\FormBuilder\Constants\FormBuilderConstants;
 
 
@@ -29,6 +30,7 @@ class FormHydrator
      */
     public function buildTemporaryConfiguration(): bool
     {
+        $suffix = null;
 
         $queryBuilder = new QueryBuilder();
         $contentData = null;
@@ -37,6 +39,7 @@ class FormHydrator
             $request = new ContentRequest();
 
             $contentData = $request->selectOne($this->content, $sql);
+
             $tempFile = $this->generateTemporaryJson($contentData);
 
             if (!empty($tempFile)) {
@@ -67,12 +70,13 @@ class FormHydrator
             foreach ($jsonToArray['fields'] as $item => $fieldConf) {
 
                 foreach ($fieldConf as $index => $arrayField) {
+
                     if ($index === 'select'){
 
                         $queryBuilder = new QueryBuilder();
                         $query = null;
 
-                        if($queryBuilder instanceof QueryBuilder){
+                        if ($queryBuilder instanceof QueryBuilder) {
 
                             $sql = $queryBuilder->buildSql(
                                 [
@@ -85,14 +89,17 @@ class FormHydrator
                             $jsonToArray['fields'][$item][$index]['option'][] = $this->addDefaultValue($results);
                         }
                     }
+
                     if ($arrayField['name']) {
 
                         $jsonToArray['fields'][$item][$index]['value'] = $contentData[\strtolower($arrayField['name'])];
                     }
+
                     if (isset($arrayField['url'])) {
 
                         $jsonToArray['fields'][$item][$index]['url'] = $contentData['url'];
                     }
+
                     if (isset($arrayField['path'])) {
 
                         $jsonToArray['fields'][$item][$index]['path'] = $contentData['path'];
@@ -100,9 +107,16 @@ class FormHydrator
 
                     }
 
+                    if ($arrayField['type']=== 'checkbox') {
+                        $results = preg_grep('/^is[A-Za-z]/',array_keys($contentData));
+                        foreach ($results as $key => $value) {
+                            $jsonToArray['fields'][$item][$index]['value'] = boolval($contentData[$value]);
+                        }
+                    }
                 }
             }
         }
+
 
         if (!empty($jsonToArray)) {
             return \json_encode($jsonToArray);

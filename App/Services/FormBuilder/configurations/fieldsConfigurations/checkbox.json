@@ -1,11 +1,11 @@
 {
-  "fieldType": "checkbox",
+  "fieldType": "input",
   "labelDisplay": "",
-  "content": "",
-  "value": "",
+  "type": "checkbox",
+  "name": "",
+  "value": false,
   "checked": false,
-  "for": "",
   "id": "",
-  "class": "",
+  "class": [],
   "group": "admin-form"
 }

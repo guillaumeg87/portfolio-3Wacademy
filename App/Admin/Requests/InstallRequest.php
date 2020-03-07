@@ -17,7 +17,7 @@ class InstallRequest extends BaseRequest
     {
         $sql = "use " . $db_data['Db_name'];
         $this->dbManager->connection()->exec($sql);
-        $sql = "CREATE TABLE IF NOT EXISTS user ( id int(11) AUTO_INCREMENT NOT NULL PRIMARY KEY, login VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, isSuperAdmin BOOLEAN NULL)";
+        $sql = "CREATE TABLE IF NOT EXISTS user_settings ( id int(11) AUTO_INCREMENT NOT NULL PRIMARY KEY, login VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, isSuperAdmin BOOLEAN NULL)";
         return (bool)$this->dbManager->connection()->exec($sql);
     }
 
@@ -30,7 +30,7 @@ class InstallRequest extends BaseRequest
      */
     public function createAdminAccount(array $user)
     {
-        $sql = "INSERT INTO user (login, password, email) VALUES (:login,:pwd, :email)";
+        $sql = "INSERT INTO user_settings (login, password, email) VALUES (:login,:pwd, :email)";
         $query = $this->dbManager->connection()->prepare($sql);
         return $query->execute([
             'login' => $user['login'],

@@ -3,6 +3,7 @@
 namespace Admin\Requests;
 
 use PDO;
+use Services\Dumper\Dumper;
 
 class LoginRequest extends BaseRequest
 {
@@ -14,7 +15,7 @@ class LoginRequest extends BaseRequest
     public function getLogin (array $datas)
     {
 
-        $sql = "SELECT * FROM user WHERE login = :login";
+        $sql = "SELECT * FROM user_settings WHERE login = :login";
         $query = $this->dbManager->connection()->prepare($sql);
         $query->bindValue(':login', $datas['login'], PDO::PARAM_INT);
         $query->execute();

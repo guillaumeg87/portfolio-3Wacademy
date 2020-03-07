@@ -31,20 +31,9 @@ let CreateContentForm = {
      * Initialize app
      */
     init(formWrapper) {
+
         this.log('createContentForm', 'init');
-
-        console.log(formWrapper.length);
-
-        //this.initFormFactory(json);
-        //return formWrapper[0].appendChild(this.initFormFactory(json));
     },
-
-
-    initFormFactory(json) {
-        let initBlock = document.createElement('div');
-        initBlock.innerHTML = "TEST";
-
-    }
 };
 
 /**

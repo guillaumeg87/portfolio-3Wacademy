@@ -12,6 +12,6 @@ class IndexController extends AbstractController
 {
     public function index(){
 
-        $this->render(__NAMESPACE__, "index");
+        $this->render(__NAMESPACE__, 'index');
     }
 }

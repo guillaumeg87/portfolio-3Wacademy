@@ -5,7 +5,7 @@ namespace Admin\Controller;
 
 use Admin\Core\Config\AbstractController;
 use Admin\Core\Install\Builder\DatabaseBuilder;
-use Services\FlashMessages\FlashMessage;
+
 
 class InstallController extends AbstractController
 {
@@ -18,7 +18,9 @@ class InstallController extends AbstractController
      */
     public function indexForm($alert = [])
     {
+
         $this->render(__NAMESPACE__, 'installation_form', $alert);
+        die;
     }
 
     /**
@@ -26,6 +28,7 @@ class InstallController extends AbstractController
      */
     public function startInstall()
     {
+
         $installer = new DatabaseBuilder();
         $email = $_POST['email'];
 

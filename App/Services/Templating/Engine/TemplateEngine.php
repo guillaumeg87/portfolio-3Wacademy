@@ -21,7 +21,7 @@ class TemplateEngine
     {
         $this->templateFile = $this->getFile($templateFile);
 
-        if(!$this->templateFile) {
+        if (!$this->templateFile) {
             return (new FlashMessage(
                 'Impossible de charger ce template : '. $templateFile,
                 'error'
@@ -37,7 +37,8 @@ class TemplateEngine
     {
         if (file_exists($file)) {
             return  file_get_contents($file);
-        } else {
+        }
+        else {
             return false;
         }
     }
@@ -97,7 +98,8 @@ class TemplateEngine
                 $key .= $tag;
                 $this->embricatedDatas($key, $value);
 
-            }elseif (is_string($value)) {
+            }
+            elseif (is_string($value)) {
 
                 $key .= '.' . $tag;
             }

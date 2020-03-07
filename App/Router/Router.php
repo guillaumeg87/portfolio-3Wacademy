@@ -41,11 +41,14 @@ class Router
             $request->path = self::ADMIN_PATH;
             $request->params[] = (strpos($url, '?') ? self::urlParams($url) :[]);
 
-        } elseif (!file_exists(DatabaseBuilder::FILE_DB_CONF)) {
+        } elseif (!file_exists(DatabaseBuilder::JSON_FILE_DB_CONF)) {
+
             $request->controller = self::INSTALL;
             $request->action = self::INSTALL_FORM;
             $request->path = self::ADMIN_PATH;
             $request->params = [];
+            header('Location: /admin/install/indexForm');
+            header_remove();
         } else {
 
             $explode_url = array_slice($explode_url, 2);

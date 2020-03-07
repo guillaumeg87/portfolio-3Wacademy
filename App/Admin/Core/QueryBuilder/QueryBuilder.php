@@ -3,6 +3,7 @@
 namespace Admin\Core\QueryBuilder;
 
 use Connection\DB_conf;
+use Services\Dumper\Dumper;
 
 class QueryBuilder
 {
@@ -142,7 +143,7 @@ class QueryBuilder
         $lastElt = end($keys);
 
         forEach ($params as $key => $value) {
-            if($lastElt !== $key){
+            if  ($lastElt !== $key){
                 $str .= $key . " = :" . $key . ', ';
 
             }
@@ -173,7 +174,7 @@ class QueryBuilder
 
         forEach ($params as $key => $value) {
 
-            if($lastElt !== $key){
+            if ($lastElt !== $key){
 
                 $str .= $key . ', ';
             }

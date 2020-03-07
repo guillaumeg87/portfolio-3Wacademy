@@ -9,6 +9,7 @@ use Admin\Requests\InstallRequest;
 use mysql_xdevapi\Exception;
 use PDO;
 use PDOException;
+use Services\Dumper\Dumper;
 use Services\FlashMessages\FlashMessage;
 use Services\Mailer\MailerService;
 
@@ -23,16 +24,18 @@ class DatabaseBuilder
     const JSON_FILE_DB_CONF = '../Connection/Db_config.json';
 
     // Two constants below needed for class dynamically
-    const FILE_START = '<?php 
-
-                        namespace Connection;
-                        
-                        final class DB_conf
-                        {
-                        ';
-    const FILE_END = '
-                        }
-                        ';
+    const FILE_START =
+        '<?php 
+         
+            namespace Connection;
+            
+            final class DB_conf
+        {
+        ';
+    const FILE_END =
+        '
+        }
+        ';
 
     /**
      * Handle installation form datas
@@ -63,6 +66,7 @@ class DatabaseBuilder
                 unset($data[strtoupper($key)]);
             }
 
+
             $this->init_param($data, $admin);
         }
 
@@ -76,19 +80,15 @@ class DatabaseBuilder
      */
     public function init_param(array $param, array $admin)
     {
+        $db_data = array_combine(self::DB_INSTALL, $param);
 
-        if (!file_exists(Constants::FILE_DB_CONF)) {
-            $db_data = array_combine(self::DB_INSTALL, $param);
+        /** PHP CONSTANT CLASS DATABASE CONFIG **/
+        $this->generateConstantClassConf($db_data);
 
-            /** PHP CONSTANT CLASS DATABASE CONFIG **/
-            $this->generateConstantClassConf($db_data);
-
-            /** JSON DATABASE CONFIG **/
-            $this->generateJsonConfigFile($db_data);
-
-            $this->prepareBuild($admin, $db_data);
-        }
-
+        /** JSON DATABASE CONFIG **/
+        $this->generateJsonConfigFile($db_data);
+        sleep(2);
+        $this->prepareBuild($admin, $db_data);
     }
 
     /**
@@ -114,6 +114,7 @@ class DatabaseBuilder
      * If an error occured, Rollback function are called
      *
      * @param $admin array
+     * @param $db_data
      * @return void
      */
     private function builder($admin, $db_data)

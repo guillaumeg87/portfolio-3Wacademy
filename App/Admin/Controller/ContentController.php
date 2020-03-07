@@ -3,11 +3,14 @@ namespace Admin\Controller;
 
 use Admin\Core\Config\AbstractController;
 use Admin\Core\QueryBuilder\QueryBuilder;
+use Admin\Core\Traits\Hash;
 use Admin\Requests\Content\ContentRequest;
+use Services\Dumper\Dumper;
 
 
 class ContentController extends AbstractController
 {
+    use Hash;
     const HANDLE_CONTENT_INDEX = 'handle_content_index';
     const HANDLE_CONTENT_FORM = 'handle_content_form';
 
@@ -20,6 +23,9 @@ class ContentController extends AbstractController
     const DELETE_LABEL = 'delete';
     const SELECT_ONE_LABEL = 'select_one';
 
+    const USER_FIELDS = ['login', 'password', 'email', 'isSuperAdmin'];
+
+
     public function index($options = [])
     {
         $this->isSessionActive();
@@ -30,9 +36,12 @@ class ContentController extends AbstractController
                 $content_name = $options['content_name'] ?? $options['widget']['content_name'];
 
                 $widget = $this->getServiceManager()->getAdminWidget($content_name);
+
                 $options['labels'] = $this->getContentLabels($content_name);
+
                 $options['list'] = $widget->getElementList();
                 if (!empty($widget->getElementList()) && is_array($widget->getElementList())) {
+
                     if (!empty($widget->getElementList()[0])){
                         $options['header'] = array_keys($widget->getElementList()[0]);
 
@@ -54,9 +63,11 @@ class ContentController extends AbstractController
         $options['action'] = $options['isEdit'] ? self::EDIT_LABEL : self::CREATE_LABEL;
 
         $form = $this->getServiceManager()->getFormBuilderManager($options)->updateContentdata();
+
         // Sleep needed for temporary Json configuration file
         sleep(1);
-        if(!empty($form) && $options['action'] === self::EDIT_LABEL){
+
+        if (!empty($form) && $options['action'] === self::EDIT_LABEL){
             $options['form-selector'] = self::CONTENT_FORM_UPDATE;
 
         }
@@ -80,6 +91,11 @@ class ContentController extends AbstractController
 
         foreach ($_POST as $key => $value) {
             $formDatas[$key] = htmlspecialchars($value);
+
+            // case of boolean => in user table for exemple
+            if (preg_match('/^is[a-zA-Z]/',$key)){
+                $formDatas[$key] = boolval($value);
+            }
         }
         return $formDatas;
     }
@@ -116,7 +132,6 @@ class ContentController extends AbstractController
     {
         $this->isSessionActive();
 
-
         $formDatas = $this->verifyDatasFromForm($_POST);
         $formDatas = $this->getFilesData($formDatas, $_FILES);
         $options['widget'] = [
@@ -125,10 +140,21 @@ class ContentController extends AbstractController
         ];
         unset($formDatas['content_id']);
 
+        if(preg_match('/^user_?[a-z]/',$formDatas['content_name'])){
+            foreach (self::USER_FIELDS as $key){
+                // In case of checkbox value = false
+                if(!isset($formDatas[$key])){
+                    $formDatas[$key] = (int)false;
+                }
+            }
+            $formDatas['password'] = $this->hashString($formDatas['password']);
+        }
+
         if (!empty($formDatas) && !empty($formDatas['id'])) {
             try {
                 $queryBuilder = new QueryBuilder();
                 $sql = $queryBuilder->buildSql($formDatas, self::UPDATE_LABEL);
+
                 $request = new ContentRequest();
                 $isUpdated = $request->updateContent($formDatas, $sql);
 
@@ -290,7 +316,7 @@ class ContentController extends AbstractController
         $mainIndex = $key[0];
         foreach ($files as $key => $value){
 
-            if($files[$key]['size'] !== 0){
+            if ($files[$key]['size'] !== 0){
 
                 $imageManager = $this->getServiceManager()->getImageManager();
                 $isUploaded = $imageManager->imageHandler($files[$mainIndex]);

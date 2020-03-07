@@ -4,7 +4,7 @@ use App\Autoload;
 
 define('WEBROOT', str_replace("web/index.php", "", $_SERVER["SCRIPT_NAME"]));
 define('ROOT', str_replace("web/index.php", "", $_SERVER["SCRIPT_FILENAME"]));
-
+session_start();
 require_once ('../Autoload.php');
 Autoload::register();
 
@@ -14,4 +14,3 @@ require(ROOT . 'Router/Request.php');
 require(ROOT . 'Dispatcher/Dispatcher.php');
 $dispatch = new App\Dispatcher\Dispatcher();
 $dispatch->dispatch();
-?>
