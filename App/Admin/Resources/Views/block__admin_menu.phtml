@@ -5,25 +5,29 @@
         <ul>
             <?php
             foreach ($this->vars['options']['navigation'] as $key => $item) {
-                ?>
-                <h3><?= ucfirst($key) ?></h3>
-                <?php foreach ($item as $key => $value) { ?>
-                    <?php if ($value['contentTechnicalName'] !== 'danger_zone') { ?>
-                        <li>
-                            <a href="/admin/content/index?content_name=<?= $value['contentTechnicalName'] ?>&id=<?= $value['id'] ?>">
-                                <?= ucfirst($value['contentDisplayName']) ?>
-                            </a>
-                        </li>
-                    <?php } else { ?>
-                        <li>
-                            <a href="/admin/settings/<?= $value['controller'] ?>">
-                                <?= ucfirst($value['contentDisplayName']) ?>
-                            </a>
-                        </li>
+            ?>
+            <h3><?= ucfirst($key) ?></h3>
+            <?php
+            if (!empty($item)) {
 
-                <?php }
-                    } ?>
-            <?php } ?>
+                foreach ($item as $key => $value) { ?>
+                <?php if ($value['contentTechnicalName'] !== 'danger_zone') { ?>
+                    <li>
+                        <a href="/admin/content/index?content_name=<?= $value['contentTechnicalName'] ?>&id=<?= $value['id'] ?>">
+                            <?= ucfirst($value['contentDisplayName']) ?>
+                        </a>
+                    </li>
+                    <?php } else { ?>
+                    <li>
+                        <a href="/admin/settings/<?= $value['controller'] ?>">
+                            <?= ucfirst($value['contentDisplayName']) ?>
+                        </a>
+                    </li>
+
+            <?php       }
+                    }
+                }
+            } ?>
         </ul>
     </div>
 </aside>

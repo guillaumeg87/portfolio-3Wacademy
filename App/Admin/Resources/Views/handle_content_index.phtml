@@ -15,7 +15,6 @@
                 if (!empty($this->vars['options']['response']['id'])){ ?>
                     <input name="id" type="hidden" value="<?= $this->vars['options']['response']['id'] ?>">
                 <?php } ?>
-
                 <?php if (!empty($this->vars['options']['list'])) { ?>
                 <div class="admin-content-widget">
                     <h3>CONTENT LIST : <?= ucfirst($this->vars['options']['labels']['displayName']) ?></h3>
@@ -40,6 +39,9 @@
                                 <?php foreach ($item as $key => $value) {
                                     if ($key === 'id') {
                                         $id = $value;
+                                    }
+                                    elseif($key === 'password'){
+                                        $value = '********';
                                     } ?>
                                     <td>
                                         <a href="/admin/content/formContent?id=<?= $id ?>&content_name=<?= $this->vars['options']['labels']['technicalName'] ?>&isEdit=true&content_type=<?= $this->vars['options']['content_name'] ?>&content_id=<?= $this->vars['options']['id'] ?>"><?= $value ?></a>

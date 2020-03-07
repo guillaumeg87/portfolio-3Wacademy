@@ -24,20 +24,20 @@ const FormBuilderManager = {
     },
 
     selectors: {
-        $formBuilder : document.querySelector('.formbuilder'),
-        $formBuilder__buildNewForm : document.getElementsByClassName('form-init'),
-        $formBuilder__loadConfiguration : document.getElementsByClassName('formbuilder-load'),
-        $formBuilder__updateConfiguration : document.getElementsByClassName('update_form'),
-        $formBuilder__settings : document.getElementsByClassName('settings'),
+        $formBuilder: document.querySelector('.formbuilder'),
+        $formBuilder__buildNewForm: document.getElementsByClassName('form-init'),
+        $formBuilder__loadConfiguration: document.getElementsByClassName('formbuilder-load'),
+        $formBuilder__updateConfiguration: document.getElementsByClassName('update_form'),
+        $formBuilder__settings: document.getElementsByClassName('settings'),
 
     },
 
     data: {
-        countNewfield : 0
+        countNewfield: 0
     },
     regex: {
-        getClass : 'getConf-*',
-        settings : 'settings-*'
+        getClass: 'getConf-*',
+        settings: 'settings-*'
     },
 
     /**
@@ -57,8 +57,8 @@ const FormBuilderManager = {
 
             contentType = this.getConfigurationFile(this.selectors.$formBuilder__loadConfiguration);
             if (contentType === '') {
-                 this.showError();
-            }else{
+                this.showError();
+            } else {
                 emptySelectValue = !this.selectors.$formBuilder__updateConfiguration.length > 0;
                 let json = require(`../configurations/custom/temp/${contentType}.json`);
                 this.fieldsBuilder(json, emptySelectValue);
@@ -66,8 +66,8 @@ const FormBuilderManager = {
         }
         if (this.selectors.$formBuilder__settings.length > 0) {
             let regex = RegExp(this.regex.settings);
-            this.selectors.$formBuilder.classList.forEach( function (elt){
-                if(regex.test(elt)){
+            this.selectors.$formBuilder.classList.forEach(function (elt) {
+                if (regex.test(elt)) {
                     contentType = elt;
                 }
             });
@@ -87,9 +87,9 @@ const FormBuilderManager = {
     },
 
     /**
-    * Action when cancel button is clicked
-    */
-    deleteChoiceform(){
+     * Action when cancel button is clicked
+     */
+    deleteChoiceform() {
         let choiceForm = document.querySelector('.form_field_choice');
         let parent = document.querySelector('.admin-form');
         parent.removeChild(choiceForm);
@@ -160,7 +160,7 @@ const FormBuilderManager = {
      * @param data
      * @param {boolean} emptySelectValue
      */
-    setArrayField(type, data, emptySelectValue) {
+    setArrayField: function (type, data, emptySelectValue) {
 
         let obj;
         let inDom;
@@ -171,9 +171,6 @@ const FormBuilderManager = {
 
                     inDom = document.createElement(field);
 
-                    if (obj[field].id) {
-                        inDom.setAttribute('id', obj[field].id);
-                    }
                     if (obj[field].for) {
                         inDom.setAttribute('for', obj[field].for);
                     }
@@ -181,22 +178,28 @@ const FormBuilderManager = {
                         inDom.setAttribute('name', obj[field].name);
                     }
                     if (obj[field].type) {
+
+                        if (obj[field].type === 'checkbox' && (obj[field].value === true || obj[field].value === 1)) {
+                            inDom.setAttribute('checked', 'true')
+                        }
                         inDom.setAttribute('type', obj[field].type);
+
                     }
                     if (obj[field].value) {
-                        switch(field) {
+
+                        switch (field) {
                             case 'textarea':
 
                                 inDom.innerHTML = emptySelectValue ? '' : obj[field].value;
                                 break;
 
                             case 'input':
-
                                     inDom.setAttribute('value', obj[field].value);
+
                                 break;
 
                             default:
-                                let value =  emptySelectValue ? '' : obj[field].value;
+                                let value = emptySelectValue ? '' : obj[field].value;
                                 inDom.setAttribute('value', value);
                         }
                     }
@@ -209,7 +212,8 @@ const FormBuilderManager = {
                     if (obj[field].content) {
                         inDom.innerHTML = obj[field].content;
                     }
-                    if (obj[field].class !== []) {
+
+                    if (obj[field].class && obj[field].class.length !== 0) {
                         for (let i of obj[field].class) {
                             inDom.classList.add(i);
                         }
@@ -223,13 +227,13 @@ const FormBuilderManager = {
                     if (obj[field].path) {
                         inDom.innerHTML = obj[field].path;
                     }
-                    if (obj[field].option){
-                        this.addSelectOptions(obj, inDom,  emptySelectValue);
+                    if (obj[field].option) {
+                        this.addSelectOptions(obj, inDom, emptySelectValue);
                     }
                     if (obj[field].group) {
                         let target = document.getElementsByClassName(obj[field].group);
                         target[0].appendChild(inDom);
-                        if(previewImage !== null) {
+                        if (previewImage !== null) {
                             target[0].appendChild(previewImage);
                         }
                     } else {
@@ -239,7 +243,8 @@ const FormBuilderManager = {
                         inDom.innerHTML = obj[field].labelDisplay;
 
                     }
-                    if(obj[field].eventListener){
+                    if (obj[field].eventListener) {
+                        console.log('-event');
                         this.addElementListener(obj[field].eventListener, inDom);
                     }
                 }
@@ -285,7 +290,7 @@ const FormBuilderManager = {
                 if (parent[child].option) {
                     let json;
                     // select init form
-                    if (parent[child].option === 'fields-list' ) {
+                    if (parent[child].option === 'fields-list') {
                         // From configuration file init form
                         let path = parent[child].option;
                         json = require(`../configurations/${path}.json`);
@@ -332,15 +337,15 @@ const FormBuilderManager = {
      * Get new fields selected in little form and render all the field needed for building a new field
      * Insert collection if field in DOM
      */
-    newFieldSelected(field){
+    newFieldSelected(field) {
 
         let json = require(`../configurations/fieldsConfigurations/${field}.json`);
         let toDom = [];
         let rank = this.counter();
 
-        for(let item in json) {
+        for (let item in json) {
 
-            if (json.hasOwnProperty(item)){
+            if (json.hasOwnProperty(item)) {
 
                 this.buildField(item, json, toDom, rank);
             }
@@ -364,13 +369,13 @@ const FormBuilderManager = {
      * @param rank
      * @returns {number | * | boolean}
      */
-    buildField(type, datas, toDom, rank){
+    buildField(type, datas, toDom, rank) {
 
         let wrapper = this.fieldWrapper();
         let newInput;
         let newLabel;
         let imagePreview = null;
-        switch(type){
+        switch (type) {
             case 'labelDisplay':
             case 'type':
             case 'name':
@@ -415,7 +420,7 @@ const FormBuilderManager = {
 
                 let jsonOptions = require(`../configurations/custom/taxonomy/taxonomy_list.json`);
                 let option;
-                for(let elt in jsonOptions){
+                for (let elt in jsonOptions) {
                     option = document.createElement('option');
                     option.setAttribute('value', `${elt}_${jsonOptions[elt]}`);
                     option.innerHTML = Tools.ucFirst(jsonOptions[elt]);
@@ -444,7 +449,7 @@ const FormBuilderManager = {
                 newInput.setAttribute('type', 'hidden');
 
                 wrapper.appendChild(newInput);
-            break;
+                break;
         }
 
         return toDom.push(wrapper);
@@ -490,7 +495,7 @@ const FormBuilderManager = {
      * @param parent
      * @param count
      */
-    addDeleteGroupButton(parent, count){
+    addDeleteGroupButton(parent, count) {
         let btnDelete = document.createElement('button');
         btnDelete.classList.add('btn_delete');
         btnDelete.setAttribute('data-count', count);
@@ -504,10 +509,10 @@ const FormBuilderManager = {
      *
      * @returns {number}
      */
-    counter(){
+    counter() {
         let groupNumber = document.getElementsByClassName('new-field-group').length;
 
-        if(groupNumber === 0){
+        if (groupNumber === 0) {
             this.data.countNewfield = 0;
         }
         return parseInt(++this.data.countNewfield);
@@ -518,7 +523,7 @@ const FormBuilderManager = {
      * @param elt
      * @param inDom
      */
-    addElementListener(elt, inDom){
+    addElementListener(elt, inDom) {
 
         if (typeof ListenersCallback[elt.callback] === "function") {
 
@@ -532,11 +537,11 @@ const FormBuilderManager = {
      * @param form
      * @returns {string}
      */
-    getConfigurationFile(form){
+    getConfigurationFile(form) {
         let contentType = '';
         var regex = RegExp(this.regex.getClass);
-        form[0].classList.forEach( function (elt){
-            if(regex.test(elt)){
+        form[0].classList.forEach(function (elt) {
+            if (regex.test(elt)) {
                 let chunks = elt.split('-');
                 contentType = chunks[1];
             }
@@ -548,7 +553,8 @@ const FormBuilderManager = {
      * @TODO fonction à écrire dans le cas où il n'y a pas de contenu
      * afficher l'erreur dans le DOM => flash message
      */
-    showError(){},
+    showError() {
+    },
 
     /**
      * Return input type
@@ -556,7 +562,7 @@ const FormBuilderManager = {
      * @returns {string}
      */
     getInputType(datas) {
-        return  datas.fieldType === 'input' ? datas.type : '';
+        return datas.fieldType === 'input' ? datas.type : '';
     }
 };
 
@@ -571,4 +577,13 @@ export {FormBuilderManager};
  */
 $(document).ready(function () {
     FormBuilderManager.init();
+
+    // Checkbox field
+    FormBuilderManager.addElementListener({
+        callback : 'callback_isChecked_chkbx',
+        type: 'click'
+    }, document.querySelector('.update_form input[type="checkbox"]'));
+
+
+
 });

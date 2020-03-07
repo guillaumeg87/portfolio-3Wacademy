@@ -107,7 +107,7 @@ class CheckboxFields extends AbstractFields
      */
     public function setValue(string $value): CheckboxFields
     {
-        $this->value = $value;
+        $this->value = $value ? true : false;
         return $this;
     }
 

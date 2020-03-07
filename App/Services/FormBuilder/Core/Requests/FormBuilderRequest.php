@@ -63,7 +63,7 @@ class FormBuilderRequest extends BaseRequest
     {
         $tableName = null;
 
-        switch($option){
+        switch($option) {
             case 'taxonomy':
                 $tableName = $name . FormBuilderConstants::TAXO_TABLE_SUFFIX;
             break;

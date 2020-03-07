@@ -6,6 +6,7 @@ namespace Admin\Core\Config;
 use Admin\Controller\AdminController;
 use Admin\Core\QueryBuilder\QueryBuilder;
 use Admin\Core\Traits\NavigationTrait;
+use Services\FlashMessages\FlashMessage;
 use Services\ServiceManager\ServiceManager;
 
 
@@ -27,7 +28,12 @@ use NavigationTrait;
 
     public function addRenderOptions($options)
     {
-        $options['navigation'] = $this->getNavigation();
+        if(!$this->getNavigation() instanceof FlashMessage){
+            $options['navigation'] = $this->getNavigation();
+        }else{
+            $this->vars['options'][] = $this->getNavigation();
+        }
+
         $this->vars['options'] = array_merge($this->vars, $options);
     }
 
@@ -104,7 +110,7 @@ use NavigationTrait;
     {
         $modVars = str_replace('\\', '/',$vars);
 
-        if(preg_match(self::REGEX_IS_ADMIN, $modVars)) {
+        if (preg_match(self::REGEX_IS_ADMIN, $modVars)) {
 
             return self::ADMIN_DIR;
         }
@@ -131,20 +137,24 @@ use NavigationTrait;
     }
 
     /**
-     *
+     * @param $options
      */
     public function isSessionActive()
     {
         session_start();
+        if ($_SESSION !== [] && isset($_SESSION['LAST_REQUEST_TIME'])) {
+            if (time() - $_SESSION['LAST_REQUEST_TIME'] > CoreConstants::SESSION_DURATION) {
 
-        if (empty($_SESSION)) {
-            $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
-                'Veuillez vous connecter pour accéder à l\'admin.',
-                'error'
-            ))->messageBuilder();
+                $_SESSION = [];
+                session_destroy();
+                $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
+                    'Session expirée, veuillez vous connecter pour accéder à l\'admin',
+                    'error'
+                ))->messageBuilder();
 
-            $this->render(self::ADMIN_CONTROLLER_NAMESPACE, AdminController::ADMIN_LOGIN_FORM, $options);
-            exit;
+                $this->render(self::ADMIN_CONTROLLER_NAMESPACE, AdminController::ADMIN_LOGIN_FORM, $options);
+                exit;
+            }
         }
     }
 }

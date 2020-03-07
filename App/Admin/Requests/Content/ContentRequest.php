@@ -5,6 +5,7 @@ namespace Admin\Requests\Content;
 use Admin\Requests\BaseRequest;
 use Connection\DB_conf;
 use PDO;
+use Services\Dumper\Dumper;
 
 
 class ContentRequest extends BaseRequest
@@ -59,13 +60,11 @@ class ContentRequest extends BaseRequest
     /**
      * Request which select all color content
      *
-     * @param array $data
      * @param string $sql
      * @return array
      */
     public function selectAll(string $sql)
     {
-
         $query = $this->dbManager->connection()->prepare($sql);
         $query->execute();
 
@@ -112,7 +111,7 @@ class ContentRequest extends BaseRequest
     private function getTable(array $data):?string
     {
         $tableName = null;
-        if(!empty($data['content_name'])){
+        if (!empty($data['content_name'])){
             $tableName =  $data['content_name'];
         }
 

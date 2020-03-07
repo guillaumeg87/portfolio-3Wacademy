@@ -14,7 +14,7 @@ class LoginController extends AbstractController
     const ADMIN_LOGIN_FORM = 'admin_login';
     const ADMIN_HOME = 'admin_home';
 
-    const SESSION_FIELDS = ['login', 'password'];
+    const SESSION_FIELDS = ['login', 'password', 'id'];
 
     /**
      * Main method for login in Back office
@@ -29,7 +29,8 @@ class LoginController extends AbstractController
 
                     $formatedDatas[$key] = sha1(htmlspecialchars($_POST[$key]));
 
-                }else{
+                }
+                else {
 
                     $formatedDatas[$key] = htmlspecialchars($_POST[$key]);
                 }
@@ -37,25 +38,28 @@ class LoginController extends AbstractController
 
             $loginCheck = new LoginRequest();
             $isExist = $loginCheck->getLogin($formatedDatas);
-            if(!empty($isExist)) {
+            if (!empty($isExist)) {
 
-                if ($formatedDatas['login'] == $isExist['login'] && $formatedDatas['password'] == $isExist['password']){
+                if ($formatedDatas['login'] === $isExist['login'] && $formatedDatas['password'] === $isExist['password']){
                     $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
                         'Connexion Réussie',
                         'success'
                     ))->messageBuilder();
-                    session_start();
 
-                    $this->handleSessionFields($formatedDatas);
+                    session_start();
+                    $this->handleSessionFields($isExist);
 
                     $this->render(__NAMESPACE__, self::ADMIN_HOME, $options);
-                }else{
+                }
+                else {
                     $this->errorLogin($options);
                 }
-            }else{
+            }
+            else {
                 $this->errorLogin($options);
             }
-        }else{
+        }
+        else {
             $this->errorLogin($options);
         }
     }
@@ -67,9 +71,9 @@ class LoginController extends AbstractController
 
         session_start();
         if (!empty($_SESSION)){
+            $_SESSION = [];
             session_destroy();
 
-            $this->handleSessionFields();
         }
         $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
             'Déconnexion réussie !',
@@ -90,7 +94,7 @@ class LoginController extends AbstractController
         foreach (self::SESSION_FIELDS as $key) {
             $_SESSION[$key] = $data[$key] ?? null;
         }
-
+        $_SESSION['LAST_REQUEST_TIME'] = time();
         return $_SESSION;
     }
 
@@ -99,10 +103,13 @@ class LoginController extends AbstractController
      * @param $options
      */
     private function errorLogin($options){
+        $_SESSION = [];
+        session_destroy();
         $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
             'Les accès sont incorrectes.',
             'error'
         ))->messageBuilder();
         $this->render(__NAMESPACE__, self::ADMIN_LOGIN_FORM, $options);
+        exit;
     }
 }

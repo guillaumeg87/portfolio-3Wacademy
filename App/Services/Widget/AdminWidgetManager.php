@@ -5,6 +5,7 @@ namespace Services\Widget;
 
 use Admin\Core\QueryBuilder\QueryBuilder;
 use Admin\Requests\Content\ContentRequest;
+use Services\Dumper\Dumper;
 use Services\FlashMessages\FlashMessage;
 
 class AdminWidgetManager
@@ -26,8 +27,7 @@ class AdminWidgetManager
     public function getElementList(): array
     {
         $results = [];
-        try{
-
+        try {
             $queryBuilder = new QueryBuilder();
             $params['content_name'] = $this->contentName;
 
@@ -40,7 +40,7 @@ class AdminWidgetManager
             if($isList){
                 $results = $isList;
             }
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             $results['flash-message'][] = (new FlashMessage(
                 'ERROR : ' . '</br>' .
                 'Code : ' . $e->getCode() .

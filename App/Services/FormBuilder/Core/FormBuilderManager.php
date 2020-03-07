@@ -3,6 +3,7 @@
 namespace Services\FormBuilder\Core;
 
 use mysql_xdevapi\Exception;
+use Services\Dumper\Dumper;
 use Services\FlashMessages\FlashMessage;
 use Services\FormBuilder\Constants\FormBuilderConstants;
 use Services\FormBuilder\Core\Entity\InputFields;
@@ -13,6 +14,8 @@ use stdClass;
 
 class FormBuilderManager
 {
+    const USER_TABLE_NAME = 'user_settings';
+
     /**
      * @var $data array
      */
@@ -58,61 +61,9 @@ class FormBuilderManager
         $optionType = $this->getOptionType($formData);
         unset($formData['option_type']);
         $reformatedDatas = $this->splitDatas($formData);
-        $fieldItem = '';
-        $idRef = '';
 
-        foreach ($reformatedDatas['reformatedEntry'] as $key => $value) {
+        $suffix = $this->formatData($reformatedDatas['reformatedEntry'], $suffix);
 
-            $explode = \explode('_', $key);
-            $index = $explode[1];
-
-            if (!empty($index) && \preg_match('/[' . $index . ']$/', $key)) {
-
-                if (\array_key_exists($index, $suffix)) {
-                    if ($explode[0] == FormBuilderConstants::KEY_FIELD_TYPE) {
-
-                        $fieldItem = \htmlspecialchars($value);
-                        $suffix[$index][$value] = [];
-
-                    } else {
-                        if ($reformatedDatas['reformatedEntry'][$key] === 'file') {
-                            //manage input type file
-                            $suffix[$index][$fieldItem] = \array_merge($suffix[$index][$fieldItem],
-                                $this->addFileFields());
-                            $suffix[$index][$fieldItem][$explode[0]] = \htmlspecialchars($value);
-
-                        } else {
-                            if (preg_match('/labelRef_' . $index . '/', $key)) {
-                                // manage select field
-                                $splitRef = \explode('_', $value);
-                                $idRef = (int)$splitRef[0];
-                                \array_shift($splitRef);
-                                $labelRef = '';
-                                $end = end($splitRef);
-                                foreach ($splitRef as $k => $v) {
-
-                                    if ($k != $end) {
-                                        $labelRef .= '_' . $v;
-
-                                    } else {
-                                        $labelRef .= $v;
-                                    }
-                                }
-                                $suffix[$index][$fieldItem][$explode[0]] = \htmlspecialchars($labelRef);
-                            } else {
-                                if (!empty($idRef) && \preg_match('/idRef_' . $index . '/', $key)) {
-
-                                    $suffix[$index][$fieldItem][$explode[0]] = (int)\htmlspecialchars($idRef);
-                                } else {
-                                    $suffix[$index][$fieldItem][$explode[0]] = \htmlspecialchars($value);
-
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
         /** Reformated Array */
         $datas = [];
         $instancesCart = [];
@@ -177,8 +128,24 @@ class FormBuilderManager
             ];
 
         }
-        elseif ($optionType === 'user'){
-            // @TODO case of user content
+        elseif ($reformatedDatas['labels']['contentTechnicalName'] === self::USER_TABLE_NAME && $optionType === 'settings'){
+            $this->writeJsonConfigFile(
+                $this->additionnalFields($datas, $reformatedDatas['labels']),
+                $reformatedDatas['labels'],
+                $optionType
+            );
+
+            $flashMessage = (new FlashMessage('La table user existe déjà, mais les configurations ont bien été créées',
+                'warning')
+            )->messageBuilder();
+
+            return [
+                'labels' => $reformatedDatas['labels'],
+                'toMenu' => true,
+                'flash-message' => $flashMessage,
+                'option_type' => $optionType
+            ];
+
         }
         else {
 
@@ -222,9 +189,9 @@ class FormBuilderManager
      * Write json configuration in a json file
      * @param $datas
      */
-    public function writeJsonConfigFile(array $datas, array $labels, $isTaxonomy)
+    public function writeJsonConfigFile(array $datas, array $labels, $optionType)
     {
-        $fileName = $isTaxonomy ? $labels[FormBuilderConstants::TECHNICAL_NAME] . FormBuilderConstants::TAXO_TABLE_SUFFIX : $labels[FormBuilderConstants::TECHNICAL_NAME];
+        $fileName = !empty($optionType) ? $labels[FormBuilderConstants::TECHNICAL_NAME] . '_' . $optionType: $labels[FormBuilderConstants::TECHNICAL_NAME];
         if (!\is_dir(FormBuilderConstants::CUSTOM_CONFIG_DIRECTORY)) {
 
             \mkdir(FormBuilderConstants::CUSTOM_CONFIG_DIRECTORY);
@@ -440,5 +407,70 @@ class FormBuilderManager
         return \file_put_contents($targetFile, \json_encode($fileContent, true));
     }
 
+    /**
+     * @param array $unformated
+     * @param $suffix
+     * @return array
+     */
+    private function formatData(array $unformated, $suffix):array
+    {
+        $fieldItem = '';
+        $idRef = '';
 
+        foreach ($unformated as $key => $value) {
+
+            $explode = \explode('_', $key);
+            $index = $explode[1];
+
+            if (!empty($index) && \preg_match('/[' . $index . ']$/', $key)) {
+
+                if (\array_key_exists($index, $suffix)) {
+                    if ($explode[0] == FormBuilderConstants::KEY_FIELD_TYPE) {
+
+                        $fieldItem = \htmlspecialchars($value);
+                        $suffix[$index][$value] = [];
+
+                    } else {
+                        if ($unformated[$key] === 'file') {
+                            //manage input type file
+                            $suffix[$index][$fieldItem] = \array_merge($suffix[$index][$fieldItem],
+                                $this->addFileFields());
+                            $suffix[$index][$fieldItem][$explode[0]] = \htmlspecialchars($value);
+
+                        }
+                        else {
+                            if (preg_match('/labelRef_' . $index . '/', $key)) {
+                                // manage select field
+                                $splitRef = \explode('_', $value);
+                                $idRef = (int)$splitRef[0];
+                                \array_shift($splitRef);
+                                $labelRef = '';
+                                $end = end($splitRef);
+                                foreach ($splitRef as $k => $v) {
+
+                                    if ($k != $end) {
+                                        $labelRef .= '_' . $v;
+
+                                    } else {
+                                        $labelRef .= $v;
+                                    }
+                                }
+                                $suffix[$index][$fieldItem][$explode[0]] = \htmlspecialchars($labelRef);
+                            } else {
+                                if (!empty($idRef) && \preg_match('/idRef_' . $index . '/', $key)) {
+
+                                    $suffix[$index][$fieldItem][$explode[0]] = (int)\htmlspecialchars($idRef);
+                                } else {
+                                    $suffix[$index][$fieldItem][$explode[0]] = \htmlspecialchars($value);
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $suffix;
+    }
 }
