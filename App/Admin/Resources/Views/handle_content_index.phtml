@@ -26,10 +26,9 @@
                                 <td>
                                     <?= $item ?>
                                 </td>
-                                <?php
-                            }
-                        }
-                        ?>
+                            <?php } ?>
+                                <td>Action </td>
+                        <?php } ?>
                         </thead>
                         <tbody>
                         <?php
@@ -37,19 +36,26 @@
                         foreach ($this->vars['options']['list'] as $item) { ?>
                             <tr>
                                 <?php foreach ($item as $key => $value) {
+
                                     if ($key === 'id') {
                                         $id = $value;
                                     }
                                     elseif($key === 'password'){
                                         $value = '********';
-                                    } ?>
-                                    <td>
+                                    }
+                                    elseif($key === 'isSuperAdmin'){
+
+                                        $class = boolval($value) ? 'admin_index__thin_col success' : 'admin_index__thin_col error';
+                                        $value = boolval($value) ? '<i class="fas fa-thumbs-up"></i>': '<i class="fas fa-thumbs-down"></i>';
+
+                                    }?>
+                                    <td class="<?= ($key === 'isSuperAdmin') ?  $class : '' ?>">
                                         <a href="/admin/content/formContent?id=<?= $id ?>&content_name=<?= $this->vars['options']['labels']['technicalName'] ?>&isEdit=true&content_type=<?= $this->vars['options']['content_name'] ?>&content_id=<?= $this->vars['options']['id'] ?>"><?= $value ?></a>
                                     </td>
 
                                 <?php } ?>
-                                <td>
-                                    <a href="/admin/content/delete?id=<?= $id ?>&content_name=<?= $this->vars['options']['labels']['technicalName'] ?>">Supprimer</a>
+                                <td class="admin_index__to_delete">
+                                    <a href="/admin/content/delete?id=<?= $id ?>&content_name=<?= $this->vars['options']['labels']['technicalName'] ?>">Supprimer</>
                                 </td>
                             </tr>
                         <?php }
@@ -58,7 +64,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div>
+                    <div class="admin_info__no_content">
 
                 <?php } else{ ?>
                         <p>Pas de liste d'élément pour le moment...</p>

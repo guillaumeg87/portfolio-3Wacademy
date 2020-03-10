@@ -3,18 +3,15 @@
 }
 
 .success{
-  background-color: forestgreen;
-  color: #fff;
+  @include success();
 }
 
 .error{
-  background-color: #990000;
-  color: #fff;
+  @include error();
 }
 
 .warning {
-  background-color: darkorange;
-  color: #fff;
+  @include warning();
 }
 
 .flash-message {
@@ -32,5 +29,6 @@
 .disabled{
   cursor: not-allowed;
   opacity: 0.4;
+  background-color:pink;
 }
 
