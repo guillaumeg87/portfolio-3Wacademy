@@ -1,6 +1,5 @@
 <?php
 namespace App;
-use Services\Dumper\Dumper;
 
 /**
  * Class Autoloader

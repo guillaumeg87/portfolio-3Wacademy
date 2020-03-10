@@ -6,6 +6,7 @@ use Admin\Controller\AdminController;
 use Admin\Controller\InstallController;
 use Admin\Core\Traits\Hash;
 use Admin\Requests\InstallRequest;
+use Connection\Db_manager;
 use mysql_xdevapi\Exception;
 use PDO;
 use PDOException;
@@ -18,24 +19,30 @@ class DatabaseBuilder
     use Hash;
 
     const DB_INSTALL = ['Db_name', 'Db_host', 'Db_admin', 'Db_password'];
+    const USER_TECHNICAL_NAME = 'user_settings';
+    const USER_DISPLAY_NAME = 'Utilisateur';
     const USER_FIELDS_TABLE = ['login', 'pwd', 'email', 'isSuperAdmin'];
+    const USER_MENU_COLUMS = [
+        'contentTechnicalName' => self::USER_TECHNICAL_NAME,
+        'contentDisplayName' => self::USER_DISPLAY_NAME,
+    ];
     const LABEL_PWD = 'pwd';
     const FILE_DB_CONF = '../Connection/DB_conf.php';
     const JSON_FILE_DB_CONF = '../Connection/Db_config.json';
 
     // Two constants below needed for class dynamically
     const FILE_START =
-        '<?php 
-         
-            namespace Connection;
-            
-            final class DB_conf
-        {
-        ';
+'<?php 
+
+namespace Connection;
+
+final class DB_conf
+{
+';
     const FILE_END =
-        '
-        }
-        ';
+'
+}
+';
 
     /**
      * Handle installation form datas
@@ -100,6 +107,7 @@ class DatabaseBuilder
     public function prepareBuild(array $admin, array $db_data)
     {
 
+
         try {
             $this->builder($admin, $db_data);
 
@@ -126,12 +134,25 @@ class DatabaseBuilder
             $sql = "CREATE DATABASE IF NOT EXISTS " . $db_data['Db_name'];
             $connection->exec($sql);
             $isCreate = $this->createDataBase($db_data);
+
             if ($isCreate) {
+
                 $request = new InstallRequest();
                 $request->createUserTable($db_data);
                 $request->createMenuEntryTable($db_data);
-                $this->saveAdmin($request, $admin, $db_data);
+
+                $request->addUserEntryInMenu(array_merge(
+                    self::USER_MENU_COLUMS,
+                    ['createdAt' => (new \DateTime())->format('Y-m-d H:m:i'),
+                        'updatedAt' => null
+                    ]));
+                $superAdmin = array_merge($admin, ['isSuperAdmin' => true]);
+                $this->saveAdmin($request, $superAdmin, $db_data);
             }
+            $options['flash-message'][] = (new FlashMessage(
+                "DB created successfully",
+                'success'
+            ))->messageBuilder();
 
         } catch (\Exception $e) {
 
@@ -139,10 +160,6 @@ class DatabaseBuilder
 
         }
 
-        $options['flash-message'][] = (new FlashMessage(
-            "DB created successfully",
-            'success'
-        ))->messageBuilder();
 
         // Send mail
        /*
@@ -183,7 +200,7 @@ class DatabaseBuilder
         }
 */
         $admin = new AdminController();
-        $admin->index($options);
+        $admin->index([]);
     }
 
     /**
@@ -240,10 +257,16 @@ class DatabaseBuilder
             'error'
         ))->messageBuilder();
         // Deletion of the 2 generated files
-        unlink(Constants::FILE_DB_CONF);
+        /** Don't delete PHP file configuration, reset values to null for each attibute */
+        //unlink(Constants::FILE_DB_CONF);
+        $this->generateConstantClassConf(array_combine(self::DB_INSTALL, [null, null, null, null]));
         unlink(self::JSON_FILE_DB_CONF);
-        $retryInstallation = new InstallController();
-        $retryInstallation->indexForm($options);
+
+        header('Location: /');
+        header_remove();
+
+        //$retryInstallation = new InstallController();
+        //$retryInstallation->indexForm($options);
     }
 
     /**
@@ -253,11 +276,6 @@ class DatabaseBuilder
      */
     private function generateJsonConfigFile(array $db_data)
     {
-        $file = fopen(self::JSON_FILE_DB_CONF, 'w');
-
-        // Keep line above, if need to keep  API acces somewhere
-        //$jsonArray = json_decode($file, true);
-
         foreach ($db_data as $key => $value) {
             $jsonArray['Database'][$key] = $db_data[$key];
         }
@@ -272,11 +290,11 @@ class DatabaseBuilder
      * Fast and easiest than Json encode and decode
      * @param $param
      */
-    private function generateConstantClassConf(array $db_data)
+    private function generateConstantClassConf(array $param)
     {
         $config_file = [];
 
-        foreach ($db_data as $key => $value) {
+        foreach ($param as $key => $value) {
 
             $config_file[] = "const " . strtoupper($key) . " = '" . $value . "';\r\n";
         }
@@ -287,7 +305,7 @@ class DatabaseBuilder
 
         foreach ($config_file as $key => $value) {
 
-            fwrite($handle, $value);
+            fwrite($handle,$value);
         }
 
         fwrite($handle, self::FILE_END);
@@ -300,7 +318,6 @@ class DatabaseBuilder
      * Process Installation
      * Hard coded database creation
      * Avoid error like missing files or configuration
-     * @TODO : Improving this...
      * @param array $db_data
      * @return int
      */
@@ -309,6 +326,6 @@ class DatabaseBuilder
         $connection = new \PDO("mysql:host=" . $db_data['Db_host'], $db_data['Db_admin'], $db_data['Db_password']);
         $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $sql = "CREATE DATABASE IF NOT EXISTS " . $db_data['Db_name'];
-        return $connection->exec($sql);
+        return (bool)$connection->exec($sql);
     }
 }

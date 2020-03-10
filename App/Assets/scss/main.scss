@@ -1,5 +1,18 @@
 /* COLORS */
-$midnight-blue : #2c3e5a;
+$main_background : #2c3e5a;
+$text_primary : orange;
+$error : #900;
+$success : forestgreen;
+$warning: darkorange;
+
+/* IMPORTS */
+@import "_mixins";
+@import "_normalizer";
+@import "_tools";
+@import "_adminHome";
+@import "_adminForm";
+@import "_adminIndexTable";
+
 
 /* GENERAL */
 html {font-size: 62.5%}
@@ -10,7 +23,7 @@ body {
   font-size: 1.6rem;
   line-height: 1.6;
   font-family: 'Open Sans', sans-serif;
-  background-color: $midnight-blue;
+  background-color: $main_background;
 
 }
 
@@ -43,20 +56,17 @@ img{
   max-width: 100%;
 }
 
-h1{
-  color: orange;
-}
 a{
-  color: orange;
-  transition: 0.3s ease;
+  color: $text_primary;
+  @include transition_table($time: 0.2s, $type:ease);
   text-decoration: none;
+  margin: 0;
+  padding:0;
     &:hover{
       opacity: 0.5;
     }
   }
 
 
-@import "_normalizer";
-@import "_tools";
-@import "_adminHome";
-@import "_adminForm";
+
+

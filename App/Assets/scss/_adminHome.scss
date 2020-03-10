@@ -8,10 +8,22 @@
     .header-welcome {
       width: 100%;
       text-align: center;
-    }
-
-    form{
-      text-align: right;
+      h1{
+        color: $text_primary;
+        display: inline-block;
+        &::before, &::after{
+          content:"\f7a4";
+          text-align: center;
+          font-family: FontAwesome;
+          margin: 0 15px;
+          width: 40px;
+          height: 20px;
+          display: inline-block;
+        }
+      }
+      h2{
+        color: $text_primary;
+      }
 
     }
   }
@@ -21,6 +33,7 @@
   background-color: aliceblue;
   padding: 1rem 2%;
   flex-wrap: wrap;
+  min-height: 600px;
 
   .admin-sidebar {
     width: 20%;
@@ -42,5 +55,93 @@
     background-color: white;
     margin: 1rem 2%;
     padding: 1rem 1%;
+  }
+}
+
+
+.adminLogout{
+
+  a{
+    font-size: 1.8rem;
+    display: block;
+    margin: 0.7rem 1%;
+    @include transition_table($time: 0.3s, $type: ease);
+    &:hover{
+      transform: translateX(10px);
+    }
+  }
+  a[title~=logout]{
+    &:hover{
+      color:$error;
+    }
+  }
+  .fas {
+    margin-right: 0.5%;
+  }
+}
+
+
+.admin_info__no_content{
+  p{
+    text-align: center;
+    color: $main_background;
+  }
+  a{
+    display: block;
+    margin: 0 auto;
+    width: 15%;
+    text-align: center;
+    border: $main_background solid 2px;
+    padding: 1rem 2%;
+    color: $main_background;
+    @include transition_table($time: 0.3s, $type: ease);
+    &:hover{
+      background-color: $text_primary;
+      color: white;
+      box-shadow: 5px 5px 5px #bbb;
+      transform: scale(1.1);
+    }
+  }
+}
+
+
+.admin-sidebar{
+  h3{
+    color: $main_background;
+    border-bottom: $main_background 2px solid;
+  }
+
+   .admin_menu__add_new_content{
+     display: block;
+     .fas{
+       margin-right: 1%;
+     }
+    @include transition_table($time: 0.3s, $type: linear);
+     &:hover{
+       transform: translateX(10px);
+     }
+  }
+
+  .admin_menu__dynamic_content_label{
+    li{
+      @include transition_table($time: 0.3s, $type: linear);
+      a{
+        display: inline-block;
+
+        &::before {
+
+          font-weight: 900;
+          content:"\f105";
+          font-family: FontAwesome;
+          width: 10px;
+          height: 20px;
+          display: inline-block;
+        }
+      }
+
+      &:hover{
+        transform: translateX(10px);
+      }
+    }
   }
 }

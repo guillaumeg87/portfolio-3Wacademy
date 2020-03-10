@@ -1,8 +1,8 @@
 <aside class="admin-sidebar">
     <div>
-        <h2>Menu</h2>
-        <a href="/admin/formBuilder/index">Ajouter un nouveau types de contenu</a>
-        <ul>
+        <h3>Menu</h3>
+        <a class="admin_menu__add_new_content" href="/admin/formBuilder/index"><i class="fas fa-plus-square"></i> Ajouter un nouveau types de contenu</a>
+        <ul class="admin_menu__dynamic_content_label">
             <?php
             foreach ($this->vars['options']['navigation'] as $key => $item) {
             ?>

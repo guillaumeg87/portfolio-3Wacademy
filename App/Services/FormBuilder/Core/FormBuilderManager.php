@@ -386,13 +386,11 @@ class FormBuilderManager
         if (!empty($option)) {
                 $path = FormBuilderConstants::CUSTOM_CONFIG_DIRECTORY . $option . '/';
                 $targetFile = $path . $option .'_list.json';
-
         }
 
         if (!\is_dir($path)) {
 
             \mkdir($path);
-
             if (!\file_exists($targetFile)) {
 
                 $json = \json_encode(new stdClass, true);

@@ -1,0 +1,75 @@
+.admin-content-widget {
+
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 5rem;
+
+  h3{
+    color: $main_background;
+    text-transform: uppercase;
+
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    thead {
+      td {
+        padding: 1rem 0;
+        background-color: $main_background;
+        color: $text_primary;
+        text-align: center;
+        text-transform: capitalize;
+
+      }
+    }
+    tbody {
+
+      tr:nth-child(even){
+        background-color: burlywood;
+      }
+      tr:nth-child(odd) {
+        background-color: bisque;
+      }
+      tr{
+
+
+        @include transition_table($time:0.2s, $type:linear);
+        &:hover{
+          opacity: 0.4;
+        }
+
+        td {
+          border-collapse: collapse;
+          margin: 0;
+          padding: 0.5rem 0.5%;
+          text-align: center;
+          a {
+
+            display: block;
+            color: $main_background;
+            width: 100%;
+            cursor: pointer;
+            @include transition_table($time:0.4s, $type:linear);
+          }
+          .fas{
+            color: white;
+          }
+        }
+        .admin_index__thin_col{
+          margin: 0;
+          width:50px;
+        }
+
+        .admin_index__to_delete{
+          @include transition_table($time:0.4s, $type:linear);
+          &:hover{
+            @include error();
+            margin: 0;
+            padding: 0.5rem 0.5%;
+          }
+        }
+      }
+    }
+  }
+}

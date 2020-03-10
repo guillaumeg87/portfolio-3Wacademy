@@ -11,3 +11,4 @@
 /App/Services/FormBuilder/configurations/custom/*
 /App/Services/FormBuilder/configurations/custom/temp/*
 /App/web/uploads/*
+!/App/Services/FormBuilder/configurations/custom/user_settings.json

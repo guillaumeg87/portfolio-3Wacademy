@@ -117,7 +117,6 @@ class FormHydrator
             }
         }
 
-
         if (!empty($jsonToArray)) {
             return \json_encode($jsonToArray);
         }
