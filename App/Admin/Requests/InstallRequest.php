@@ -3,7 +3,6 @@
 
 namespace Admin\Requests;
 
-use Services\Dumper\Dumper;
 
 class InstallRequest extends BaseRequest
 {

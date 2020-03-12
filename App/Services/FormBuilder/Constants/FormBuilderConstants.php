@@ -26,6 +26,7 @@ final class FormBuilderConstants
     const RADIO = 'RadioFields';
     const CHECKBOX = 'CheckboxFields';
     const FILES = 'FilesFields';
+    const ENTITY_REF = 'EntityReferenceFields';
 
     // Json file config
     const CONTENT_FORM_CLASS_WRAPPER = 'admin-form';

@@ -5,7 +5,6 @@ use Admin\Core\Config\AbstractController;
 use Admin\Core\QueryBuilder\QueryBuilder;
 use Admin\Core\Traits\Hash;
 use Admin\Requests\Content\ContentRequest;
-use Services\Dumper\Dumper;
 
 
 class ContentController extends AbstractController
@@ -88,14 +87,31 @@ class ContentController extends AbstractController
     {
 
         $formDatas = [];
-
+        $multipleValues = '';
         foreach ($_POST as $key => $value) {
-            $formDatas[$key] = htmlspecialchars($value);
 
-            // case of boolean => in user table for exemple
-            if (preg_match('/^is[a-zA-Z]/',$key)){
-                $formDatas[$key] = boolval($value);
+            if (is_array($value)){
+                $lastElt = end($value);
+
+                foreach ($value as $k=> $v){
+                    if  ($lastElt !== $v){
+                        $multipleValues .= $v. ', ';
+
+                    }
+                    else {
+                        $multipleValues .= $v;
+                    }
+                }
+                $formDatas[$key] =  $multipleValues;
+            }else{
+                $formDatas[$key] = htmlspecialchars($value);
+
+                // case of boolean => in user table for exemple
+                if (preg_match('/^is[a-zA-Z]/',$key)){
+                    $formDatas[$key] = boolval($value);
+                }
             }
+
         }
         return $formDatas;
     }

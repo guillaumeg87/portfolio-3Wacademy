@@ -61,13 +61,16 @@ const ListenersCallback = {
      * @param event
      */
     callback_isChecked_chkbx(event){
+        console.log(event.target.getAttribute('value'));
+        console.log(event.target.getAttribute('name'));
 
-        let value = (event.target.getAttribute('checked') === 'true');
+        //let value = (event.target.getAttribute('checked') === 'true');
+        let value = event.target.getAttribute('id');
         if (value === true){
-            event.target.setAttribute('value', false);
+
             event.target.setAttribute('checked', false);
         }else{
-            event.target.setAttribute('value', true);
+
             event.target.setAttribute('checked', true);
         }
 

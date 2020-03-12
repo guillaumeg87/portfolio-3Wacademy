@@ -3,7 +3,6 @@
 namespace Admin\Requests;
 
 use PDO;
-use Services\Dumper\Dumper;
 
 class LoginRequest extends BaseRequest
 {

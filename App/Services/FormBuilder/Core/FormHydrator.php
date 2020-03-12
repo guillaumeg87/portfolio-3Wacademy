@@ -71,7 +71,7 @@ class FormHydrator
 
                 foreach ($fieldConf as $index => $arrayField) {
 
-                    if ($index === 'select'){
+                    if ($index === 'select' || $index === 'entityReference'){
 
                         $queryBuilder = new QueryBuilder();
                         $query = null;
@@ -87,6 +87,11 @@ class FormHydrator
                             $results = (new ContentRequest())->selectAll($sql);
 
                             $jsonToArray['fields'][$item][$index]['option'][] = $this->addDefaultValue($results);
+
+                            if ($contentData &&$index === 'entityReference'){
+
+                                $jsonToArray = $this->checkedOptions($contentData, $jsonToArray, $item, $index);
+                            }
                         }
                     }
 
@@ -106,8 +111,9 @@ class FormHydrator
                         //$jsonToArray['fields'][$item][$index]['base64'] = $this->toBase64($contentData['url']);
 
                     }
+                    // Boolean checkbox
+                    if ($arrayField['type'] === 'checkbox') {
 
-                    if ($arrayField['type']=== 'checkbox') {
                         $results = preg_grep('/^is[A-Za-z]/',array_keys($contentData));
                         foreach ($results as $key => $value) {
                             $jsonToArray['fields'][$item][$index]['value'] = boolval($contentData[$value]);
@@ -181,5 +187,64 @@ class FormHydrator
     private function toBase64(string $url):string
     {
         return \base64_encode(\file_get_contents($url));
+    }
+
+    /**
+     * Get taxonomy value (multi select) saved in database and add param checked for each option
+     * and set boolean values if the option is selected or not
+     * @param array $contentData
+     * @param array $jsonToArray
+     * @param int $item
+     * @param string $index
+     * @return array
+     */
+    private function checkedOptions(array $contentData, array $jsonToArray, int $item, string $index ):array
+    {
+        $target = $jsonToArray['fields'][$item][$index]['labelRef'];
+        if(isset($target) && preg_match('/[a-zA-Z]{1,}_taxonomy$/', $target)){
+
+            $taxoName = $this->rebuildTaxoName($this->extractNameChunk($target));
+            $values = explode(',',$contentData[$taxoName]);
+            $options = $jsonToArray['fields'][$item][$index]['option'][0];
+
+            foreach ($options as $key => $value) {
+                if(in_array($options[$key]['id'], $values)){
+                    $jsonToArray['fields'][$item][$index]['option'][0][$key]['checked'] = true;
+                }else{
+                    $jsonToArray['fields'][$item][$index]['option'][0][$key]['checked'] = false;
+
+                }
+            }
+        }
+        return $jsonToArray;
+    }
+
+    /** Rebuild taxonomy name from exploded value x(Ex: xxxx_xxxx_taxonomy => get xxxx_xxxx at the end)
+     * @param array $params
+     * @return string
+     */
+    private function rebuildTaxoName(array $params):string
+    {
+        $lastElt = end($params);
+        $name = '';
+        forEach ($params as $key => $value) {
+            if  ($lastElt !== $value){
+                $name .= $value . ', ';
+
+            }
+            else {
+                $name .= $value;
+            }
+        }
+        return $name;
+    }
+
+
+    private function extractNameChunk($param):array
+    {
+        $explode = explode('_', $param);
+        $explodeLength = count($explode);
+        unset($explode[$explodeLength-1]);
+        return $explode;
     }
 }

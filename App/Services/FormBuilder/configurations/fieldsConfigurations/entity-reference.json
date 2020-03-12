@@ -1,0 +1,12 @@
+{
+  "fieldType": "entityReference",
+  "labelDisplay": "entity reference",
+  "defaultField": "-- Choisissez une options --",
+  "name": "",
+  "id": "",
+  "class": [],
+  "labelRef": "",
+  "idRef": "",
+  "option": [],
+  "group": "admin-form"
+}

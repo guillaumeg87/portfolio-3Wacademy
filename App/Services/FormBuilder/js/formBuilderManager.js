@@ -37,7 +37,8 @@ const FormBuilderManager = {
     },
     regex: {
         getClass: 'getConf-*',
-        settings: 'settings-*'
+        settings: 'settings-*',
+        defaultValue: '^\\-{1,}|\\-{1,}$'
     },
 
     /**
@@ -114,6 +115,7 @@ const FormBuilderManager = {
 
                 case 'fields':
                 case 'select':
+                case 'entityReference':
                 case 'buttons':
                     this.setArrayField(field, json[field], emptySelectValue);
                     break;
@@ -169,8 +171,11 @@ const FormBuilderManager = {
             for (let field in obj) {
                 if (obj.hasOwnProperty(field)) {
 
-                    inDom = document.createElement(field);
-
+                    if (field === 'entityReference'){
+                        inDom = document.createElement('div');
+                    }else{
+                        inDom = document.createElement(field);
+                    }
                     if (obj[field].for) {
                         inDom.setAttribute('for', obj[field].for);
                     }
@@ -228,7 +233,17 @@ const FormBuilderManager = {
                         inDom.innerHTML = obj[field].path;
                     }
                     if (obj[field].option) {
-                        this.addSelectOptions(obj, inDom, emptySelectValue);
+
+                        switch (field) {
+                            case 'select':
+                                this.addSelectOptions(obj, inDom, emptySelectValue);
+                                break;
+
+                            case 'entityReference':
+
+                                this.addMultiSelectOptions(obj, inDom);
+                                break;
+                        }
                     }
                     if (obj[field].group) {
                         let target = document.getElementsByClassName(obj[field].group);
@@ -331,6 +346,58 @@ const FormBuilderManager = {
 
             }
         }
+    },
+
+    /**
+     * Build dynamically the field selector which help to add field in form.
+     * @param parent
+     * @param inDom
+     */
+    addMultiSelectOptions(parent, inDom) {
+
+        let options = parent.entityReference.option[0];
+        let fieldName = parent.entityReference.name;
+        //Remove default value
+        for (let child of options) {
+            var regex = RegExp(this.regex.defaultValue);
+
+            if (regex.test(child.name)){
+                let index = options.indexOf(child);
+                options.splice(index, 1);
+            }
+        }
+
+        for (let child of options) {
+            let fieldWrapper = document.createElement('div');
+            fieldWrapper.classList.add('entityRef__wrap');
+
+            let inDomChildLabel  = document.createElement('label');
+            inDomChildLabel.setAttribute('for', child.name);
+            inDomChildLabel.innerHTML = child.name;
+
+
+            let inDomChildInput = document.createElement('input');
+            inDomChildInput.setAttribute('type', 'checkbox');
+            inDomChildInput.setAttribute('name', child.name);
+
+            if (child.id) {
+                inDomChildInput.setAttribute('value', child.id);
+
+            }
+            if (child.name) {
+                inDomChildInput.setAttribute('name', `${fieldName}[]`);
+            }
+
+            if (child.checked) {
+                inDomChildInput.setAttribute('checked', child.checked);
+            }
+
+            fieldWrapper.appendChild(inDomChildLabel);
+            fieldWrapper.appendChild(inDomChildInput);
+            inDom.appendChild(fieldWrapper);
+
+        }
+
     },
 
     /**
@@ -526,9 +593,20 @@ const FormBuilderManager = {
     addElementListener(elt, inDom) {
 
         if (typeof ListenersCallback[elt.callback] === "function") {
-
             let callback = ListenersCallback[elt.callback];
             inDom.addEventListener(elt.type, callback);
+        }
+    },
+
+    addListListener(elt, inDom) {
+
+        if (typeof ListenersCallback[elt.callback] === "function") {
+
+            inDom.forEach(item => {
+                let callback = ListenersCallback[elt.callback];
+                item.addEventListener(elt.type, callback);
+            });
+
         }
     },
 
@@ -579,10 +657,16 @@ $(document).ready(function () {
     FormBuilderManager.init();
 
     // Checkbox field
-    FormBuilderManager.addElementListener({
-        callback : 'callback_isChecked_chkbx',
-        type: 'click'
-    }, document.querySelector('.update_form input[type="checkbox"]'));
+    let checkbox_target = document.querySelectorAll('.update_form input[type="checkbox"]');
+    console.log(checkbox_target);
+    // improve EVENT here
+    if(checkbox_target){
+        FormBuilderManager.addListListener({
+            callback : 'callback_isChecked_chkbx',
+            type: 'click'
+        }, checkbox_target);
+    }
+
 
 
 

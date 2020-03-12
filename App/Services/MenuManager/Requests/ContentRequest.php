@@ -29,13 +29,13 @@ class ContentRequest extends BaseRequest
     public function createMenuEntry(array $data, string $contentType)
     {
         $contentTechnicalName = $contentType !== '' ? $data['contentTechnicalName'] . '_' . $contentType : $data['contentTechnicalName'];
-        $sql = "INSERT INTO " . self::TABLE_NAME . " (contentTechnicalName, contentDisplayName, createAt) VALUES (:technical, :display, :createAt)";
+        $sql = "INSERT INTO " . self::TABLE_NAME . " (contentTechnicalName, contentDisplayName, createdAt) VALUES (:technical, :display, :createdAt)";
         $query = $this->dbManager->connection()->prepare($sql);
 
         return $query->execute([
             'technical' => $contentTechnicalName,
             'display'   => $data['contentDisplayName'],
-            'createAt'  => $this->createAt(),
+            'createdAt'  => $this->createdAt(),
         ]);
     }
 

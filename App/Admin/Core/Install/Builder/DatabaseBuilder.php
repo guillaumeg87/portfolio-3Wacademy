@@ -10,7 +10,6 @@ use Connection\Db_manager;
 use mysql_xdevapi\Exception;
 use PDO;
 use PDOException;
-use Services\Dumper\Dumper;
 use Services\FlashMessages\FlashMessage;
 use Services\Mailer\MailerService;
 

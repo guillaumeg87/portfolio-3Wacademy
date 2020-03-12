@@ -6,7 +6,6 @@ use Admin\Core\Install\Builder\DatabaseBuilder;
 use Connection\DB_conf;
 use Router\Request;
 use Router\Router;
-use Services\Dumper\Dumper;
 
 class Dispatcher
 {

@@ -19,6 +19,7 @@ class ContentManager
     public function getMenu():array
     {
         $itemsMenu = (new ContentRequest())->getMenuEntryList();
+
         $menuKeys = $this->getContentKey($itemsMenu);
         $sorting = $this->sortEntryInMenu($itemsMenu, $menuKeys);
         return $this->addDangerZone($sorting);
@@ -71,7 +72,7 @@ class ContentManager
                         $chunk = explode('_', $value);
 
                         if (!in_array($chunk[1], $menuKeys)){
-                            $menuKeys[$chunk[1]] = [];
+                            $menuKeys[end($chunk)] = [];
                         }
                     }
                 }
