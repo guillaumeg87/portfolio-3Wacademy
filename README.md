@@ -19,56 +19,14 @@ Avoir un serveur local ou utiliser cet environnement local utilisant Docker :
 ```text
 git clone git@github.com:mattcontet/environment.git
 ```
+Executer la commande suivante pour installer les dépendances JS 
+```$xslt
+npm install
+```
 
 ## BASE DE DONNEES
 
 Ouvrez le projet dans votre navigateur, le projet va se charger de vous installer la base de donnéee, avec les informations que vous indiquerez dans le formulaire d'nstallation.
-
-## WEBPACK
-
-Ce projet utilise les fonctions sommaires de [WEBPACK](https://webpack.js.org/), et de gérer les assets au même endroit avec le même outil:
-
-* utilisation de [SASS](https://sass-lang.com/), compilation et minification du css
-* Traduction du JS ES6 en ES 5 avec [Babel](https://babeljs.io/)
-* Minification du JS avec Uglify
-
-// @TODO à regarder, minification des images...
-
-**Installation de Webpack:**
-
-Installer [Node JS](https://nodejs.org/en/) et NPM, si on ne les a pas déjà.
-
-Installer Webpack :
-
-```text
-npm install --save-dev webpack@latest webpack-dev-server@latest
-npm install -g webpack@latest
-```
-
-Installer Babel:
-
-```text
-npm install --save-dev gulp-babel @babel/core @babel/preset-env
-```
-
-Installer les dépendances pour le css:
-
-```text
-npm i --save-dev sass-loader node-sass css-loader style-loader autoprefixer postcss-loader
-npm install --save-dev mini-css-extract-plugin
-```
-
-Installer Webpack server :
-
-```text
-npm install webpack-dev-server --save-dev
-```
-
-Installer Webpack Dashboard \(voir les executions de webpack un peu mieux présentées...\)
-
-```text
-npm install webpack-dashboard --save-dev
-```
 
 ### Utilisation de Webpack pendant le dev
 

@@ -259,7 +259,7 @@ const FormBuilderManager = {
 
                     }
                     if (obj[field].eventListener) {
-                        console.log('-event');
+
                         this.addElementListener(obj[field].eventListener, inDom);
                     }
                 }
@@ -441,7 +441,6 @@ const FormBuilderManager = {
         let wrapper = this.fieldWrapper();
         let newInput;
         let newLabel;
-        let imagePreview = null;
         switch (type) {
             case 'labelDisplay':
             case 'type':
