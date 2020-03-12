@@ -62,17 +62,3 @@ Dumper::dump($var|'string');
 
 Ceci permet d'avoir des var\_dump mieux formatés et plus lisible pour developer et débuguer
 
-**Notes:**
-
-Avec Webpack 4 _ExtractTextWebpackPlugin_ est déprécié, utiliser [Mini Css Extract Plugin](https://webpack.js.org/plugins/mini-css-extract-plugin/#root)
-
-Ajout du fichier Webpack 4 [_**.babelrc**_](https://stackoverflow.com/questions/52092739/upgrade-to-babel-7-cannot-read-property-bindings-of-null/52092788)_\*\*\*\*_
-
-**Sources à conserver pour webpack:**
-
-[https://www.sitepoint.com/webpack-beginner-guide/](https://www.sitepoint.com/webpack-beginner-guide/)
-
-[https://www.alsacreations.com/tuto/lire/1754-debuter-avec-webpack.html](https://www.alsacreations.com/tuto/lire/1754-debuter-avec-webpack.html)
-
-[https://github.com/babel/gulp-babel/issues/124](https://github.com/babel/gulp-babel/issues/124)
-
