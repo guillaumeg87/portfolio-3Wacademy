@@ -64,6 +64,7 @@
   a{
     font-size: 1.8rem;
     display: block;
+    width: 15%;
     margin: 0.7rem 1%;
     @include transition_table($time: 0.3s, $type: ease);
     &:hover{

@@ -7,7 +7,6 @@ use Admin\Core\QueryBuilder\QueryBuilder;
 use Admin\Core\Traits\NavigationTrait;
 use Admin\Requests\Content\ContentRequest;
 use mysql_xdevapi\Exception;
-use Services\Dumper\Dumper;
 use Services\FlashMessages\FlashMessage;
 use Services\FormBuilder\Constants\FormBuilderConstants;
 

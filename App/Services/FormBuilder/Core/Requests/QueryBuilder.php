@@ -4,7 +4,6 @@
 namespace Services\FormBuilder\Core\Requests;
 
 use Services\FormBuilder\Constants\FormBuilderConstants;
-use Services\FormBuilder\Core\Entity\CheckboxFields;
 use Services\FormBuilder\Core\Entity\FilesFields;
 use Services\FormBuilder\Core\Entity\InputFields;
 
@@ -48,8 +47,9 @@ class QueryBuilder
 
                     break;
 
+                case FormBuilderConstants::ENTITY_REF :
                 case FormBuilderConstants::SELECT :
-                    $toQuery = $this->formatColumnName($field->getName()) . " int(11) NOT NULL";
+                    $toQuery = $this->formatColumnName($field->getName()) . "  VARCHAR(255)";
 
                     break;
 
@@ -91,13 +91,13 @@ class QueryBuilder
     }
 
     /**
-     * Add regular columns : id createAt and updateAt
+     * Add regular columns : id createdAt and updatedAt
      * @param $str string
      * @return string
      */
     private function addRegularColumns($str): string
     {
-        return "( id int(11) AUTO_INCREMENT NOT NULL PRIMARY KEY, " . $str . ", createdAt DATE NULL default null, updateAt DATE NULL default null )";
+        return "( id int(11) AUTO_INCREMENT NOT NULL PRIMARY KEY, " . $str . ", createdAt DATE NULL default null, updatedAt DATE NULL default null )";
     }
 
     /**

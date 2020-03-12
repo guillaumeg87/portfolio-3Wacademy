@@ -1,8 +1,9 @@
 {
-  "input": "",
+  "text": "",
   "select": "",
   "checkbox": "",
   "radio": "",
   "textarea":"",
-  "file": ""
+  "file": "",
+  "entity-reference": ""
 }
