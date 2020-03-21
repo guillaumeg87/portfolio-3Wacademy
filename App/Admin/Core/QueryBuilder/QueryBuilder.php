@@ -109,12 +109,13 @@ class QueryBuilder
             $keys = array_keys($params);
             for($i = 0; $i < count($params); $i++){
                 if ($i === (count($params) - 1)){
-                    $columns .= $keys[$i];
-                    $aliases .= ':' . $keys[$i];
+
+                    $columns .= str_replace('-', '_',$keys[$i]);
+                    $aliases .= ':' .str_replace('-', '_',$keys[$i]);
                 }else{
 
-                    $columns .= $keys[$i] . ', ';
-                    $aliases .= ':' . $keys[$i] . ', ';
+                    $columns .= str_replace('-', '_',$keys[$i]) . ', ';
+                    $aliases .= ':' . str_replace('-', '_',$keys[$i]) . ', ';
                 }
             }
         }

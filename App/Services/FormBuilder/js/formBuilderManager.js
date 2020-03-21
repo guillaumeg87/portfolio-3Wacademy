@@ -44,7 +44,7 @@ const FormBuilderManager = {
     /**
      * Initialize formbuilder
      */
-    init: function () {
+    init() {
         this.log('form', 'init');
         let emptySelectValue = true;
         let contentType = null;
@@ -145,7 +145,7 @@ const FormBuilderManager = {
 
         if (data.content) {
 
-            inDom.innerHTML = emptySelectValue ? '' : data.content;
+            inDom.innerHTML = data.content;
         }
 
         if (data.group) {
@@ -162,12 +162,18 @@ const FormBuilderManager = {
      * @param data
      * @param {boolean} emptySelectValue
      */
-    setArrayField: function (type, data, emptySelectValue) {
+    setArrayField(type, data, emptySelectValue) {
 
         let obj;
         let inDom;
+        let target;
+        let wrap;
         let previewImage = null;
         for (obj of data) {
+
+            wrap = document.createElement('div');
+            wrap.classList.add('admin-form-field');
+
             for (let field in obj) {
                 if (obj.hasOwnProperty(field)) {
 
@@ -183,6 +189,9 @@ const FormBuilderManager = {
                         inDom.setAttribute('name', obj[field].name);
                     }
                     if (obj[field].type) {
+                        if(obj[field].type !== 'submit'){
+                            wrap.classList.add(obj[field].type);
+                        }
 
                         if (obj[field].type === 'checkbox' && (obj[field].value === true || obj[field].value === 1)) {
                             inDom.setAttribute('checked', 'true')
@@ -205,7 +214,9 @@ const FormBuilderManager = {
 
                             default:
                                 let value = emptySelectValue ? '' : obj[field].value;
-                                inDom.setAttribute('value', value);
+                                if (inDom.tagName !== 'DIV'){
+                                    inDom.setAttribute('value', value);
+                                }
                         }
                     }
                     if (obj[field].checked) {
@@ -233,6 +244,7 @@ const FormBuilderManager = {
                         inDom.innerHTML = obj[field].path;
                     }
                     if (obj[field].option) {
+                        wrap.classList.add('list');
 
                         switch (field) {
                             case 'select':
@@ -240,14 +252,17 @@ const FormBuilderManager = {
                                 break;
 
                             case 'entityReference':
-
                                 this.addMultiSelectOptions(obj, inDom);
                                 break;
                         }
                     }
                     if (obj[field].group) {
-                        let target = document.getElementsByClassName(obj[field].group);
-                        target[0].appendChild(inDom);
+                        target = document.getElementsByClassName(obj[field].group);
+                        if(obj[field].type === 'submit'){
+                            wrap = inDom;
+                        }else{
+                            wrap.appendChild(inDom);
+                        }
                         if (previewImage !== null) {
                             target[0].appendChild(previewImage);
                         }
@@ -264,6 +279,7 @@ const FormBuilderManager = {
                     }
                 }
             }
+            target[0].appendChild(wrap);
         }
     },
 
@@ -397,8 +413,31 @@ const FormBuilderManager = {
             inDom.appendChild(fieldWrapper);
 
         }
+         inDom = this.addDefaultCheckboxValue(inDom, parent);
 
     },
+
+    /**
+     * Add default value foir multiselect fields
+     * Needed for submitted fields elseif empty
+     * @param inDom
+     * @param parent
+     * @returns {*}
+     */
+    addDefaultCheckboxValue(inDom, parent){
+
+        let checkboxType = parent.label.for;
+
+        let hiddenField = document.createElement('input');
+        hiddenField.setAttribute('type', 'hidden');
+        hiddenField.setAttribute('name', `${checkboxType}[]`);
+        hiddenField.setAttribute('value', ``);
+        hiddenField.setAttribute('checked', `true`);
+
+        inDom.appendChild(hiddenField);
+        return inDom;
+    },
+
 
     /**
      * Get new fields selected in little form and render all the field needed for building a new field
@@ -657,7 +696,6 @@ $(document).ready(function () {
 
     // Checkbox field
     let checkbox_target = document.querySelectorAll('.update_form input[type="checkbox"]');
-    console.log(checkbox_target);
     // improve EVENT here
     if(checkbox_target){
         FormBuilderManager.addListListener({

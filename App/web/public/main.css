@@ -349,8 +349,9 @@ template {
       width: 100%;
       text-align: center; }
       .admin-header .header-content .header-welcome h1 {
-        color: orange;
-        display: inline-block; }
+        display: block;
+        text-align: center;
+        color: orange; }
         .admin-header .header-content .header-welcome h1::before, .admin-header .header-content .header-welcome h1::after {
           content: "\f7a4";
           text-align: center;
@@ -445,23 +446,54 @@ template {
   .admin-sidebar .admin_menu__dynamic_content_label li:hover {
     transform: translateX(10px); }
 
-.admin-form, .admin-content {
+.admin-form, .admin-content, .installation-form {
   display: inline-block;
   margin-bottom: 2rem;
   vertical-align: top;
   width: 100%;
   padding: 1rem 2%; }
-  .admin-form label, .admin-content label {
-    display: inline-block; }
-  .admin-form input[type='text'], .admin-content input[type='text'] {
-    width: 50%;
+  .admin-form fieldset, .admin-content fieldset, .installation-form fieldset {
+    border: 3px solid #2c3e5a;
+    background-color: #fff;
+    box-shadow: 10px 10px 10px #C1C1C1; }
+    .admin-form fieldset legend, .admin-content fieldset legend, .installation-form fieldset legend {
+      color: orange;
+      padding: 1rem 2%;
+      text-transform: uppercase;
+      background-color: #fff;
+      border-radius: 5px;
+      border: 3px solid #2c3e5a; }
+  .admin-form .admin-form-field, .admin-content .admin-form-field, .installation-form .admin-form-field {
+    margin: 2rem 0; }
+    .admin-form .admin-form-field input[placeholder], .admin-form .admin-form-field textarea[placeholder], .admin-content .admin-form-field input[placeholder], .admin-content .admin-form-field textarea[placeholder], .installation-form .admin-form-field input[placeholder], .installation-form .admin-form-field textarea[placeholder] {
+      color: #C1C1C1;
+      font-size: 1.2em; }
+    .admin-form .admin-form-field label, .admin-content .admin-form-field label, .installation-form .admin-form-field label {
+      display: block;
+      text-transform: capitalize;
+      color: orange; }
+    .admin-form .admin-form-field input[type='text'], .admin-form .admin-form-field input[type='password'], .admin-content .admin-form-field input[type='text'], .admin-content .admin-form-field input[type='password'], .installation-form .admin-form-field input[type='text'], .installation-form .admin-form-field input[type='password'] {
+      color: #2c3e5a;
+      width: 50%;
+      display: block;
+      border: none;
+      border-bottom: #2c3e5a solid 1px; }
+    .admin-form .admin-form-field input[type='checkbox'], .admin-content .admin-form-field input[type='checkbox'], .installation-form .admin-form-field input[type='checkbox'] {
+      display: inline-block; }
+    .admin-form .admin-form-field textarea, .admin-content .admin-form-field textarea, .installation-form .admin-form-field textarea {
+      color: #2c3e5a;
+      width: 100%;
+      min-height: 300px; }
+  .admin-form .text .entityRef__wrap label, .admin-form .file .entityRef__wrap label, .admin-form .list .entityRef__wrap label, .admin-content .text .entityRef__wrap label, .admin-content .file .entityRef__wrap label, .admin-content .list .entityRef__wrap label, .installation-form .text .entityRef__wrap label, .installation-form .file .entityRef__wrap label, .installation-form .list .entityRef__wrap label {
+    display: inline-block;
+    text-transform: capitalize;
+    color: #2c3e5a; }
+  .admin-form .list label, .admin-form .checkbox label, .admin-content .list label, .admin-content .checkbox label, .installation-form .list label, .installation-form .checkbox label {
+    width: 10%;
+    color: orange; }
+  .admin-form .addNewField, .admin-content .addNewField, .installation-form .addNewField {
     display: block; }
-  .admin-form input[type='checkbox'], .admin-content input[type='checkbox'] {
-    margin-left: 2rem;
-    display: inline-block; }
-  .admin-form .addNewField, .admin-content .addNewField {
-    display: block; }
-  .admin-form .form-btn-submit, .admin-content .form-btn-submit {
+  .admin-form .form-btn-submit, .admin-content .form-btn-submit, .installation-form .form-btn-submit {
     display: block;
     margin: 3rem 1% 0 auto;
     padding: 1rem 2%;
@@ -471,7 +503,7 @@ template {
     border: solid 2px orange;
     transition: 0.4s ease;
     border-radius: 5px; }
-    .admin-form .form-btn-submit:hover, .admin-content .form-btn-submit:hover {
+    .admin-form .form-btn-submit:hover, .admin-content .form-btn-submit:hover, .installation-form .form-btn-submit:hover {
       background-color: white;
       color: orange; }
 
@@ -527,6 +559,71 @@ template {
           margin: 0;
           margin: 0;
           padding: 0.5rem 0.5%; }
+
+.wrapper-installation header h1 {
+  display: block;
+  text-align: center;
+  color: orange; }
+  .wrapper-installation header h1::before, .wrapper-installation header h1::after {
+    content: "\f7a4";
+    text-align: center;
+    font-family: FontAwesome;
+    margin: 0 15px;
+    width: 40px;
+    height: 20px;
+    display: inline-block; }
+  @media (max-width: 1250px) {
+    .wrapper-installation header h1 {
+      width: 100%; } }
+
+.installation-form {
+  display: block;
+  width: 50%;
+  margin: 2rem auto; }
+  @media (max-width: 1250px) {
+    .installation-form {
+      display: flex;
+      flex-direction: column;
+      width: 90%; } }
+  .installation-form fieldset {
+    border: 3px solid #2c3e5a;
+    background-color: #fff;
+    box-shadow: 5px 5px 5px orange;
+    margin: 7rem auto; }
+    @media (max-width: 1250px) {
+      .installation-form fieldset {
+        margin: 3rem 2%;
+        width: 100%; } }
+    @media (max-width: 800px) {
+      .installation-form fieldset {
+        font-size: 1.4em; } }
+    .installation-form fieldset legend {
+      color: orange;
+      padding: 1rem 2%;
+      text-transform: uppercase;
+      background-color: #fff;
+      border-radius: 5px;
+      border: 3px solid #2c3e5a; }
+  .installation-form .admin-form-field label {
+    display: block;
+    text-transform: uppercase;
+    color: orange; }
+  .installation-form .admin-form-field input {
+    border-radius: 5px;
+    padding: 0.5rem 1%;
+    font-size: 2rem;
+    border-bottom: orange 1px solid;
+    transition-duration: 0.3s;
+    transition-timing-function: ease; }
+    .installation-form .admin-form-field input:focus {
+      outline: 0;
+      border: none;
+      border-bottom: 2px orange solid;
+      background: linear-gradient(#fff 40%, orange); }
+  .installation-form .admin-form-field input[type='text'], .installation-form .admin-form-field input[type='password'] {
+    border-bottom: orange solid 1px;
+    transition-duration: 0.3s;
+    transition-timing-function: ease; }
 
 /* GENERAL */
 html {

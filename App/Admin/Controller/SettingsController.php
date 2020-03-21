@@ -9,6 +9,7 @@ use Admin\Requests\Content\ContentRequest;
 use mysql_xdevapi\Exception;
 use Services\FlashMessages\FlashMessage;
 use Services\FormBuilder\Constants\FormBuilderConstants;
+use stdClass;
 
 class SettingsController extends AbstractController
 {
@@ -88,7 +89,8 @@ class SettingsController extends AbstractController
                 'error'
             ))->messageBuilder();
         }
-        $this->render(__NAMESPACE__, self::ADMIN_SETTINGS_DANGER_ZONE, $options);
+        $this->dangerZone($options);
+        //this->render(__NAMESPACE__, self::ADMIN_SETTINGS_DANGER_ZONE, $options);
 
     }
 
@@ -162,8 +164,10 @@ class SettingsController extends AbstractController
      */
     private function deleteConfigFiles(string $tableName): bool
     {
+
         $isConfDeleted = false;
         $isTempDeleted = false;
+        $isListUpdated = false;
         $pathConfigFiles = FormBuilderConstants::CUSTOM_APP_PATH
                             . str_replace('..', '', FormBuilderConstants::CUSTOM_CONFIG_DIRECTORY)
                             . $tableName . '.json';
@@ -179,6 +183,44 @@ class SettingsController extends AbstractController
                 $isTempDeleted = unlink($pathTempConfig);
             }
         }
-        return $isConfDeleted || ($isConfDeleted && $isTempDeleted);
+        if ($isConfDeleted){
+            $isListUpdated = $this->removeInContentList($tableName);
+        }
+
+        return $isConfDeleted && $isListUpdated || ($isConfDeleted && $isTempDeleted && $isListUpdated);
+    }
+
+    /**
+     * @param string $tableName
+     * @return bool
+     */
+    private function removeInContentList(string $tableName):bool
+    {
+        //delete in content type config list
+        $explode = \explode('_', $tableName);
+        $contentType = end($explode);
+        $save = false;
+        $pathContentList = FormBuilderConstants::CUSTOM_APP_PATH
+            . str_replace('..', '', FormBuilderConstants::CUSTOM_CONFIG_DIRECTORY)
+            . $contentType . '/' . $contentType . '_list.json';
+
+        if (file_exists($pathContentList)) {
+            $list = json_decode(file_get_contents($pathContentList), true);
+
+            foreach ($list as $key => $value) {
+                if ($value === $tableName) {
+                    unset($list[$key]);
+                }
+            }
+            if (empty($list)) {
+                $json = \json_encode(new \stdClass, true);
+                $save = \file_put_contents($pathContentList, $json);
+            } else {
+
+                $save = file_put_contents($pathContentList, json_encode($list));
+            }
+        }
+
+        return is_int($save) ? true : false;
     }
 }

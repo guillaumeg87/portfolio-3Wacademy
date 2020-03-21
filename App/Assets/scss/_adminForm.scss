@@ -1,5 +1,5 @@
 
-.admin-form, .admin-content{
+.admin-form, .admin-content, .installation-form{
 
   display: inline-block;
   margin-bottom: 2rem;
@@ -7,16 +7,65 @@
   width: 100%;
   padding: 1rem 2%;
 
-  label{
-    display: inline-block;
+  fieldset {
+    border: 3px solid $main_background;
+    background-color: #fff;
+    box-shadow: 10px 10px 10px #C1C1C1;
+
+    legend {
+      color: $text_primary;
+      padding: 1rem 2%;
+      text-transform: uppercase;
+      background-color: #fff;
+      border-radius: 5px;
+      border: 3px solid $main_background;
+    }
   }
-  input[type='text']{
-    width: 50%;
-    display: block;
+  .admin-form-field{
+    margin: 2rem 0;
+    input[placeholder], textarea[placeholder] {
+      color: #C1C1C1;
+      font-size: 1.2em;
+    }
+    label{
+      display: block;
+      text-transform: capitalize;
+      color: $text_primary;
+    }
+
+    input[type='text'], input[type='password']{
+      color:$main_background;
+      width: 50%;
+      display: block;
+      border:none;
+      border-bottom: $main_background solid 1px;
+    }
+    input[type='checkbox']{
+      display: inline-block;
+    }
+
+    textarea {
+      color: $main_background;
+      width: 100%;
+      min-height: 300px;
+    }
   }
-  input[type='checkbox']{
-  margin-left: 2rem;
-    display: inline-block;
+  .text, .file, .list{
+
+    .entityRef__wrap{
+      label{
+        display: inline-block;
+        text-transform: capitalize;
+        color: $main_background;
+      }
+    }
+  }
+
+  .list, .checkbox {
+    label {
+      width: 10%;
+      color: $text_primary;
+    }
   }
 
   .addNewField{
