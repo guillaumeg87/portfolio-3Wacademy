@@ -34,7 +34,6 @@ class FormBuilderManager
     public function buildIndex(array $formData): array
     {
         $suffixe = [];
-
         unset($formData[FormBuilderConstants::DISPLAY_NAME]);
         unset($formData[FormBuilderConstants::TECHNICAL_NAME]);
 
@@ -42,7 +41,7 @@ class FormBuilderManager
         foreach ($arrayKey as $key) {
 
             $num = \explode('_', $key);
-            if (!\in_array($num[1], $suffixe)) {
+            if ((int)$num[1] > 0 && !\in_array($num[1], $suffixe)) {
                 $suffixe[$num[1]] = [];
             }
         }
@@ -237,6 +236,11 @@ class FormBuilderManager
         $labelsDatas = [];
 
         foreach ($datas as $key => $value) {
+
+            if(preg_match('/name_{1,}/', $key)){
+
+                $datas[$key] = $this->stripSpecialsCharacters($value);
+            }
             if (\in_array($key, FormBuilderConstants::MENU_LABEL_COLLECTIONS)) {
                 $labelsDatas[$key] = ($key === FormBuilderConstants::DISPLAY_NAME) ?
                     \strtolower(trim($value)) : \str_replace(' ', '_', \strtolower(trim($value)));
@@ -379,7 +383,7 @@ class FormBuilderManager
      * @param $labels
      * @return false|int
      */
-    public function handleContentConfig($labels, $option)
+    private function handleContentConfig($labels, $option)
     {
         $path = null;
         if (!empty($option)) {
@@ -392,7 +396,7 @@ class FormBuilderManager
             \mkdir($path);
             if (!\file_exists($targetFile)) {
 
-                $json = \json_encode(new stdClass, true);
+                $json = \json_encode(new \stdClass, true);
                 \file_put_contents($targetFile, $json);
             }
         }
@@ -469,5 +473,35 @@ class FormBuilderManager
         }
 
         return $suffix;
+    }
+
+    /**
+     * Strip special chars replace by '_' and avoid to have multiple '_' in a row
+     * Exemple = "az -er- ty" => return az_er_ty and not "az__er__ty"
+     * @param string $value
+     * @return string
+     */
+    private function stripSpecialsCharacters(string $value)
+    {
+        $before = '';
+        $str = '';
+        for ($i = 0; $i < strlen($value); $i++) {
+            $before = $i === 0 ? $before : $value[$i - 1];
+
+            if (preg_match('/[ -]/', $value[$i])){
+
+                if (preg_match('/[ -]/', $before)) {
+                    $str .= '';
+                    //$str .= \preg_replace('/[ -+:;?_]/', '_', \strtolower(trim($value[$i])));
+                }else {
+                    $str .= \preg_replace('/[ -]/', '_', \strtolower($value[$i]));
+                }
+
+            } else {
+                $str .= $value[$i];
+            }
+
+        }
+        return $str;
     }
 }

@@ -1,0 +1,73 @@
+.wrapper-installation{
+
+  header{
+    h1{
+      @include admin_main_title();
+      @media (max-width: 1250px)  {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.installation-form{
+  display: block;
+  width: 50%;
+  margin: 2rem auto;
+  @media (max-width: 1250px)  {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+  }
+  fieldset {
+    border: 3px solid $main_background;
+    background-color: #fff;
+    box-shadow: 5px 5px 5px $text_primary;
+    margin: 7rem auto;
+    @media (max-width: 1250px)  {
+      margin: 3rem 2%;
+      width: 100%;
+
+    }
+    @media (max-width: 800px)  {
+      font-size: 1.4em;
+    }
+    legend {
+      color: $text_primary;
+      padding: 1rem 2%;
+      text-transform: uppercase;
+      background-color: #fff;
+      border-radius: 5px;
+      border: 3px solid $main_background;
+    }
+  }
+
+  .admin-form-field{
+
+    label{
+      display: block;
+      text-transform: uppercase;
+      color: $text_primary;
+    }
+    input{
+      border-radius: 5px;
+      padding: 0.5rem 1%;
+      font-size: 2rem;
+      border-bottom: $text_primary 1px solid;
+      @include transition_table($time: 0.3s, $type: ease);
+
+      &:focus{
+        outline:0;
+        border: none;
+        border-bottom: 2px $text_primary solid;
+        background: linear-gradient(#fff 40%, $text_primary);
+
+      }
+    }
+    input[type='text'], input[type='password']{
+      border-bottom: $text_primary solid 1px;
+      @include transition_table($time: 0.3s, $type: ease);
+
+    }
+  }
+}

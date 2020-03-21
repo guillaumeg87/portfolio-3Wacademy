@@ -6,7 +6,6 @@ use Admin\Core\QueryBuilder\QueryBuilder;
 use Admin\Core\Traits\Hash;
 use Admin\Requests\Content\ContentRequest;
 
-
 class ContentController extends AbstractController
 {
     use Hash;
@@ -111,7 +110,7 @@ class ContentController extends AbstractController
                     $formDatas[$key] = boolval($value);
                 }
             }
-
+            $multipleValues = '';
         }
         return $formDatas;
     }

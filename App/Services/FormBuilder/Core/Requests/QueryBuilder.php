@@ -29,7 +29,7 @@ class QueryBuilder
 
                     if ($field instanceof InputFields){
 
-                    $toQuery = $this->formatColumnName($field->getName()) . " VARCHAR(255)";
+                    $toQuery = $this->formatColumnName(str_replace('-', '_', $field->getName())) . " VARCHAR(255)";
                     }
                     if ($field->getType() === 'checkbox'){
 

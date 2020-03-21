@@ -36,8 +36,10 @@
                         foreach ($this->vars['options']['list'] as $item) { ?>
                             <tr>
                                 <?php foreach ($item as $key => $value) {
-
+                                    // limit sting length for table display
+                                    $value = strlen($value) > 50 ? substr($value, 0, 40) . '...' : $value;
                                     if ($key === 'id') {
+
                                         $id = $value;
                                     }
                                     elseif($key === 'password'){

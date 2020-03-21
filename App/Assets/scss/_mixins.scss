@@ -23,3 +23,19 @@
   padding: 0;
   margin: 0;
 }
+
+@mixin admin_main_title() {
+  display: block;
+  text-align: center;
+  color: $text_primary;
+
+  &::before, &::after{
+    content:"\f7a4";
+    text-align: center;
+    font-family: FontAwesome;
+    margin: 0 15px;
+    width: 40px;
+    height: 20px;
+    display: inline-block;
+  }
+}
