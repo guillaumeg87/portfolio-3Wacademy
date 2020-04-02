@@ -1,0 +1,29 @@
+<header>
+    <?php
+    //Shortcut in index.phtml $datas = $this->>vars['options']
+    if (!empty($datas['flash-message'])) { ?>
+        <div class="flash-message <?= $datas['flash-message']['type-class'] ?>">
+            <p><?= $datas['flash-message']['message'] ?></p>
+        </div>
+    <?php } ?>
+
+    <img src="<?= $datas['header']['banner']['data'][0]['url'] ?>" alt="<?= $datas['header']['banner']['content'] .
+        '-' .  $datas['header']['site_sub_title']['content'] .
+        '-' . $datas['header']['site_title']['content']  ?> ">
+
+    <h1><?= $datas['header']['site_title']['content'] ?></h1>
+    <h2><?= $datas['header']['site_sub_title']['content'] ?></h2>
+
+    <?php if (!empty($_SESSION)){ ?>
+        <div>
+            <a href="/admin">ADMIN</a>
+
+        </div>
+    <?php } ?>
+
+
+
+    <?php include("block__navigation_front.phtml") ?>
+</header>
+
+

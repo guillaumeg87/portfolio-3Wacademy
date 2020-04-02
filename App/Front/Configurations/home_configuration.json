@@ -1,0 +1,15 @@
+{
+  "section_1": {
+    "type": "query",
+    "content": "a_propos_content"
+  },
+  "section_2": {
+    "type": "query",
+    "content": "parcours_content",
+    "join": ["langage"],
+    "sort": {
+      "type": "DESC",
+      "column": "date_start"
+    }
+  }
+}

@@ -12,6 +12,7 @@ use Services\FormBuilder\Constants\FormBuilderConstants;
 
 class FormHydrator
 {
+    const DATETIME_REGEX = '/^\d\d\d\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9])$/';
 
     /**
      * @var array $content
@@ -95,7 +96,6 @@ class FormHydrator
                     }
 
                     if ($arrayField['name']) {
-
                         $jsonToArray['fields'][$item][$index]['value'] = $contentData[\strtolower($arrayField['name'])];
                     }
 
@@ -116,6 +116,19 @@ class FormHydrator
                         $results = \preg_grep('/^is[A-Za-z]/', \array_keys($contentData));
                         foreach ($results as $key => $value) {
                             $jsonToArray['fields'][$item][$index]['value'] = \boolval($contentData[$value]);
+                        }
+                    }
+                    // Datetime
+                    if ($arrayField['type'] === 'date') {
+
+
+                        foreach ($arrayField as $key => $value) {
+
+                            if (\preg_match('/date/', $value) && preg_match(self::DATETIME_REGEX, $contentData[$value])) {
+
+                                $date = \DateTime::createFromFormat('Y-m-d H:i:s', $contentData[$value]);
+                                $jsonToArray['fields'][$item][$index]['value'] = $date->format('Y-m-d');
+                            }
                         }
                     }
                 }

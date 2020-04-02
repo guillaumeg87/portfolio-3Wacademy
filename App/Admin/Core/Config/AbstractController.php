@@ -33,7 +33,6 @@ use NavigationTrait;
         }else{
             $this->vars['options'][] = $this->getNavigation();
         }
-
         $this->vars['options'] = array_merge($this->vars, $options);
     }
 
@@ -142,19 +141,25 @@ use NavigationTrait;
     public function isSessionActive()
     {
         session_start();
-        if ($_SESSION !== [] && isset($_SESSION['LAST_REQUEST_TIME'])) {
+        $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
+            'Session expirée, veuillez vous connecter pour accéder à l\'admin',
+            'error'
+        ))->messageBuilder();
+        if ($_SESSION !== [] && !isset($_SESSION['LAST_REQUEST_TIME'])) {
             if (time() - $_SESSION['LAST_REQUEST_TIME'] > CoreConstants::SESSION_DURATION) {
 
                 $_SESSION = [];
                 session_destroy();
-                $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
-                    'Session expirée, veuillez vous connecter pour accéder à l\'admin',
-                    'error'
-                ))->messageBuilder();
+
 
                 $this->render(self::ADMIN_CONTROLLER_NAMESPACE, AdminController::ADMIN_LOGIN_FORM, $options);
                 exit;
             }
         }
+        elseif (!isset($_SESSION['LAST_REQUEST_TIME']) && !isset($_SESSION['login'])){
+            $this->render(self::ADMIN_CONTROLLER_NAMESPACE, AdminController::ADMIN_LOGIN_FORM, $options);
+            exit;
+        }
+
     }
 }

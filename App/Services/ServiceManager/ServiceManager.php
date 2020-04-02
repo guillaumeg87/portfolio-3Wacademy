@@ -7,6 +7,7 @@ namespace Services\ServiceManager;
 use Admin\Core\Entity\User;
 use Services\FlashMessages\FlashMessage;
 use Services\FormBuilder\Core\FormBuilderManager;
+use Services\FrontManager\FrontManager;
 use Services\ImagesManager\ImagesManager;
 use Services\Mailer\MailerService;
 use Services\MenuManager\ContentManager;
@@ -85,4 +86,11 @@ class ServiceManager
         return new ImagesManager();
     }
 
+    /**
+     * @return FrontManager
+     */
+    public function getFrontManager():FrontManager
+    {
+        return new FrontManager();
+    }
 }

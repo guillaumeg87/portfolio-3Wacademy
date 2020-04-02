@@ -1,0 +1,18 @@
+{
+  "site_title":{
+    "type": "display",
+    "content": "Guillaume Genty"
+  },
+  "site_sub_title":{
+    "type": "display",
+    "content":"portfolio"
+  },
+  "banner": {
+    "type": "query",
+    "content":"hp_banner_header_settings"
+  },
+  "navigation": {
+    "type": "query",
+    "content":"main_menu_settings"
+  }
+}
