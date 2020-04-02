@@ -3,6 +3,7 @@
 
 namespace Services\FormBuilder\Core\Requests;
 
+use Connection\DB_conf;
 use Services\FormBuilder\Constants\FormBuilderConstants;
 use Services\FormBuilder\Core\Entity\FilesFields;
 use Services\FormBuilder\Core\Entity\InputFields;
@@ -34,6 +35,11 @@ class QueryBuilder
                     if ($field->getType() === 'checkbox'){
 
                         $toQuery = $this->formatColumnName($field->getName()) . " BOOLEAN NOT NULL";
+                    }
+
+                    if ($field->getType() === 'date'){
+
+                        $toQuery = $this->formatColumnName($field->getName()) . " DATETIME";
                     }
 
                     break;
@@ -114,4 +120,25 @@ class QueryBuilder
         return '';
 
     }
+
+    /**
+ * @param string $param
+ * @return string
+ */
+    public function selectAllToFront(string $param):string
+    {
+        return 'SELECT * FROM ' . DB_conf::DB_NAME . '.' . $param . ' WHERE 1';
+    }
+
+    /**
+     * @param string $param
+     * @param string $id
+     * @return string
+     */
+    public function selectOneToFront(string $param, string $id):string
+    {
+
+        return 'SELECT * FROM ' . DB_conf::DB_NAME . '.' . $param . ' WHERE id = :id';
+    }
 }
+

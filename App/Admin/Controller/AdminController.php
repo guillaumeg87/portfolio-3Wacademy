@@ -10,7 +10,6 @@ class AdminController extends AbstractController
     use NavigationTrait;
     //TEMPLATE
     const ADMIN_LOGIN_FORM = 'admin_login';
-    const ADMIN_LOGIN_PATH = '/admin_login';
     const ADMIN_HOME= 'admin_home';
 
     public function index($options = [])

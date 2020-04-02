@@ -1,0 +1,14 @@
+<nav>
+    <?php
+    $itemNav = $datas['header']['navigation']['data'];
+
+    ?>
+    <ul>
+        <?php
+        foreach ($itemNav as $key => $value) { ?>
+            <li>
+                <a href="<?= $itemNav[$key]['route'] ?>" title="<?= $itemNav[$key]['label'] ?>"><?= $itemNav[$key]['label'] ?></a>
+            </li>
+        <?php } ?>
+    </ul>
+</nav>

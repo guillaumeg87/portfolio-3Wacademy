@@ -2,10 +2,9 @@
 
 namespace App\Dispatcher;
 
-use Admin\Core\Install\Builder\DatabaseBuilder;
-use Connection\DB_conf;
 use Router\Request;
 use Router\Router;
+
 
 class Dispatcher
 {
@@ -19,29 +18,31 @@ class Dispatcher
         $this->request = new Request();
         Router::parse($this->request->url, $this->request);
         $controller = $this->loadController();
-        call_user_func_array([$controller, $this->request->action], $this->request->params);
+
+        if($controller && method_exists($controller, $this->request->action)) {
+
+            call_user_func_array([$controller, $this->request->action], $this->request->params);
+        }
+        else {
+            header_remove();
+            header('Location: /front/index/page404');
+        }
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
     public function loadController()
     {
 
         $name = str_replace('/', '\\', $this->request->path) . ucfirst($this->request->controller . "Controller");
-        $controller = new $name();
+        $filePath = '../' . $this->request->path . $this->request->controller. 'Controller.php';
 
-        return $controller;
-    }
-
-    /**
-     * @param $file string
-     * @return string
-     */
-    private function getNamespace($file)
-    {
-        $path = explode('/App', str_replace('.php', '', $file));
-        $namespace = str_replace('/', '\\', $path);
-        return $namespace[1];
+        if (\file_exists($filePath)){
+            return new $name();
+        }
+        else{
+            return false;
+        }
     }
 }

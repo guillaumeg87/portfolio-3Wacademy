@@ -1,0 +1,27 @@
+<footer>
+    <?php
+    //Shortcut in index.phtml $datas = $this->>vars['options']
+
+    // Contenu footer
+    $footerDatas = $datas['footer']['section_1']['data'];
+    ?>
+    <ul>
+        <?php foreach ($footerDatas as $key => $value) { ?>
+
+            <li>
+                <a href="<?= $footerDatas[$key]['profile_link'] ?>" target="_blank" title="<?= $footerDatas[$key]['alt_logo'] ?>">
+                    <?php if (empty($footerDatas[$key]['fontawesome_icon'])) { ?>
+
+                        <img src="<?= $footerDatas[$key]['url'] ?>" alt="<?= $footerDatas[$key]['alt_logo'] ?>" title="<?= $footerDatas[$key]['name'] ?>">
+
+                    <?php } else {
+                        echo html_entity_decode($footerDatas[$key]['fontawesome_icon'], ENT_HTML5 | ENT_QUOTES);
+                    } ?>
+                </a>
+            </li>
+
+        <?php } ?>
+    </ul>
+</footer>
+
+

@@ -1,22 +1,74 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <title>Portfolio</title>
-        <link rel="stylesheet" href="/public/main.css">
-    </head>
-    <body>
-        <?php
-        if (!empty($this->vars['options']['flash-message'])) { ?>
-            <div class="flash-message <?= $this->vars['options']['flash-message']['type-class'] ?>">
-                <p><?= $this->vars['options']['flash-message']['message'] ?></p>
-            </div>
-        <?php } ?>
-        <h1>Index Layout</h1>
-        <a href="/admin">ADMIN</a>
-        <img src="./uploads/img/bbang.jpeg" alt="">
-        <img src="http://www.portfolio.localhost/uploads/img/bbang.jpeg" alt="">
-        <script src="./public/bundle.js"></script>
+<?php
+// Shortcut
+    $datas = $this->vars['options'];
+    include("block__head_front.phtml");
 
+    if (!empty($datas)) {
+ ?>
+    <body>
+    <?php include("block__header_front.phtml"); ?>
+
+    <?php
+    // Contenu Homepage Front
+    $section1 = $datas['main']['section_1']['data'][0];
+    $section2 = $datas['main']['section_2']['data'];
+    ?>
+
+    <section>
+        <h3><?= $section1['title'] ?></h3>
+        <p><?= $section1['description'] ?></p>
+        <img src="<?= $section1['url'] ?>" alt="">
+    </section>
+    <section>
+        <?php
+        $explode = explode('_', $datas['main']['section_2']['content']);
+        $section2Title = $explode[0];
+        ?>
+        <h3><?= ucfirst($section2Title) ?></h3>
+        <ul>
+            <?php
+            foreach ($section2 as $item => $value) { ?>
+                <li>
+                    <div>
+                        <img src="<?= $section2[$item]['url'] ?>" alt="<?= $section2[$item]['label'] ?>">
+                        <h4><?= $section2[$item]['label'] ?></h4>
+                        <h5><?= $section2[$item]['poste'] ?></h5>
+                        <p>De <?= $section2[$item]['date_start'] ?> à <?= $section2[$item]['date_end'] > $section2[$item]['date_start'] ? $section2[$item]['date_end'] : 'aujourd\'hui' ?></p>
+                        <p><?= $section2[$item]['description'] ?></p>
+                        <?php
+                        if (isset($section2[$item]['linked']) && !empty(isset($section2[$item]['linked']))) {
+                            $linkedData = $section2[$item]['linked'];
+                            ?>
+                            <ul>
+                                <?php foreach ($linkedData as $key => $value) {  ?>
+
+                                    <li>
+                                        <img src="<?= $linkedData[$key]['url'] ?>" alt="<?= $linkedData[$key]['name'] ?>">
+                                    </li>
+
+                                <?php } ?>
+                            </ul>
+
+                        <?php } ?>
+                    </div>
+                </li>
+            <?php } ?>
+        </ul>
+    </section>
+
+
+
+    <?php include("block__footer_front.phtml"); ?>
+
+
+
+
+    <?php }
+    else{ ?>
+        <h1>Merci de suivre la procédure d'installation avant d'aller plus loin....</h1>
+    <?php } ?>
+        <script src="./public/bundle.js"></script>
     </body>
 </html>

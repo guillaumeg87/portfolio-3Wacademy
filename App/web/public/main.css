@@ -651,7 +651,6 @@ li {
   list-style-type: none; }
 
 .flex {
-  display: -webkit-box;
   display: flex; }
 
 .max-width {

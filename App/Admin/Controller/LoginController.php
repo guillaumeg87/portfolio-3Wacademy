@@ -7,7 +7,6 @@ namespace Admin\Controller;
 use Admin\Core\Config\AbstractController;
 use Admin\Requests\LoginRequest;
 
-
 class LoginController extends AbstractController
 {
     //TEMPLATE
@@ -15,6 +14,13 @@ class LoginController extends AbstractController
     const ADMIN_HOME = 'admin_home';
 
     const SESSION_FIELDS = ['login', 'password', 'id'];
+
+    public function login($options = [])
+    {
+        $this->isSessionActive();
+
+        $this->render(__NAMESPACE__, self::ADMIN_LOGIN_FORM, $options);
+    }
 
     /**
      * Main method for login in Back office

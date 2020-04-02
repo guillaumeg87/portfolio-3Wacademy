@@ -24,7 +24,7 @@
                         if (!empty($this->vars['options']['header'])) {
                             foreach ($this->vars['options']['header'] as $item) { ?>
                                 <td>
-                                    <?= $item ?>
+                                    <?= str_replace('_', ' ', $item); ?>
                                 </td>
                             <?php } ?>
                                 <td>Action </td>
@@ -38,6 +38,11 @@
                                 <?php foreach ($item as $key => $value) {
                                     // limit sting length for table display
                                     $value = strlen($value) > 50 ? substr($value, 0, 40) . '...' : $value;
+                                    if (preg_match(\Services\FormBuilder\Core\FormHydrator::DATETIME_REGEX, $value)) {
+
+                                        $date = \DateTime::createFromFormat('Y-m-d H:i:s', $value);
+                                        $value = $date->format('d/m/Y');
+                                    }
                                     if ($key === 'id') {
 
                                         $id = $value;
