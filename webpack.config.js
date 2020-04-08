@@ -13,13 +13,14 @@ let config = {
         filename: "./bundle.js"
     },
     module: {
-        rules: [
-        {
-            test: /\.js$/,
-            exclude: /node_modules/,
-            loader: "babel-loader",
+        rules:
+        [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: "babel-loader",
 
-        },
+            },
             {
 
                 test: /\.scss$/,
@@ -30,8 +31,17 @@ let config = {
                     'sass-loader',
                     'postcss-loader'
                 ]
+            },
+            {
+                test: /\.(png|jpe?g|gif)$/,
+                use: {
+                    loader: 'file-loader',
+                    options: {
+                        name: '/uploads/img/[name].[ext]',
+                    },
+                },
             }
-            ]
+        ]
     },
     plugins: [
         new MiniCssExtractplugin({

@@ -1,0 +1,163 @@
+.front__main_wrapper{
+
+  max-width: 1100px;
+  margin: 0 auto;
+  background-color: $second_background;
+  section{
+    margin-top: 6rem;
+    padding: 2rem 2%;
+    background-color: $card_barckground;
+    box-shadow: 0 0 10px #A1A1A1;
+    h3{
+      color: $main_background;
+      @include front_buttons($size:2rem);
+      background-color: $text_primary;
+      padding: 0.5rem 2%;
+      border-radius: 5px;
+      width: 200px;
+      text-align: center;
+    }
+  }
+
+  .front__a_propos_wrapper{
+    align-content: space-between;
+    .front__block_a_propos_content {
+      @include font_text($size: 1.6rem);
+
+      img{
+        border-radius: 100%;
+        float: right;
+        width: 30%;
+      }
+    }
+  }
+
+  .front__parcours_wrapper{
+    flex-direction: column;
+    h3{
+      flex-basis: 100%;
+    }
+    ul{
+      display: block;
+      width: 100%;
+
+      .front__parcours_item{
+        margin: 2rem 0;
+        padding: 1rem 2%;
+        border: solid 2px $main_background;
+        .parcours__main_logo{
+          justify-content: center;
+          align-items: center;
+          width: 200px;
+          height: auto;
+        }
+        .parcours__row{
+          width: calc(100% - 200px);
+          padding: 1rem 2%;
+
+          .parcours__informations {
+            justify-content: space-between;
+
+            .front__block_label{
+              h4, h5{
+                font-size: 2rem;
+                font-family: 'Bungee Shade', cursive;
+                color: $main_background;
+              }
+            }
+
+            .front__block_date{
+              p{
+                @include font_text($size: 1.6rem);
+                font-style: italic;
+              }
+            }
+          }
+
+          .parcours__description{
+            p{
+              @include font_text($size: 1.6rem);
+            }
+          }
+
+          .parcours__skills{
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            li{
+              margin: 0 2%;
+              width: 100px;
+              height: auto;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1215px){}
+
+@media screen and (max-width: 1024px){}
+
+@media screen and (max-width: 780px) {
+  .front__main_wrapper{
+
+    .front__parcours_wrapper{
+
+      ul{
+
+        .front__parcours_item{
+
+          .parcours__main_logo{
+            min-width: 30%;
+          }
+          .parcours__row{
+            width: calc(100% - 150px);
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 560px) {
+  .front__main_wrapper{
+    section{
+
+      h3{
+        display: block;
+        width: 100%;
+      }
+    }
+
+    .front__parcours_wrapper{
+      h3{
+        display: block;
+        width: 100%;
+      }
+      ul{
+
+        .front__parcours_item{
+          flex-direction: column;
+
+          .parcours__main_logo{
+            display: block;
+            width: 50%;
+            margin: 0 auto;
+            img{
+              width: 100%;
+
+            }
+          }
+          .parcours__row{
+            margin: 0 auto;
+            display: block;
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}

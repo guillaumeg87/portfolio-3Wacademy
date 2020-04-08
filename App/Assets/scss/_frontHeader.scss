@@ -1,0 +1,144 @@
+.front__header{
+  position: relative;
+  background-image: url("../../web/uploads/img/graf-women1-banner.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 600px;
+  padding-top: 6rem;
+
+  h1{
+    margin:  auto;
+    display: block;
+    text-align: center;
+    @include header_title_font($size:9rem);
+
+    .front__header_chunkTitle {
+      display: inline-block;
+    }
+  }
+
+  h2{
+    margin: 0 auto;
+    display: block;
+    text-align: center;
+    @include header_title_font($size:9rem);
+  }
+
+  .front__link_BO{
+    position: absolute;
+    top: 0;
+    width: 100%;
+    background-color: $text_primary;
+
+    a{
+      display: block;
+      width: 100%;
+      color: $main_background;
+      text-transform: uppercase;
+      @include front_buttons($size: 2rem);
+      text-align: center;
+
+    }
+  }
+
+  nav{
+    position: absolute;
+    bottom: 0;
+    padding: 2rem 10%;
+    width: 100%;
+    background-color: $text_primary;
+    box-shadow: 0px 5px  10px #C1C1C1;
+
+    ul{
+
+      display: flex;
+      align-items: center;
+      align-content: space-around;
+      height: auto;
+
+      li {
+        text-align: center;
+        flex: 1;
+        box-sizing: border-box;
+
+        a{
+          @include front_buttons($size: 2rem);
+          display: block;
+          width: 100%;
+          padding: 1rem 5%;
+          color: $main_background;
+          transition: 0.3s linear;
+          border-bottom: 4px solid $text_primary;
+          &:hover{
+            border-bottom: 2px solid $main_background;
+
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1215px){
+
+}
+
+@media screen and (max-width: 1024px){}
+
+@media screen and (max-width: 780px) {
+  .front__header{
+
+    h1{
+
+      .front__header_chunkTitle {
+
+        display: block;
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 560px) {
+  .front__header{
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url("../../web/uploads/img/graf-women2.jpg");
+
+    h1{
+      @include header_title_font($size:5rem);
+      margin-top: 13rem;
+    }
+
+    h2{
+      @include header_title_font($size:5rem);
+    }
+
+    nav{
+
+
+      ul{
+        flex-direction: column;
+        align-items: center;
+        align-content: space-around;
+        height: auto;
+
+        li {
+
+
+          a{
+            @include front_buttons($size: 2.4rem);
+
+            &:hover{
+
+
+            }
+          }
+        }
+      }
+    }
+  }
+}
