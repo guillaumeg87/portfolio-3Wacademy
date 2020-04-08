@@ -2,5 +2,9 @@
   "section_1" : {
     "type": "query",
     "content": "socials_content"
+  },
+  "section_2" : {
+    "type": "display",
+    "content": "@Copyright - Fait à la main - L'artisan"
   }
 }

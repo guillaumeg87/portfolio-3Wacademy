@@ -1,0 +1,36 @@
+.front__footer{
+  background-color: $main_background;
+  margin-top: 4rem;
+  border-top: $text_primary 3px solid;
+  padding: 2rem 5% 0.5rem;
+  ul{
+    width: 30%;
+    margin: 0 auto;
+    justify-content: space-between;
+  }
+  p{
+    text-align: center;
+
+    color: $text_primary;
+  }
+}
+
+@media screen and (max-width: 1215px){
+
+}
+
+@media screen and (max-width: 1024px){}
+
+@media screen and (max-width: 780px) {
+
+}
+
+@media screen and (max-width: 560px) {
+  .front__footer{
+
+    ul {
+      width: 100%;
+
+    }
+  }
+}

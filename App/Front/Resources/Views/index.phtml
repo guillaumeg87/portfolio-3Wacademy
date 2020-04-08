@@ -7,7 +7,7 @@
 
     if (!empty($datas)) {
  ?>
-    <body>
+    <body class="front__main_content">
     <?php include("block__header_front.phtml"); ?>
 
     <?php
@@ -15,55 +15,73 @@
     $section1 = $datas['main']['section_1']['data'][0];
     $section2 = $datas['main']['section_2']['data'];
     ?>
-
-    <section>
-        <h3><?= $section1['title'] ?></h3>
-        <p><?= $section1['description'] ?></p>
-        <img src="<?= $section1['url'] ?>" alt="">
-    </section>
-    <section>
-        <?php
-        $explode = explode('_', $datas['main']['section_2']['content']);
-        $section2Title = $explode[0];
-        ?>
-        <h3><?= ucfirst($section2Title) ?></h3>
-        <ul>
+    <main class="front__main_wrapper">
+        <section class="flex front__a_propos_wrapper">
+            <div class="front__block_a_propos_content">
+                <h3><?= $section1['title'] ?></h3>
+                <img src="<?= $section1['url'] ?>" alt="">
+                <p><?= html_entity_decode($section1['description'], ENT_HTML5) ?></p>
+            </div>
+        </section>
+        <section class="flex front__parcours_wrapper">
             <?php
-            foreach ($section2 as $item => $value) { ?>
-                <li>
-                    <div>
-                        <img src="<?= $section2[$item]['url'] ?>" alt="<?= $section2[$item]['label'] ?>">
-                        <h4><?= $section2[$item]['label'] ?></h4>
-                        <h5><?= $section2[$item]['poste'] ?></h5>
-                        <p>De <?= $section2[$item]['date_start'] ?> à <?= $section2[$item]['date_end'] > $section2[$item]['date_start'] ? $section2[$item]['date_end'] : 'aujourd\'hui' ?></p>
-                        <p><?= $section2[$item]['description'] ?></p>
-                        <?php
-                        if (isset($section2[$item]['linked']) && !empty(isset($section2[$item]['linked']))) {
-                            $linkedData = $section2[$item]['linked'];
-                            ?>
-                            <ul>
-                                <?php foreach ($linkedData as $key => $value) {  ?>
+            $explode = explode('_', $datas['main']['section_2']['content']);
+            $section2Title = $explode[0];
+            ?>
+            <h3><?= ucfirst($section2Title) ?></h3>
+            <ul>
+                <?php
+                foreach ($section2 as $item => $value) { ?>
+                    <li>
+                        <div class="flex front__parcours_item">
+                            <?php if (!empty($section2[$item]['url'])) { ?>
 
-                                    <li>
-                                        <img src="<?= $linkedData[$key]['url'] ?>" alt="<?= $linkedData[$key]['name'] ?>">
-                                    </li>
+                            <div class="flex parcours__main_logo">
+                                <img src="<?= $section2[$item]['url'] ?>" alt="<?= $section2[$item]['label'] ?>">
 
-                                <?php } ?>
-                            </ul>
+                            </div>
+                            <?php } ?>
 
-                        <?php } ?>
-                    </div>
-                </li>
-            <?php } ?>
-        </ul>
-    </section>
+                            <div class="parcours__row">
+                                <div class="flex parcours__informations">
+                                    <div class="front__block_label">
+                                        <h4><?= $section2[$item]['label'] ?></h4>
+                                        <h5><?= $section2[$item]['poste'] ?></h5>
+                                    </div>
+                                    <div class="front__block_date">
+                                        <p>De <?= (\DateTime::createFromFormat('Y-m-d H:i:s', $section2[$item]['date_start']))->format('d/m/Y') ?> à <?= $section2[$item]['date_end'] > $section2[$item]['date_start'] ? (\DateTime::createFromFormat('Y-m-d H:i:s', $section2[$item]['date_end']))->format('d/m/Y') : 'aujourd\'hui' ?></p>
+                                    </div>
+                                </div>
+                                <div class="parcours__description">
+                                    <p><?= $section2[$item]['description'] ?></p>
 
+                                </div>
+                                    <?php
+                                    if (isset($section2[$item]['linked']) && !empty(isset($section2[$item]['linked']))) {
+                                        $linkedData = $section2[$item]['linked'];
+                                        ?>
+                                        <ul class="parcours__skills">
 
+                                            <?php foreach ($linkedData as $key => $value) {
 
+                                                if (!empty($linkedData[$key]['url'])) { ?>
+                                                <li>
+                                                    <img src="<?= $linkedData[$key]['url'] ?>" alt="<?= $linkedData[$key]['name'] ?>">
+                                                </li>
+                                        <?php }
+                                         } ?>
+                                        </ul>
+
+                                    <?php } ?>
+                            </div>
+
+                        </div>
+                    </li>
+                <?php } ?>
+            </ul>
+        </section>
+    </main>
     <?php include("block__footer_front.phtml"); ?>
-
-
-
 
     <?php }
     else{ ?>

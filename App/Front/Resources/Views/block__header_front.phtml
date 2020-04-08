@@ -1,4 +1,4 @@
-<header>
+<header class="front__header">
     <?php
     //Shortcut in index.phtml $datas = $this->>vars['options']
     if (!empty($datas['flash-message'])) { ?>
@@ -7,16 +7,33 @@
         </div>
     <?php } ?>
 
-    <img src="<?= $datas['header']['banner']['data'][0]['url'] ?>" alt="<?= $datas['header']['banner']['content'] .
+    <!-- <img src="<?= $datas['header']['banner']['data'][0]['url'] ?>" alt="<?= $datas['header']['banner']['content'] .
         '-' .  $datas['header']['site_sub_title']['content'] .
         '-' . $datas['header']['site_title']['content']  ?> ">
+        -->
+    <?php
+    // explode main title and insert each chunk in span tag
+    $explode = \explode(' ', $datas['header']['site_title']['content']);
+    $lastValue = end($explode);
+    $mainTitle = '';
+    foreach ($explode as $key => $value) {
+        if ($value !== $lastValue){
+            $mainTitle .= '<span class="front__header_chunkTitle">' . $value . '</span>' . ' ';
 
-    <h1><?= $datas['header']['site_title']['content'] ?></h1>
+        }
+        else {
+            $mainTitle .= '<span class="front__header_chunkTitle">' . $value . '</span>';
+
+        }
+    }
+    ?>
+
+    <h1><?= $mainTitle ?></h1>
     <h2><?= $datas['header']['site_sub_title']['content'] ?></h2>
 
     <?php if (!empty($_SESSION)){ ?>
-        <div>
-            <a href="/admin">ADMIN</a>
+        <div class="front__link_BO">
+            <a href="/admin">Back-Office</a>
 
         </div>
     <?php } ?>

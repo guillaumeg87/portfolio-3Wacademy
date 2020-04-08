@@ -3,6 +3,7 @@
 namespace Services\FrontManager;
 
 use Admin\Requests\Content\ContentRequest;
+use Services\Dumper\Dumper;
 use Services\FormBuilder\Constants\FormBuilderConstants;
 use Services\FormBuilder\Core\Requests\QueryBuilder;
 
@@ -77,16 +78,19 @@ class FrontManager
         foreach ($params[$region][$zone]['data'] as $key => $value){
 
             foreach ($value as $k => $v){
-                $taxolist = \explode(', ', $v);
+                if (is_string($v)) {
+                    $taxolist = \explode(', ', $v);
+                    if (is_array($taxolist)){
+                        foreach ($taxolist as $item => $id){
 
-                foreach ($taxolist as $item => $id){
+                            if (preg_match('/' . $contentName . '/', $k)){
+                                $sql = $this->queryBuilder->selectOneToFront($contentName . FormBuilderConstants::TAXO_TABLE_SUFFIX, $id);
+                                $params[$region][$zone]['data'][$key]['linked'][] = $this->contentRequest->selectOne(
+                                    ['id' => $id], $sql
+                                );
 
-                    if (preg_match('/' . $contentName . '/', $k)){
-                        $sql = $this->queryBuilder->selectOneToFront($contentName . FormBuilderConstants::TAXO_TABLE_SUFFIX, $id);
-                        $params[$region][$zone]['data'][$key]['linked'][] = $this->contentRequest->selectOne(
-                            ['id' => $id], $sql
-                        );
-
+                            }
+                        }
                     }
                 }
             }

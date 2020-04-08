@@ -1,11 +1,11 @@
-<footer>
+<footer class="front__footer">
     <?php
     //Shortcut in index.phtml $datas = $this->>vars['options']
 
     // Contenu footer
     $footerDatas = $datas['footer']['section_1']['data'];
     ?>
-    <ul>
+    <ul class="flex">
         <?php foreach ($footerDatas as $key => $value) { ?>
 
             <li>
@@ -22,6 +22,7 @@
 
         <?php } ?>
     </ul>
+    <p><?= $datas['footer']['section_2']['content'] ?></p>
 </footer>
 
 

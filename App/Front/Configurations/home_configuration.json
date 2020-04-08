@@ -6,7 +6,7 @@
   "section_2": {
     "type": "query",
     "content": "parcours_content",
-    "join": ["langage"],
+    "join": ["langage", "techno"],
     "sort": {
       "type": "DESC",
       "column": "date_start"

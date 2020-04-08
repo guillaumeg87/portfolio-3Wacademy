@@ -1,5 +1,8 @@
 /* COLORS */
 $main_background : #2c3e5a;
+/*  #FEFDFF   #F0F8FF #D1FAFF */
+$second_background: #F0F8FF;
+$card_barckground: #FFF;
 $text_primary : orange;
 $error : #900;
 $success : forestgreen;
@@ -7,12 +10,16 @@ $warning: darkorange;
 
 /* IMPORTS */
 @import "_mixins";
+@import "_fonts";
 @import "_normalizer";
 @import "_tools";
 @import "_adminHome";
 @import "_adminForm";
 @import "_adminIndexTable";
 @import "_projectInstallation";
+@import "_frontHeader";
+@import "_frontContent";
+@import "_frontFooter";
 
 
 /* GENERAL */
@@ -24,8 +31,12 @@ body {
   font-size: 1.6rem;
   line-height: 1.6;
   font-family: 'Open Sans', sans-serif;
-  background-color: $main_background;
+  //background-color: $main_background;
 
+}
+
+.front__main_content{
+  background-color: $second_background;
 }
 
 a, a:hover, a:visited, a:active {
