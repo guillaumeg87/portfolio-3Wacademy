@@ -4,11 +4,13 @@ namespace Admin\Controller;
 use Admin\Core\Config\AbstractController;
 use Admin\Core\QueryBuilder\QueryBuilder;
 use Admin\Core\Traits\Hash;
+use Admin\Core\Traits\RequestDateTrait;
 use Admin\Requests\Content\ContentRequest;
 
 class ContentController extends AbstractController
 {
     use Hash;
+    use RequestDateTrait;
     const HANDLE_CONTENT_INDEX = 'handle_content_index';
     const HANDLE_CONTENT_FORM = 'handle_content_form';
 
@@ -164,6 +166,7 @@ class ContentController extends AbstractController
             }
             $formDatas['password'] = $this->hashString($formDatas['password']);
         }
+        $formDatas['updatedAt'] = $this->updatedAt();
 
         if (!empty($formDatas) && !empty($formDatas['id'])) {
             try {
@@ -270,10 +273,12 @@ class ContentController extends AbstractController
                 $sql = $this->getQueryBuilder()->buildSql($params, $method);
 
                 if ($method == self::CREATE_LABEL) {
+                    $params['createdAt'] = $this->createdAt();
 
                     $isSaved = $request->createContent($params, $sql);
 
                 } elseif ($method == self::UPDATE_LABEL) {
+                    $params['updatedAt'] = $this->updatedAt();
 
                     $isSaved = $request->updateContent($params, $sql);
                 }

@@ -3,7 +3,6 @@
 namespace Services\FrontManager;
 
 use Admin\Requests\Content\ContentRequest;
-use Services\Dumper\Dumper;
 use Services\FormBuilder\Constants\FormBuilderConstants;
 use Services\FormBuilder\Core\Requests\QueryBuilder;
 

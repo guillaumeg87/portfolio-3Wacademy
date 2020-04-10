@@ -331,7 +331,7 @@ const FormBuilderManager = {
 
                                 let option = document.createElement('option');
                                 option.setAttribute('value', item);
-                                option.innerHTML = item;
+                                option.innerHTML = Tools.ucFirst(item);
                                 inDom.appendChild(option);
                             }
                         }

@@ -1,9 +1,9 @@
 {
   "fieldType": "input",
   "labelDisplay": "",
-  "type": "checkbox",
+  "type": "date",
   "name": "",
-  "value": false,
-  "checked": false,
+  "value": "",
   "group": "admin-form"
 }
+
