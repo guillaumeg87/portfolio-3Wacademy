@@ -23,20 +23,25 @@ class QueryBuilder
             $explode = explode('\\', get_class($field));
             $length = count($explode);
             $name = $explode[$length - 1];
-
             switch ($name) {
 
                 case FormBuilderConstants::INPUT :
 
-                    if ($field instanceof InputFields){
+                    if ($field instanceof InputFields
+                        && $field->getType() !== 'checkbox'
+                        && $field->getType() !== 'radio'
+                    ){
 
-                    $toQuery = $this->formatColumnName(str_replace('-', '_', $field->getName())) . " VARCHAR(255)";
+                        $toQuery = $this->formatColumnName(str_replace('-', '_', $field->getName())) . " VARCHAR(255)";
                     }
                     if ($field->getType() === 'checkbox'){
 
                         $toQuery = $this->formatColumnName($field->getName()) . " BOOLEAN NOT NULL";
                     }
+                    if ($field->getType() === 'radio'){
 
+                        $toQuery = $this->formatColumnName($field->getName()) . " BOOLEAN NOT NULL";
+                    }
                     if ($field->getType() === 'date'){
 
                         $toQuery = $this->formatColumnName($field->getName()) . " DATETIME";
@@ -60,8 +65,8 @@ class QueryBuilder
                     break;
 
                 case FormBuilderConstants::RADIO :
-                    //@TODO
-                    // $toQuery = $this->formatColumnName($field->getName()) . " VARCHAR(255) NOT NULL";
+
+                    $toQuery = $this->formatColumnName($field->getName()) . " VARCHAR(255) NOT NULL";
                     break;
 
                 case FormBuilderConstants::CHECKBOX :
@@ -114,8 +119,8 @@ class QueryBuilder
     {
         if ($field instanceof FilesFields) {
 
-            return $this->formatColumnName(FilesFields::FILE_URL_LABEL) . " VARCHAR(255)"
-                . ', ' . $this->formatColumnName(FilesFields::FILE_PATH_LABEL) . " VARCHAR(255)";
+            return $this->formatColumnName($field->getName() . '_' . FilesFields::FILE_URL_LABEL) . " VARCHAR(255)"
+                . ', ' . $this->formatColumnName($field->getName() . '_' . FilesFields::FILE_PATH_LABEL) . " VARCHAR(255)";
         }
         return '';
 

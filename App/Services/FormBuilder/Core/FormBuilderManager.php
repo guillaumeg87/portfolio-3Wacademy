@@ -8,7 +8,6 @@ use Services\FormBuilder\Constants\FormBuilderConstants;
 use Services\FormBuilder\Core\Entity\InputFields;
 use Services\FormBuilder\Core\Requests\FormBuilderRequest;
 use Services\FormBuilder\Core\Requests\QueryBuilder;
-use stdClass;
 
 
 class FormBuilderManager
@@ -80,7 +79,6 @@ class FormBuilderManager
 
         try {
             $isTableExist = $this->getFormBuilderRequest()->isTableExist($reformatedDatas['labels'], $optionType);
-
         } catch (\PDOException $exception) {
             throw new \PDOException();
         }
@@ -94,8 +92,11 @@ class FormBuilderManager
                  * I wait non boolean result, because this function use exec and can return false
                  * https://www.php.net/manual/en/pdo.exec.php
                  */
-                $isTableCreated = $this->getFormBuilderRequest()->createContentTable($reformatedDatas['labels'][FormBuilderConstants::TECHNICAL_NAME],
-                    $query, $optionType);
+                $isTableCreated = $this->getFormBuilderRequest()->createContentTable(
+                    $reformatedDatas['labels'][FormBuilderConstants::TECHNICAL_NAME],
+                    $query,
+                    $optionType
+                );
 
                 if ($isTableCreated !== false) {
                     if (!empty($optionType)) {
@@ -338,12 +339,12 @@ class FormBuilderManager
      * Add the field for file field
      * @return array
      */
-    private function addFileFields(): array
+    private function addFileFields($name): array
     {
 
         return [
-            'path' => '',
-            'url' => ''
+            $name . '_path' => '',
+            $name . '_url' => ''
         ];
     }
 
@@ -417,12 +418,17 @@ class FormBuilderManager
     {
         $fieldItem = '';
         $idRef = '';
+        $name = '';
+        foreach ($unformated as $k => $v) {
+            if (preg_match('/^name_{1,}/', $k)) {
+                $name = $unformated[$k];
+            }
+        }
 
         foreach ($unformated as $key => $value) {
 
             $explode = \explode('_', $key);
             $index = $explode[1];
-
             if (!empty($index) && \preg_match('/[' . $index . ']$/', $key)) {
 
                 if (\array_key_exists($index, $suffix)) {
@@ -435,7 +441,7 @@ class FormBuilderManager
                         if ($unformated[$key] === 'file') {
                             //manage input type file
                             $suffix[$index][$fieldItem] = \array_merge($suffix[$index][$fieldItem],
-                                $this->addFileFields());
+                                $this->addFileFields($name));
                             $suffix[$index][$fieldItem][$explode[0]] = \htmlspecialchars($value);
 
                         }

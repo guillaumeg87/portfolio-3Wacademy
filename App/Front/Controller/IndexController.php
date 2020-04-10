@@ -15,7 +15,7 @@ class IndexController extends AbstractController
     const HOME_CONTENT = 'home_configuration';
 
     use PrepareFromConfig;
-    public function index($options = []){
+    public function index($options = []) {
 
         foreach (FrontConstants::FRONT_CONFIG_SECTIONS as $key => $value) {
 
