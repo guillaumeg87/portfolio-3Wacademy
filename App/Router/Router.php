@@ -22,6 +22,7 @@ class Router
      */
     static public function parse($url, $request)
     {
+
         $explode_url = explode('/', trim($url));
         if (preg_match(self::MATCH_ADMIN_OR_INSTALL, $explode_url[1])) {
 
@@ -39,7 +40,7 @@ class Router
             $action = ($explode_url[3] === null) ? self::INDEX : $explode_url[3];
             $request->action = explode('?', $action)[0];
             $request->path = self::ADMIN_PATH;
-            $request->params[] = (strpos($url, '?') ? self::urlParams($url) :[]);
+            $request->params[] = (strpos($url, '?') ? self::urlParams($url) : []);
 
         } elseif (!file_exists(DatabaseBuilder::JSON_FILE_DB_CONF)) {
 
@@ -52,8 +53,10 @@ class Router
         } else {
 
             $explode_url = array_slice($explode_url, 2);
+            $split = explode('?', $explode_url[1]);
+            $request->action = $split[0];
+            $request->params[] = (strpos($url, '?') ? self::urlParams($url) : []);
 
-            $request->action = $explode_url[1];
             $request->path = self::FRONT_PATH;
 
             if (null === $explode_url[0]) {
@@ -62,7 +65,6 @@ class Router
             }
 
             $request->controller = ucfirst($explode_url[0]);
-            $request->params = array_slice($explode_url, 2);
         }
     }
 

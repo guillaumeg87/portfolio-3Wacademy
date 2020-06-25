@@ -5,12 +5,14 @@ namespace Services\ServiceManager;
 
 
 use Admin\Core\Entity\User;
+use Services\ApiManager\ApiManager;
 use Services\FlashMessages\FlashMessage;
 use Services\FormBuilder\Core\FormBuilderManager;
 use Services\FrontManager\FrontManager;
 use Services\ImagesManager\ImagesManager;
 use Services\Mailer\MailerService;
 use Services\MenuManager\ContentManager;
+use Services\PaginationManager\PaginationManager;
 use Services\Templating\Engine\TemplateEngine;
 use Services\Widget\AdminWidgetManager;
 
@@ -93,4 +95,22 @@ class ServiceManager
     {
         return new FrontManager();
     }
+
+    /**
+     * @param $credentials
+     * @return ApiManager
+     */
+    public function getApiManager($credentials):ApiManager
+    {
+        return new ApiManager($credentials);
+    }
+
+    /**
+     * @return PaginationManager
+     */
+    public function getPaginationManager($params):PaginationManager
+    {
+        return new PaginationManager($params);
+    }
+
 }

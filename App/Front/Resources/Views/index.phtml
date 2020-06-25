@@ -66,7 +66,7 @@
 
                                                 if (!empty($linkedData[$key]['url'])) { ?>
                                                 <li>
-                                                    <img src="<?= $linkedData[$key]['url'] ?>" alt="<?= $linkedData[$key]['name'] ?>">
+                                                    <img src="<?= $linkedData[$key]['url'] ?>" alt="<?= $linkedData[$key]['name'] ?>" title="<?= $linkedData[$key]['name'] ?>">
                                                 </li>
                                         <?php }
                                          } ?>
@@ -85,8 +85,8 @@
 
     <?php }
     else{ ?>
-        <h1>Merci de suivre la procédure d'installation avant d'aller plus loin....</h1>
+        <h1>Merci de suivre la procédure d'installation avant d'aller plus loin...</h1>
     <?php } ?>
-        <script src="./public/bundle.js"></script>
+        <script src="../../../public/bundle.js"></script>
     </body>
 </html>

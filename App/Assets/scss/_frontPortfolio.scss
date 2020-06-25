@@ -1,0 +1,259 @@
+.front__main_wrapper {
+  .front__label{
+    font-style: italic;
+    color: #A1A1A1;
+  }
+  .front__profile_informations {
+    justify-content: space-around;
+    .front__picture_block {
+      width:40%;
+      img{
+        box-shadow: 0 0 10px #A1A1A1;
+        border-radius: 10px;
+        border: solid 5px $text_primary;
+      }
+      h1 {
+        text-align: center;
+      }
+    }
+
+    .front__informations {
+      width:40%;
+      flex-direction: column;
+      justify-content: center;
+
+      .fa-map-marker-alt{
+        margin-right: 0.5rem;
+        color: $text_primary;
+      }
+
+      a{
+        display: block;
+        margin: 5rem auto;
+        @include btn();
+        width: 200px;
+      }
+    }
+  }
+
+  .front__portfolio_commit_section {
+    padding-left: 50px;
+    position: relative;
+
+    .front__portfolio_commit_block {
+
+      margin-bottom: 2rem;
+
+      article {
+        margin-bottom: 5rem;
+        &::before {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 20px;
+          display: block;
+          width: 4px;
+          content: "";
+          z-index: 1;
+          background-color: $text_primary;
+        }
+
+        .front__portfolio_single_commit {
+          //sborder-bottom: solid 2px $main_background;
+          padding: 1rem 2%;
+          h4 {
+            font-weight: 900;
+            font-size: 2rem;
+            hyphens: auto;
+            max-width: 100%;
+          }
+
+          .front__label{
+            font-style: italic;
+            color: #A1A1A1;
+          }
+          a{
+            display: block;
+            margin: 0 auto;
+            @include btn();
+            width: 200px;
+
+          }
+
+
+          .front__single_commit-msg-list{
+            .fa-check-square{
+              margin-right: 0.5rem;
+              color: $text_primary;
+            }
+          }
+        }
+
+        .commitMerge {
+          background-color: aliceblue;
+          color: #A1A1A1;
+        }
+
+        .front__portfolio_commit_date {
+
+          position: relative;
+          margin-left: -44px;
+          margin-bottom: 1rem;
+          background: linear-gradient(to right, $main_background 5%, white);
+          color: $text_primary;
+          padding: 0.4rem 0.5%;
+          border-radius: 10px;
+          overflow: hidden;
+          z-index: 100;
+          font-family: 'Ruda', sans-serif;
+          p {
+            display: inline-block;
+            margin: 0;
+            position: absolute;
+            top: 1.1rem;
+          }
+          .fa-hard-hat {
+            display: inline-block;
+            padding: 0.3rem 0;
+            margin-right: 15px;
+            color: $text_primary;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+//Pagination Links
+.front__block_pagination {
+
+  .pagination__link_wrapper1, .pagination__link_wrapper2{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin: 3rem 0 3rem;
+
+    .pagination__btn_link {
+      @include btn();
+      display: inline-block;
+      white-space: nowrap;
+      &:hover {
+        box-shadow: 5px 5px 5px #bbb;
+        transform: scale(1.05);
+      }
+    }
+  }
+
+
+  .first {
+    text-wrap: avoid;
+    &::before {
+      font-weight: 900;
+      content: "\f100";
+      margin-right: 1rem;
+      font-family: FontAwesome;
+      width: 10px;
+      height: 20px;
+      display: inline-block;
+    }
+  }
+
+  .prev {
+    text-wrap: avoid;
+    &::before {
+      font-weight: 900;
+      content: "\f104";
+      margin-right: 1rem;
+      font-family: FontAwesome;
+      width: 10px;
+      height: 20px;
+      display: inline-block;
+    }
+  }
+
+  .next {
+    text-wrap: avoid;
+    &::after {
+      font-weight: 900;
+      content: "\f105";
+      margin-left: 1rem;
+      font-family: FontAwesome;
+      width: 10px;
+      height: 20px;
+      display: inline-block;
+    }
+  }
+
+  .last {
+    text-wrap: avoid;
+    &::after {
+      font-weight: 900;
+      content: "\f101";
+      margin-left: 1rem;
+      font-family: FontAwesome;
+      width: 10px;
+      height: 20px;
+      display: inline-block;
+    }
+  }
+}
+
+
+@media screen and (max-width: 1024px) {
+
+}
+
+@media screen and (max-width: 780px) {
+
+  .front__main_wrapper {
+
+    .front__profile_informations {
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+
+      .front__informations {
+        width: 100%;
+        padding: 0 2%;
+
+      }
+    }
+  }
+
+  .front__block_pagination {
+
+    margin: 3rem 0 3rem;
+    .portfolio-label{
+      display: inline;
+    }
+
+    .first, .prev, .next, .last {
+      //min-width: 35%;
+      margin: 1rem;
+
+    }
+
+    .first {
+      order: 3;
+      //margin-left: 15%;
+    }
+
+    .prev {
+      order: 1;
+      //margin-left: 15%;
+    }
+
+    .next {
+      order: 2;
+      //margin-right: 15%;
+    }
+
+    .last {
+      order: 4;
+      //margin-right: 15%;
+
+    }
+  }
+}
