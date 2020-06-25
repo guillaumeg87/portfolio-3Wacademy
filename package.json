@@ -46,7 +46,7 @@
     "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
-    "jquery": "^3.4.1"
+    "jquery": "^3.5.0"
   },
   "resolutions": {
     "minimist": ">=0.2.1 <1.0.0 || >=1.2.3",
