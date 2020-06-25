@@ -1,10 +1,18 @@
 <header class="front__header">
     <?php
     //Shortcut in index.phtml $datas = $this->>vars['options']
-    if (!empty($datas['flash-message'])) { ?>
-        <div class="flash-message <?= $datas['flash-message']['type-class'] ?>">
-            <p><?= $datas['flash-message']['message'] ?></p>
-        </div>
+
+    if (!empty($this->vars['options']['flash-message'])) { ?>
+    <?php \Services\Dumper\Dumper::dump($this->vars['options']['flash-message']); ?>
+    <div class="flash-message <?= $this->vars['options']['flash-message']['type-class'] ?>">
+        <?php
+
+        foreach ($this->vars['options']['flash-message'] as $key){ ?>
+
+            <p class="flash-message <?= $key['type-class'] ?>"><?= $key['message'] ?></p>
+        <?php }
+        ?>
+    </div>
     <?php } ?>
 
     <!-- <img src="<?= $datas['header']['banner']['data'][0]['url'] ?>" alt="<?= $datas['header']['banner']['content'] .

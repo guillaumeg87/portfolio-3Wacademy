@@ -17,4 +17,11 @@ final class FrontConstants
     ];
 
     const FRONT_CONFIGURATIONS_PATH = '../Front/Configurations/';
+
+    // New key in GITHUB API Response
+    const COMMIT_MESSAGE = 'commitMessage';
+    const LABEL_COMMIT = 'labelCommit';
+
+    // Github API
+    const REPO_NAME = 'portfolio-3Wacademy';
 }

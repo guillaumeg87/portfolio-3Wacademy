@@ -270,15 +270,16 @@ class ContentController extends AbstractController
 
             $isSaved = false;
             if ($isTableExist) {
-                $sql = $this->getQueryBuilder()->buildSql($params, $method);
 
                 if ($method == self::CREATE_LABEL) {
                     $params['createdAt'] = $this->createdAt();
+                    $sql = $this->getQueryBuilder()->buildSql($params, $method);
 
                     $isSaved = $request->createContent($params, $sql);
 
                 } elseif ($method == self::UPDATE_LABEL) {
                     $params['updatedAt'] = $this->updatedAt();
+                    $sql = $this->getQueryBuilder()->buildSql($params, $method);
 
                     $isSaved = $request->updateContent($params, $sql);
                 }

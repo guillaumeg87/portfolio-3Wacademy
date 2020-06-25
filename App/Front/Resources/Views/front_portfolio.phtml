@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<?php
+// Shortcut
+
+
+$datas = $this->vars['options'];
+    include("block__head_front.phtml");
+
+    if (!empty($datas)) {
+ ?>
+    <body class="front__main_content">
+    <?php include("block__header_front.phtml"); ?>
+
+    <?php
+
+    // Contenu Homepage Front
+    $section1 = $datas['main']['section_1']['data']['github_user'] ;
+    $section2 = $datas['main']['section_2']['data']['commitList'];
+
+    ?>
+    <main class="front__main_wrapper">
+
+    <section class="front__profile_informations flex">
+        <div class="front__picture_block">
+            <img src="<?= $section1['avatar_url'] ?>" alt="github_avatar">
+            <h1>@<?=  $section1['login'] ?></h1>
+        </div>
+        <div class="front__informations flex">
+            <p><span class="front__label">Bio:</span> <?=  $section1['bio'] ?></p>
+            <p><i class="fas fa-map-marker-alt"></i><span class="front__label"></span><?=  $section1['location'] ?></p>
+            <a href="<?= $section1['html_url'] ?>" target="_blank">Mon profile Github</a>
+        </div>
+
+    </section>
+
+        <section class="front__portfolio_commit_section">
+            <ul class="front__portfolio_commit_block">
+                <?php
+
+                foreach ($section2 as $index => $array) { ?>
+                    <?php
+                        $isMergeCommitClass = '';
+                        if (preg_match('/merge pull request/', mb_strtolower($array['commit']['message']))) {
+                            $isMergeCommitClass = 'commitMerge';
+                        }
+
+                    ?>
+                <li>
+                    <article>
+                        <div class="front__portfolio_commit_date">
+                            <i class="fas fa-hard-hat fa-2x"></i><p>Date de commit: <?= (new \DateTime($array['commit']['committer']['date']))->format('d/m/Y') ?></p>
+                        </div>
+                        <div class="front__portfolio_single_commit <?= $isMergeCommitClass ?>">
+                            <h4><?= ucfirst($array['commit']['message']) ?></h4>
+                            <p><span class="front__label">Sha:</span> <?= substr($array['sha'], 0, 7) ?></p>
+                            <p><span class="front__label">Auteur:</span> <?= $array['commit']['committer']['name'] ?></p>
+                            <p><span class="front__label">Date de commit:</span> <?= (new \DateTime($array['commit']['committer']['date']))->format('d/m/Y') ?></p>
+
+                            <p><span class="front__label">Branche:</span> <?= $array['commit'][\Front\Constants\FrontConstants::LABEL_COMMIT] ?></p>
+                            <!-- Gérer le cas ou c'st un tableau -->
+                            <?php if (is_array($array['commit'][\Front\Constants\FrontConstants::COMMIT_MESSAGE])){ ?>
+                                <ul class="front__single_commit-msg-list">
+                                    <?php foreach ($array['commit'][\Front\Constants\FrontConstants::COMMIT_MESSAGE] as $item) { ?>
+                                        <li>
+                                            <i class="fas fa-check-square"></i><?= $item ?>
+                                        </li>
+                                    <?php } ?>
+                                </ul>
+
+                                <p><?= $array['commit'][\Front\Constants\FrontConstants::COMMIT_MESSAGE] ?></p>
+                            <?php } else { ?>
+                                <p><span class="front__label">Commit message:</span> <?= $array['commit'][\Front\Constants\FrontConstants::COMMIT_MESSAGE] ?></p>
+                                <a href="<?= $array['html_url'] ?>" target="_blank">Voir le commit</a>
+                            <?php }  ?>
+                        </div>
+
+
+                    </article>
+                </li>
+                <?php } ?>
+            </ul>
+
+        </section>
+
+        <?php
+        if (!empty($datas['main']['pagination'])) {
+            include("block__pagination_github.phtml");
+        }
+        ?>
+        </main>
+        <?php include("block__footer_front.phtml") ?>
+
+    <?php } else{ ?>
+        <h1>Merci de suivre la procédure d'installation avant d'aller plus loin....</h1>
+    <?php } ?>
+        <script src="../../../public/bundle.js"></script>
+    </body>
+</html>

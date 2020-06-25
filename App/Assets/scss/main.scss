@@ -18,8 +18,9 @@ $warning: darkorange;
 @import "_adminIndexTable";
 @import "_projectInstallation";
 @import "_frontHeader";
-@import "_frontContent";
+@import "_frontHome";
 @import "_frontFooter";
+@import "_frontPortfolio";
 
 
 /* GENERAL */
@@ -30,8 +31,7 @@ body {
   padding: 0;
   font-size: 1.6rem;
   line-height: 1.6;
-  font-family: 'Open Sans', sans-serif;
-  //background-color: $main_background;
+  font-family: 'Ruda', sans-serif;
 
 }
 

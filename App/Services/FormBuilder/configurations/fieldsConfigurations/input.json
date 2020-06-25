@@ -1,7 +1,7 @@
 {
   "fieldType": "input",
   "labelDisplay": "",
-  "type": "",
+  "type": "password",
   "name": "",
   "value": "",
   "placeholder": "",

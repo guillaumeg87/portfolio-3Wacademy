@@ -1,0 +1,14 @@
+<div class="front__block_pagination">
+    <div class="pagination__link_wrapper1">
+    <?php
+
+        foreach ($datas['main']['pagination'] as $array ) { ?>
+
+            <a class="pagination__btn_link <?= $array['class'] ?>" href="/front/index/portfolio?<?= $array['path'] ?>"><span class="portfolio-label"><?= ucfirst($array['label']) ?></span></a>
+
+        <?php
+        } ?>
+    </div>
+    <div class="pagination__link_wrapper2">
+    </div>
+</div>

@@ -1,14 +1,5 @@
 <header class="admin__header">
-    <?php
-    if (!empty($this->vars['options']['flash-message'])) { ?>
-        <div class="flash-message <?= $this->vars['options']['flash-message']['type-class'] ?>">
-            <?php
-            foreach ($this->vars['options']['flash-message'] as $key){ ?>
-                <p class="flash-message <?= $key['type-class'] ?>"><?= $key['message'] ?></p>
-            <?php }
-            ?>
-        </div>
-    <?php } ?>
+    <?php include("block__flash_message.phtml") ?>
     <div class="header-content">
         <div class="header-welcome">
             <h1>Portfolio 3WAcademy</h1>

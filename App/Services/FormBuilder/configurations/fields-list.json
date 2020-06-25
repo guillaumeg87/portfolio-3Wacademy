@@ -6,5 +6,6 @@
   "radio": "",
   "textarea":"",
   "file": "",
-  "entity-reference": ""
+  "entity-reference": "",
+  "password": ""
 }
