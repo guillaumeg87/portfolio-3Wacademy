@@ -43,12 +43,18 @@ class ContentController extends AbstractController
                 if (!empty($widget->getElementList()) && is_array($widget->getElementList())) {
 
                     if (!empty($widget->getElementList()[0])){
-                        $options['header'] = array_keys($widget->getElementList()[0]);
+                         $temp = array_keys($widget->getElementList()[0]);
+                        // Limit display field in table
+                        $options['header'] = [];
+                        foreach ($temp as $key => $value){
+                            if (count($options['header']) < 6 && (preg_match('/(id|createdAt|updatedAt)/', $value) || !preg_match('/(url|path)/', $value))){
+                                $options['header'][] = $value;
+                            }
 
+                        }
                     }
                 }
             }
-
             // @TODO = regarder si $widget->getElementList(); ne retourne pas de flash message
         }
 
@@ -336,15 +342,14 @@ class ContentController extends AbstractController
         $key = array_keys($files);
         $mainIndex = $key[0];
         foreach ($files as $key => $value){
-
             if ($files[$key]['size'] !== 0){
 
                 $imageManager = $this->getServiceManager()->getImageManager();
-                $isUploaded = $imageManager->imageHandler($files[$mainIndex]);
+                $isUploaded = $imageManager->imageHandler($files[$key]);
                 if ($isUploaded) {
 
-                    $formDatas['url'] = $imageManager->getFileUrl($files[$key]['name'])['url'];
-                    $formDatas['path'] = $imageManager->getFileUrl($files[$key]['name'])['path'];
+                    $formDatas[$key . '_url'] = $imageManager->getFileUrl($files[$key]['name'])['url'];
+                    $formDatas[$key . '_path'] = $imageManager->getFileUrl($files[$key]['name'])['path'];
 
                 }
             }

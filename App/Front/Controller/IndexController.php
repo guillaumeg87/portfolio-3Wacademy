@@ -3,9 +3,10 @@
 namespace Front\Controller;
 
 use Admin\Core\Config\AbstractController;
+use Admin\Requests\Content\ContentRequest;
 use Front\Constants\FrontConstants;
 use Front\Traits\PrepareFromConfig;
-use Services\Dumper\Dumper;
+use Services\FormBuilder\Constants\FormBuilderConstants;
 
 /**
  * Class IndexController
@@ -16,6 +17,11 @@ class IndexController extends AbstractController
     const HOME_CONTENT = 'home_configuration';
     const PORTFOLIO_CONTENT = 'portfolio_configuration';
     const PORTFOLIO_TEMPLATE = 'front_portfolio';
+    const PROJECT_CONTENT = 'projects_configuration';
+    const PROJECT_TEMPLATE = 'front_projects';
+    const SINGLE_PROJECT_TEMPLATE = 'front_single_project';
+    const SELECT_ONE = 'select_one';
+    const CONTENT_NAME = 'project_content';
 
     use PrepareFromConfig;
 
@@ -29,7 +35,7 @@ class IndexController extends AbstractController
 
         } else {
 
-            $options = $this->getDatas($options, self::HOME_CONTENT);
+            $options = $this->getConfig($options, self::HOME_CONTENT);
 
             $frontManager = $this->getServiceManager()->getFrontManager();
             $options = $frontManager->getDatas($options);
@@ -41,14 +47,12 @@ class IndexController extends AbstractController
     public function projet($options = [])
     {
 
-        Dumper::dump('CONTROLLER PROJET');
-        die;
+        $options = $this->getConfig($options, self::PROJECT_CONTENT);
 
-        $options = $this->getDatas($options, self::HOME_CONTENT);
         $frontManager = $this->getServiceManager()->getFrontManager();
         $options = $frontManager->getDatas($options);
 
-        $this->render(__NAMESPACE__, 'index', $options);
+        $this->render(__NAMESPACE__, self::PROJECT_TEMPLATE, $options);
     }
 
 
@@ -65,7 +69,7 @@ class IndexController extends AbstractController
             unset($options['per_page']);
         }
 
-        $options = $this->getDatas($options, self::PORTFOLIO_CONTENT);
+        $options = $this->getConfig($options, self::PORTFOLIO_CONTENT);
 
         $frontManager = $this->getServiceManager()->getFrontManager();
         $options = $frontManager->getDatas($options);
@@ -100,17 +104,66 @@ class IndexController extends AbstractController
         $this->render(__NAMESPACE__, self::PORTFOLIO_TEMPLATE, $options);
     }
 
-    public function loisirs($options = [])
+    /**
+     * Get a single project and render to front
+     * @param array $options
+     */
+    public function singleProject($options = [])
     {
+        $projectTaxo = $this->getTaxoList(self::CONTENT_NAME);
 
+        $id = htmlspecialchars($options['id']);
+        $result = null;
+        if (!empty($id) && preg_match('/^[0-9]+$/', $id)) {
+            try {
 
-        Dumper::dump('CONTROLLER HOBBY');
-        die;
+                $param = [
+                    'id' => $id,
+                    'content_name' => self::CONTENT_NAME
+                ];
 
+                $sql = $this->getQueryBuilder()->buildSql($param, self::SELECT_ONE);
 
-        $this->render(__NAMESPACE__, 'index', $options);
+                $request = new ContentRequest();
+                //faire une REQUETE avec des jointures
+                $result = $request->selectOne($param, $sql);
+
+                if (!empty($result)) {
+
+                    foreach ($projectTaxo as $key => $value) {
+                        $chunk = explode('_', $value);
+
+                        if (array_key_exists($chunk[0], $result)) {
+                            $ids = $result[$chunk[0]];
+                            $idList = $this->getIdList($ids);explode(', ', $ids);
+
+                            $result['linked'][$chunk[0]] = $this->getLinkedTaxo($value, $idList);
+
+                        }
+                    }
+                }
+
+            } catch (\Exception $exception) {
+                //
+            }
+
+        }
+        /**
+         * Get menu / header / footer datas defined in configuration files
+         */
+        $options = $this->getConfig($options, '');
+        $options = $this->getServiceManager()->getFrontManager()->getDatas($options);
+
+        $options['main']['data'] = $result;
+
+        $this->render(__NAMESPACE__, self::SINGLE_PROJECT_TEMPLATE, $options);
+
     }
 
+    /**
+     * Page 404
+     * @param array $options
+     */
     public function page404($options = [])
     {
 
@@ -162,22 +215,89 @@ class IndexController extends AbstractController
                     }
                 }
             }
-
         }
         return $datas;
     }
 
-    private function getDatas(array $options, string $type):array
+    private function getConfig(array $options, string $type):array
     {
         foreach (FrontConstants::FRONT_CONFIG_SECTIONS as $key => $value) {
 
             if ($key !== 'main' && !empty($config = $this->prepare($key))) {
                 $options[$key] = $config;
-            } else {
+            } elseif (!empty($type)) {
                 $options[$key] = $this->prepare($type);
             }
         }
 
         return $options;
     }
+
+    /**
+     * Extract taxonomy list from configuration file
+     * @param $contentName
+     * @return array
+     */
+    private function getTaxoList($contentName)
+    {
+        $taxoBag = [];
+        $json = \file_get_contents(FormBuilderConstants::CUSTOM_CONFIG_DIRECTORY . $contentName . '.json');
+        $toArray = json_decode($json, true);
+
+        if (!empty($toArray) && isset($toArray['fields'])) {
+            foreach ($toArray['fields'] as $key => $value) {
+
+                if (preg_match('/[a-zA-Z0-9]+_taxonomy/', $value['label']['labelRef'])) {
+                    $taxoBag[] = $value['label']['labelRef'];
+                }
+            }
+        }
+
+        return $taxoBag;
+    }
+
+    /**
+     * Remove empty value in id list
+     * @param $ids
+     * @return array
+     */
+    private function getIdList($ids): array
+    {
+        $cleanArray = [];
+        $explode = explode(', ', $ids);
+
+        foreach ($explode as $k => $v) {
+            if (!empty($v)) {
+                $cleanArray[] = $v;
+            }
+        }
+        return $cleanArray;
+    }
+
+    private function getLinkedTaxo($taxoName, $idList)
+    {
+
+        $request = new ContentRequest();
+        $linkedTaxo = [];
+
+        foreach ($idList as $key => $value) {
+            $param = [
+                'id' => $value,
+                'content_name' => $taxoName
+            ];
+            try {
+                $sql = $this->getQueryBuilder()->buildSql($param, self::SELECT_ONE);
+                $result = $request->selectOne($param, $sql);
+                if (!empty($result)) {
+                    $linkedTaxo[] = $result;
+                }
+            } catch (\Exception $e){
+                //
+            }
+
+        }
+
+        return $linkedTaxo;
+    }
 }
+

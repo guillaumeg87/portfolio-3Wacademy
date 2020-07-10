@@ -35,9 +35,12 @@
                         if (!empty($this->vars['options']['list'])) {
                         foreach ($this->vars['options']['list'] as $item) { ?>
                             <tr>
-                                <?php foreach ($item as $key => $value) {
+                                <?php
+
+                                foreach ($item as $key => $value) {
+                                    if (in_array($key, $this->vars['options']['header'])) {
                                     // limit sting length for table display
-                                    $value = strlen($value) > 50 ? substr($value, 0, 40) . '...' : $value;
+                                    $value = strlen($value) > 20 ? substr($value, 0, 20) . '...' : $value;
                                     if (preg_match(\Services\FormBuilder\Core\FormHydrator::DATETIME_REGEX, $value)) {
 
                                         $date = \DateTime::createFromFormat('Y-m-d H:i:s', $value);
@@ -60,7 +63,7 @@
                                         <a href="/admin/content/formContent?id=<?= $id ?>&content_name=<?= $this->vars['options']['labels']['technicalName'] ?>&isEdit=true&content_type=<?= $this->vars['options']['content_name'] ?>&content_id=<?= $this->vars['options']['id'] ?>"><?= $value ?></a>
                                     </td>
 
-                                <?php } ?>
+                                <?php } }?>
                                 <td class="admin_index__to_delete">
                                     <a href="/admin/content/delete?id=<?= $id ?>&content_name=<?= $this->vars['options']['labels']['technicalName'] ?>">Supprimer</>
                                 </td>

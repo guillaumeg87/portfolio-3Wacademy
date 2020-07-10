@@ -40,7 +40,7 @@
   }
 }
 
-@mixin btn (){
+@mixin btn () {
   display: block;
   padding: 1rem 2%;
   background-color: $text_primary;
@@ -54,5 +54,34 @@
     background-color: white;
     color: $text_primary;
 
+  }
+}
+
+@mixin external-link() {
+  position: absolute;
+  content: "\f35d";
+  font-family: FontAwesome;
+  bottom: 55%;
+  right: 15px;
+  display: block;
+  height: 10px;
+  width: 10px;
+}
+
+@mixin card_button() {
+  position: absolute;
+  display: flex;
+  justify-content: space-around;
+  align-content: center;
+  width: 100%;
+  a{
+    color: $main_background;
+    border-radius: 5px;
+    text-align: center;
+    border: solid 2px $main_background;
+    padding: 0.5rem 2%;
+    transition: linear 0.3s;
+    max-height: 39px;
+    width: 150px;
   }
 }

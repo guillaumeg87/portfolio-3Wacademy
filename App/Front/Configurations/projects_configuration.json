@@ -1,0 +1,11 @@
+{
+  "section_1": {
+    "type": "query",
+    "content": "project_content",
+    "join": ["langage", "techno", "tags", "type"],
+    "sort": {
+      "type": "DESC",
+      "column": "start_date"
+    }
+  }
+}
