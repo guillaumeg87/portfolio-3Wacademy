@@ -337,6 +337,7 @@ class FormBuilderManager
 
     /**
      * Add the field for file field
+     * @param $name
      * @return array
      */
     private function addFileFields($name): array
@@ -418,19 +419,19 @@ class FormBuilderManager
     {
         $fieldItem = '';
         $idRef = '';
+        /*
         $name = '';
         foreach ($unformated as $k => $v) {
             if (preg_match('/^name_{1,}/', $k)) {
                 $name = $unformated[$k];
             }
         }
-
+*/
         foreach ($unformated as $key => $value) {
 
             $explode = \explode('_', $key);
             $index = $explode[1];
             if (!empty($index) && \preg_match('/[' . $index . ']$/', $key)) {
-
                 if (\array_key_exists($index, $suffix)) {
                     if ($explode[0] == FormBuilderConstants::KEY_FIELD_TYPE) {
 
@@ -440,8 +441,10 @@ class FormBuilderManager
                     } else {
                         if ($unformated[$key] === 'file') {
                             //manage input type file
+
+                            $name = str_replace(' ', '_', $suffix[$index][$fieldItem]);
                             $suffix[$index][$fieldItem] = \array_merge($suffix[$index][$fieldItem],
-                                $this->addFileFields($name));
+                                $this->addFileFields($name['labelDisplay']));
                             $suffix[$index][$fieldItem][$explode[0]] = \htmlspecialchars($value);
 
                         }

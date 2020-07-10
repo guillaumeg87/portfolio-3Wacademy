@@ -62,14 +62,23 @@
                                         ?>
                                         <ul class="parcours__skills">
 
-                                            <?php foreach ($linkedData as $key => $value) {
+                                            <?php foreach ($linkedData['langage'] as $key => $val) {
 
-                                                if (!empty($linkedData[$key]['url'])) { ?>
+                                                if (!empty($linkedData['langage'][$key]['url'])) { ?>
                                                 <li>
-                                                    <img src="<?= $linkedData[$key]['url'] ?>" alt="<?= $linkedData[$key]['name'] ?>" title="<?= $linkedData[$key]['name'] ?>">
+                                                    <img src="<?= $linkedData['langage'][$key]['url'] ?>" alt="<?= $linkedData['langage'][$key]['name'] ?>" title="<?= $linkedData['langage'][$key]['name'] ?>">
                                                 </li>
                                         <?php }
-                                         } ?>
+                                         }
+
+                                         foreach ($linkedData['techno'] as $k => $v) {
+
+                                                if (!empty($linkedData['techno'][$k]['url'])) { ?>
+                                                    <li>
+                                                        <img src="<?= $linkedData['techno'][$k]['url'] ?>" alt="<?= $linkedData['techno'][$k]['name'] ?>" title="<?= $linkedData['techno'][$k]['name'] ?>">
+                                                    </li>
+                                                <?php }
+                                            } ?>
                                         </ul>
 
                                     <?php } ?>

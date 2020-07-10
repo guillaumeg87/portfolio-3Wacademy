@@ -1,0 +1,196 @@
+.front__project_list {
+
+  h2 {
+    display: block;
+    color: $main_background;
+    padding: 1rem 3%;
+    font-size: 3rem;
+    background: linear-gradient(to right, $text_primary, $second_background);
+  }
+  section{
+    justify-content: space-between;
+    position: relative;
+    flex-wrap: wrap;
+    .front__project_list_card {
+      box-shadow: 0 0 10px #A1A1A1;
+      position: relative;
+      width: 45%;
+      min-width: 40%;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
+      height: 450px;
+      max-height: 450px;
+      margin: 4rem 2%;
+      transition: 0.4s ease;
+      .front__project_list_card_title_link{
+        position: absolute;
+        top: -15px;
+        left: -15px;
+        transition: 0.4s ease;
+
+       h3 {
+          margin: 0;
+          width: auto;
+          min-width: 200px;
+          z-index: 20;
+         transition: 0.4s ease;
+        }
+        &:hover {
+          opacity: 1;
+        }
+        &:hover h3{
+          transform: scale(1.05) rotate(3deg);
+          box-shadow: 0 0 5px #000;
+        }
+      }
+
+
+      .front__project_list_thumbnail-wrapper {
+
+        .front__project_list_thumbnail-link{
+          display: block;
+          width: 100%;
+          max-height: 450px;
+          overflow: hidden;
+
+          .front__project_list-thumbnail{
+            transition: 0.4s ease;
+          }
+        }
+      }
+
+      .front__project_list_card_data {
+
+        position: absolute;
+        bottom: 0;
+        background-color: $text_primary;
+        color: $main_background;
+        width: 100%;
+        padding: 1rem 1%;
+        height: 100px;
+
+        .front__project_list_card_description, .link_wrapper {
+          transition: 0.4s ease;
+        }
+
+        .link_wrapper {
+          display: none;
+
+        }
+      }
+
+      &:hover .front__project_list_card_description {
+        display: none;
+      }
+      &:hover .link_wrapper {
+        @include card_button();
+        bottom: 28px;
+      }
+      &:hover {
+        transform: rotate(3deg) scale(1.05);
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .front__project_list {
+    section {
+      justify-content: space-between;
+      flex-direction: column;
+      align-items: center;
+
+      .front__project_list_card {
+
+        width: 80% !important;
+        min-width: inherit;
+        max-height: 500px !important;
+        height: 500px !important;
+        margin: 4rem 2%;
+        &:hover .front__project_list_card_description {
+          display: inline;
+        }
+        .front__project_list_thumbnail-wrapper {
+          width: 100%;
+          border: dashed blue 1px;
+          .front__project_list_thumbnail-link{
+            display: block;
+
+            width: 100%;
+            max-height: 450px;
+            overflow: hidden;
+
+            .front__project_list-thumbnail{
+              transition: 0.4s ease;
+
+            }
+
+          }
+        }
+
+
+        .front__project_list_card_data {
+
+          position: absolute;
+          bottom: 0;
+          background-color: $text_primary;
+          color: $main_background;
+          width: 100%;
+          padding: 1rem 1%;
+          height: 160px !important;
+
+          .link_wrapper {
+            display: flex;
+            @include card_button();
+            bottom: 10px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 560px) {
+    .front__project_list {
+
+      max-width:100%;
+
+      section {
+        justify-content: space-between;
+        flex-direction: column;
+        align-items: center;
+
+        .front__project_list_card {
+
+          width: 90% !important;
+          min-width: inherit;
+          max-height: 500px !important;
+          height: 500px !important;
+          margin: 4rem 2%;
+
+          &:hover .front__project_list_card_description {
+            display: inline;
+          }
+
+          .front__project_list_card_data {
+
+            height: 200px!important;
+
+            .link_wrapper {
+              flex-direction: column;
+              flex-wrap: wrap;
+              @include card_button();
+              bottom: 10px;
+
+              a{
+                margin: 0.5rem 3%;
+                width: 50%;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+

@@ -5,6 +5,7 @@ namespace Services\Widget;
 
 use Admin\Core\QueryBuilder\QueryBuilder;
 use Admin\Requests\Content\ContentRequest;
+use Services\Dumper\Dumper;
 use Services\FlashMessages\FlashMessage;
 
 class AdminWidgetManager
@@ -35,8 +36,7 @@ class AdminWidgetManager
             $request = new ContentRequest();
 
             $isList = $request->selectAll($sql);
-
-            if($isList){
+            if(!empty($isList)){
                 $results = $isList;
             }
         } catch (\Exception $e) {

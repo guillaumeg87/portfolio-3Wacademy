@@ -402,17 +402,14 @@ template {
   transition-timing-function: ease; }
   .adminLogout a:hover {
     transform: translateX(10px); }
-
 .adminLogout a[title~=logout]:hover {
   color: #900; }
-
 .adminLogout .fas {
   margin-right: 0.5%; }
 
 .admin_info__no_content p {
   text-align: center;
   color: #2c3e5a; }
-
 .admin_info__no_content a {
   display: block;
   margin: 0 auto;
@@ -432,7 +429,6 @@ template {
 .admin-sidebar h3 {
   color: #2c3e5a;
   border-bottom: #2c3e5a 2px solid; }
-
 .admin-sidebar .admin_menu__add_new_content {
   display: block;
   transition-duration: 0.3s;
@@ -441,7 +437,6 @@ template {
     margin-right: 1%; }
   .admin-sidebar .admin_menu__add_new_content:hover {
     transform: translateX(10px); }
-
 .admin-sidebar .admin_menu__dynamic_content_label li {
   transition-duration: 0.3s;
   transition-timing-function: linear; }
@@ -638,7 +633,7 @@ template {
 
 .front__header {
   position: relative;
-  background-image: url(/uploads/img/graf-women1-banner.png);
+  background-image: url("../../web/uploads/img/graf-women1-banner.png");
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -708,13 +703,12 @@ template {
     display: block;
     width: 100%;
     text-align: center; } }
-
 @media screen and (max-width: 560px) {
   .front__header {
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
-    background-image: url(/uploads/img/graf-women2.jpg); }
+    background-image: url("../../web/uploads/img/graf-women2.jpg"); }
     .front__header h1 {
       font-family: 'Faster One', cursive;
       font-size: 5rem;
@@ -733,7 +727,6 @@ template {
       .front__header nav ul li a {
         font-size: 2.4rem;
         font-family: 'Bungee Shade', cursive; } }
-
 .front__main_wrapper {
   max-width: 1100px;
   margin: 0 auto;
@@ -808,7 +801,6 @@ template {
     min-width: 30%; }
   .front__main_wrapper .front__parcours_wrapper ul .front__parcours_item .parcours__row {
     width: calc(100% - 150px); } }
-
 @media screen and (max-width: 560px) {
   .front__main_wrapper section h3 {
     display: block;
@@ -828,7 +820,6 @@ template {
       margin: 0 auto;
       display: block;
       width: 100%; } }
-
 .front__footer {
   background-color: #2c3e5a;
   margin-top: 4rem;
@@ -845,11 +836,9 @@ template {
 @media screen and (max-width: 560px) {
   .front__footer ul {
     width: 100%; } }
-
 .front__main_wrapper .front__label {
   font-style: italic;
   color: #A1A1A1; }
-
 .front__main_wrapper .front__profile_informations {
   justify-content: space-around; }
   .front__main_wrapper .front__profile_informations .front__picture_block {
@@ -883,7 +872,6 @@ template {
       .front__main_wrapper .front__profile_informations .front__informations a:hover {
         background-color: white;
         color: orange; }
-
 .front__main_wrapper .front__portfolio_commit_section {
   padding-left: 50px;
   position: relative; }
@@ -979,7 +967,6 @@ template {
     .front__block_pagination .pagination__link_wrapper1 .pagination__btn_link:hover, .front__block_pagination .pagination__link_wrapper2 .pagination__btn_link:hover {
       box-shadow: 5px 5px 5px #bbb;
       transform: scale(1.05); }
-
 .front__block_pagination .first {
   text-wrap: avoid; }
   .front__block_pagination .first::before {
@@ -990,7 +977,6 @@ template {
     width: 10px;
     height: 20px;
     display: inline-block; }
-
 .front__block_pagination .prev {
   text-wrap: avoid; }
   .front__block_pagination .prev::before {
@@ -1001,7 +987,6 @@ template {
     width: 10px;
     height: 20px;
     display: inline-block; }
-
 .front__block_pagination .next {
   text-wrap: avoid; }
   .front__block_pagination .next::after {
@@ -1012,7 +997,6 @@ template {
     width: 10px;
     height: 20px;
     display: inline-block; }
-
 .front__block_pagination .last {
   text-wrap: avoid; }
   .front__block_pagination .last::after {
@@ -1032,6 +1016,7 @@ template {
     .front__main_wrapper .front__profile_informations .front__informations {
       width: 100%;
       padding: 0 2%; }
+
   .front__block_pagination {
     margin: 3rem 0 3rem; }
     .front__block_pagination .portfolio-label {
@@ -1046,14 +1031,12 @@ template {
       order: 2; }
     .front__block_pagination .last {
       order: 4; } }
-
 .front__project_list h2 {
   display: block;
   color: #2c3e5a;
   padding: 1rem 3%;
   font-size: 3rem;
   background: linear-gradient(to right, orange, #F0F8FF); }
-
 .front__project_list section {
   justify-content: space-between;
   position: relative;
@@ -1174,7 +1157,6 @@ template {
             transition: linear 0.3s;
             max-height: 39px;
             width: 150px; } }
-
 @media screen and (max-width: 560px) {
   .front__project_list {
     max-width: 100%; }
@@ -1213,7 +1195,6 @@ template {
             .front__project_list section .front__project_list_card .front__project_list_card_data .link_wrapper a {
               margin: 0.5rem 3%;
               width: 50%; } }
-
 .front__single_project {
   margin-top: 8rem; }
   .front__single_project h2 {
@@ -1363,7 +1344,6 @@ template {
       margin: 1rem 1%; }
   .front__single_project article .project__content_tag .project__tag {
     margin: 1rem 1%; } }
-
 /* GENERAL */
 html {
   font-size: 62.5%; }
@@ -1410,3 +1390,4 @@ a {
   a:hover {
     opacity: 0.5; }
 
+/*# sourceMappingURL=main.css.map */

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<?php
+// Shortcut
+
+
+$datas = $this->vars['options'];
+include("block__head_front.phtml");
+
+if (!empty($datas)) {
+?>
+<body class="front__main_content">
+<?php include("block__header_front.phtml"); ?>
+
+<?php
+// Contenu Homepage Front
+$project = $datas['main']['data'];
+
+?>
+<main class="front__main_wrapper front__single_project">
+
+        <article>
+
+            <h3><?= $project['name'] ?></h3>
+            <p>Période d'activité: <?= (new \DateTime($project['start_date']))->format('d/m/Y') ?>
+                à <?= (new \DateTime($project['date_end']))->format('d/m/Y') ?></p>
+            <div class="project__content_type">
+                <?php
+                if (!empty($project['linked']['type'])) {
+                    foreach ($project['linked']['type'] as $s => $c) {
+                        if (!empty($c['name'])) {
+                            ?>
+                            <p class="project__tag">Type de projet: <?= $c['name'] ?></p>
+                        <?php }
+                    }
+                }
+                ?>
+            </div>
+            <div class="flex front__project-spec-wrapper">
+                <div class="project__thumbnail-wrapper">
+                    <a href="<?= $project['website_url'] ?>" title="Vers <?= $project['name'] ?>">
+                        <img class="front__project-thumbnail" src="<?= $project['img_url'] ?>" alt="<?= $project['name'] ?>">
+                    </a>
+                </div>
+                <div class="front__project-spec">
+                        <?php
+                        if (!empty($project['linked']['techno'])) {
+                            foreach ($project['linked']['techno'] as $t => $a) {
+
+                                if (!empty($a['name'])) { ?>
+
+                                    <a class="project__techno-langage  <?= $a['css_class_tag'] ?>"
+                                       href="<?= $a['website_documentation'] ?>" target="_blank"><?= $a['name'] ?></a>
+
+                                <?php }
+                            }
+                        }
+                        ?>
+
+                        <?php
+                        if (!empty($project['linked']['langage'])) {
+                            foreach ($project['linked']['langage'] as $l => $q) {
+
+                                if (!empty($q['name'])) { ?>
+
+                                    <a class="project__techno-langage <?= $q['css_color_tag'] ?>"
+                                       href="<?= $q['website_documentation'] ?>" target="_blank"><?= $q['name'] ?></a>
+                            <?php }
+                            }
+                        }
+                        ?>
+                </div>
+            </div>
+
+            <div class="project__content_tag">
+                <?php
+                if (!empty($project['linked']['tags'])) {
+                    foreach ($project['linked']['tags'] as $r => $b) { ?>
+                        <p class="project__tag <?= $b['css_class'] ?>"><?= $b['name'] ?></p>
+                    <?php }
+                }
+                ?>
+            </div>
+
+            <div>
+                <p><?= $project['long_description'] ?></p>
+
+                <div class="link_wrapper flex">
+                    <a class="project__btn_to_website" href="<?= $project['website_url'] ?>" title="Vers <?= $project['name'] ?>" target="_blank">Voir le
+                        site</a>
+                </div>
+            </div>
+
+        </article>
+</main>
+<?php include("block__footer_front.phtml") ?>
+
+<?php } else { ?>
+    <h1>Merci de suivre la procédure d'installation avant d'aller plus loin....</h1>
+<?php } ?>
+<script src="../../../public/bundle.js"></script>
+</body>
+</html>

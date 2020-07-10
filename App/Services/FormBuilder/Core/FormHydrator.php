@@ -99,24 +99,24 @@ class FormHydrator
                         $jsonToArray['fields'][$item][$index]['value'] = $contentData[\strtolower($arrayField['name'])];
                     }
 
-                    if (isset($arrayField['url'])) {
-
-                        $jsonToArray['fields'][$item][$index]['url'] = $contentData['url'];
+                    if (isset($arrayField[$arrayField['name'] . '_url']))  {
+                        $jsonToArray['fields'][$item][$index][$arrayField['name'] . '_url'] = $contentData[$arrayField['name'] . '_url'];
                     }
 
-                    if (isset($arrayField['path'])) {
-
-                        $jsonToArray['fields'][$item][$index]['path'] = $contentData['path'];
-                        //$jsonToArray['fields'][$item][$index]['base64'] = $this->toBase64($contentData['url']);
+                    if (isset($arrayField[$arrayField['name'] . '_path'])) {
+                        $jsonToArray['fields'][$item][$index][$arrayField['name'] . '_path'] = $contentData[$arrayField['name'] . '_path'];
 
                     }
                     // Boolean checkbox
                     if ($arrayField['type'] === 'checkbox') {
 
-                        $results = \preg_grep('/^is[A-Za-z]/', \array_keys($contentData));
-                        foreach ($results as $key => $value) {
-                            $jsonToArray['fields'][$item][$index]['value'] = \boolval($contentData[$value]);
+                        if (!empty($contentData)){
+                            $results = \preg_grep('/[A-Za-z]/', \array_keys($contentData));
+                            foreach ($results as $key => $value) {
+                                $jsonToArray['fields'][$item][$index]['value'] = \boolval($contentData[$value]);
+                            }
                         }
+
                     }
                     // Datetime
                     if ($arrayField['type'] === 'date') {
@@ -131,6 +131,7 @@ class FormHydrator
                             }
                         }
                     }
+
                 }
             }
         }
@@ -212,58 +213,19 @@ class FormHydrator
      */
     private function checkedOptions(array $contentData, array $jsonToArray, int $item, string $index ):array
     {
-        $target = $jsonToArray['fields'][$item][$index]['labelRef'];
+        $target = $jsonToArray['fields'][$item][$index]['name'];
+        $values = \explode(',',$contentData[$target]);
+        $options = $jsonToArray['fields'][$item][$index]['option'][0];
 
-        if (isset($target) && \preg_match('/[a-zA-Z]{1,}_taxonomy$/', $target)){
+        foreach ($options as $key => $value) {
+            if(\in_array($options[$key]['id'], $values)){
+                $jsonToArray['fields'][$item][$index]['option'][0][$key]['checked'] = true;
+            }else{
+                $jsonToArray['fields'][$item][$index]['option'][0][$key]['checked'] = false;
 
-            $taxoName = $this->rebuildTaxoName($this->extractNameChunk($target));
-            $values = \explode(',',$contentData[$taxoName]);
-            $options = $jsonToArray['fields'][$item][$index]['option'][0];
-
-            foreach ($options as $key => $value) {
-                if(\in_array($options[$key]['id'], $values)){
-                    $jsonToArray['fields'][$item][$index]['option'][0][$key]['checked'] = true;
-                }else{
-                    $jsonToArray['fields'][$item][$index]['option'][0][$key]['checked'] = false;
-
-                }
             }
         }
+
         return $jsonToArray;
-    }
-
-    /** Rebuild taxonomy name from exploded value x(Ex: xxxx_xxxx_taxonomy => get xxxx_xxxx at the end)
-     * @param array $params
-     * @return string
-     */
-    private function rebuildTaxoName(array $params):string
-    {
-        $lastElt = \end($params);
-        $name = '';
-        forEach ($params as $key => $value) {
-            if (!empty($value) || !empty($lastElt)) {
-
-                if  ($lastElt !== $value) {
-
-                    $name .= $value . ', ';
-                }
-                else {
-                    $name .= $value;
-                }
-            }
-        }
-        return $name;
-    }
-
-    /**
-     * @param $param
-     * @return array
-     */
-    private function extractNameChunk($param):array
-    {
-        $explode = \explode('_', $param);
-        $explodeLength = \count($explode);
-        unset($explode[$explodeLength - 1]);
-        return $explode;
     }
 }

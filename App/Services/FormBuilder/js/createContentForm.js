@@ -24,9 +24,6 @@ let CreateContentForm = {
 
     },
 
-    test() {
-        console.log('HELLO TEST');
-    },
     /**
      * Initialize app
      */

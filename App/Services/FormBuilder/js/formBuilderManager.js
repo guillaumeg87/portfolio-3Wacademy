@@ -200,8 +200,8 @@ const FormBuilderManager = {
 
                     }
                     if (obj[field].value) {
-
                         switch (field) {
+
                             case 'textarea':
 
                                 inDom.innerHTML = emptySelectValue ? '' : obj[field].value;
@@ -234,6 +234,19 @@ const FormBuilderManager = {
                             inDom.classList.add(i);
                         }
                     }
+                    if (obj[field].type === 'file') {
+                        let attrName = obj[field].name + '_url';
+                        // add preview if url is not true (empty)
+                        let url = obj[field][obj[field].name + '_url'];
+
+                        if (url !== null) {
+                            previewImage = document.createElement('img');
+                            previewImage.setAttribute('src', url);
+                            previewImage.setAttribute('class', 'admin__img-preview');
+                            inDom.innerHTML = url;
+                        }
+                    }
+
                     if (obj[field].url) {
                         // add preview if url is not true (empty)
                         previewImage = document.createElement('img');

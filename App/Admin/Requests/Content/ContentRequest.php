@@ -5,6 +5,7 @@ namespace Admin\Requests\Content;
 use Admin\Requests\BaseRequest;
 use Connection\DB_conf;
 use PDO;
+use Services\Dumper\Dumper;
 
 class ContentRequest extends BaseRequest
 {
@@ -144,4 +145,6 @@ class ContentRequest extends BaseRequest
 
         return $query->fetch(PDO::FETCH_ASSOC);
     }
+
+
 }

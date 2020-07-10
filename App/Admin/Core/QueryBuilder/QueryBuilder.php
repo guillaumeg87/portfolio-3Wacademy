@@ -38,12 +38,9 @@ class QueryBuilder
                     }
                     break;
                 case 'select_one':
-                    $dataHandler = $this->getSelectOne($params);
-                    if (!empty($dataHandler)) {
 
                         $sql = "SELECT * FROM " .  DB_conf::DB_NAME . '.'. $table_name . " WHERE id = :id;";
 
-                    }
                     break;
 
                 case 'select_all':

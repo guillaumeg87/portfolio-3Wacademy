@@ -1,0 +1,209 @@
+.front__single_project {
+  h2 {
+    display: block;
+    color: $main_background;
+    padding: 1rem 3%;
+    font-size: 3rem;
+    background: linear-gradient(to right, $text_primary, $second_background);
+  }
+
+  margin-top: 8rem;
+
+  article {
+    background-color: white;
+    box-shadow: 0px 5px 10px #C1C1C1;
+    padding: 2rem 2%;
+    margin: 4rem auto;
+
+    h3 {
+      display: block;
+      margin: 0;
+      color: $main_background;
+      font-family: 'Bungee Shade', cursive;
+      font-size: 3rem;
+
+      &::after {
+        content: '';
+        display: block;
+        height: 3px;
+        background: linear-gradient(to right, $main_background, $second_background);
+      }
+    }
+
+    .front__project-spec-wrapper {
+      justify-content: space-between;
+
+      .project__thumbnail-wrapper {
+        flex: 2;
+
+        .front__project-thumbnail {
+          display: block;
+          margin: 1rem auto;
+          width: 100%;
+          height: auto;
+        }
+      }
+
+      .front__project-spec {
+        text-align: center;
+        flex: 1;
+
+        .salesforces {
+          background-color: #369AD3;
+          color: white;
+        }
+
+        .drupal {
+          background-color: #049CDE;
+          color: white;
+        }
+
+        .wordpress {
+          background-color: #423C39;
+          color: white;
+        }
+
+        .symfony, .proximis {
+          background-color: #000;
+          color: white;
+        }
+
+        .php {
+          background-color: #7478AE;
+          color: white;
+        }
+
+        .css {
+          background-color: #026DB5;
+          color: #fff;
+        }
+
+        .javascript, .js {
+          background-color: #F0D80F;
+          color: #000;
+        }
+
+        .sass {
+          background-color: #C66495;
+          color: #fff;
+        }
+
+
+      }
+
+      // Techno and langages style
+      .project__techno-langage, .project__tag {
+        display: block;
+        width: 150px;
+        border-radius: 5px;
+        padding: 1rem 2%;
+        margin: 1rem auto;
+        text-transform: capitalize;
+      }
+
+      .project__techno-langage {
+        position: relative;
+        transition: 0.3s ease;
+        opacity: 0.4;
+
+        &::after {
+          @include external-link();
+        }
+
+        &:hover {
+          opacity: 1;
+          transform: scale(1.1);
+          box-shadow: 0px 5px 10px #C1C1C1;
+        }
+      }
+    }
+
+    .project__content_tag {
+      width: 100%;
+
+      .project__tag {
+        display: inline-block;
+        width: 150px;
+        border-radius: 5px;
+        padding: 1rem 2%;
+        margin: 1rem auto;
+        text-align: center;
+      }
+
+      //Tags style
+      .backend_tag {
+        background-color: $main_background;
+        color: $text_primary;
+      }
+
+      .frontend_tag {
+        background-color: $text_primary;
+        color: $main_background;
+      }
+    }
+
+    .link_wrapper {
+      justify-content: space-around;
+
+      a {
+        @include btn ();
+      }
+
+      .project__btn_to_website {
+        position: relative;
+
+        &::after {
+          @include external-link();
+          bottom: 59%;
+        }
+      }
+    }
+
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .front__single_project {
+    article {
+
+      .front__project-spec-wrapper {
+        justify-content: space-between;
+        flex-direction: column;
+
+        .project__thumbnail-wrapper {
+          order:2;
+          flex: 1;
+
+          .front__project-thumbnail {
+            display: block;
+            margin: 1rem auto;
+            width: 100%;
+            height: auto;
+          }
+        }
+
+        .front__project-spec {
+          order:1;
+          flex: 1;
+
+            display: inline-block;
+            .project__techno-langage {
+              display: inline-block;
+            }
+        }
+
+        .project__techno-langage {
+          margin: 1rem 1%;
+        }
+      }
+
+      .project__content_tag {
+        .project__tag {
+          margin: 1rem 1%;
+        }
+
+      }
+    }
+  }
+}
+
