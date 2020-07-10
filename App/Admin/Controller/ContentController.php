@@ -6,6 +6,7 @@ use Admin\Core\QueryBuilder\QueryBuilder;
 use Admin\Core\Traits\Hash;
 use Admin\Core\Traits\RequestDateTrait;
 use Admin\Requests\Content\ContentRequest;
+use Services\Dumper\Dumper;
 
 class ContentController extends AbstractController
 {
@@ -181,18 +182,23 @@ class ContentController extends AbstractController
 
                 $request = new ContentRequest();
                 $isUpdated = $request->updateContent($formDatas, $sql);
-
-                if ($isUpdated) {
+                // Delete temporary configuration file
+                $isDelete = $this->getServiceManager()->getFormBuilderManager($formDatas)->deleteTemporaryConfigFile($formDatas['content_name']);
+                if ($isUpdated && $isDelete) {
 
                     $options['content'] = $isUpdated;
-
 
                     $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
                         "Le contenu a bien été modifié!",
                         'success'
                     ))->messageBuilder();
 
+
+
+
+
                     $this->index($options);
+
                 }
 
             } catch (\Exception $e) {
