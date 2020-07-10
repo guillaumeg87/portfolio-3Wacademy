@@ -419,14 +419,7 @@ class FormBuilderManager
     {
         $fieldItem = '';
         $idRef = '';
-        /*
-        $name = '';
-        foreach ($unformated as $k => $v) {
-            if (preg_match('/^name_{1,}/', $k)) {
-                $name = $unformated[$k];
-            }
-        }
-*/
+
         foreach ($unformated as $key => $value) {
 
             $explode = \explode('_', $key);
@@ -501,7 +494,6 @@ class FormBuilderManager
 
                 if (preg_match('/[ -]/', $before)) {
                     $str .= '';
-                    //$str .= \preg_replace('/[ -+:;?_]/', '_', \strtolower(trim($value[$i])));
                 }else {
                     $str .= \preg_replace('/[ -]/', '_', \strtolower($value[$i]));
                 }
@@ -512,5 +504,22 @@ class FormBuilderManager
 
         }
         return $str;
+    }
+
+    /**
+     * @param string $contentName
+     * @return bool
+     */
+    public function deleteTemporaryConfigFile(string $contentName):bool
+    {
+        $isDelete = false;
+        if(!empty($contentName)){
+            $path = FormBuilderConstants::CUSTOM_TEMPORARY_CONFIG_DIRECTORY . $contentName . '.json';
+             if (\is_dir(FormBuilderConstants::CUSTOM_TEMPORARY_CONFIG_DIRECTORY) && file_exists($path)) {
+
+                $isDelete = unlink($path);
+            }
+        }
+        return $isDelete;
     }
 }
