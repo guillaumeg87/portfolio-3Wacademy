@@ -30,8 +30,7 @@ class IndexController extends AbstractController
 
         // Helper for redirect to root url and not path to controller
         if (isset($options['redirect']) && $options['redirect'] === true) {
-            header_remove();
-            header('Location: /');
+            $this->redirectTo('/', $options);
 
         } else {
 

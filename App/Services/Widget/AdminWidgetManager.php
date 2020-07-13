@@ -5,7 +5,6 @@ namespace Services\Widget;
 
 use Admin\Core\QueryBuilder\QueryBuilder;
 use Admin\Requests\Content\ContentRequest;
-use Services\Dumper\Dumper;
 use Services\FlashMessages\FlashMessage;
 
 class AdminWidgetManager

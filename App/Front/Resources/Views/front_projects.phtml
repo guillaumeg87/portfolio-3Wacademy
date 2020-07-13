@@ -25,13 +25,7 @@ $section1 = $datas['main']['section_1']['data'];
             <article class="front__project_list_card" style="background-image: url(<?= $value['img_url'] ?>);"> <!-- style="background-image: url(<?php //echo $value['img_url'] ?>);" -->
 
                 <a class="front__project_list_card_title_link" href="/front/index/singleProject?id=<?= $value['id'] ?>"><h3><?= $value['name'] ?></h3></a>
-            <!--
-                <div class="front__project_list_thumbnail-wrapper">
-                    <a class="front__project_list_thumbnail-link" href="/front/index/singleProject?id=<?php // echo $value['id'] ?>">
-                        <img class="front__project_list-thumbnail" src="<?php // echo $value['img_url'] ?>" alt="<?php // echo $value['name'] ?>">
-                    </a>
-                </div>
-                -->
+
                 <div class="front__project_list_card_data">
                     <p class="front__project_list_card_description"><?=
                         strlen($value['short_description']) > 100 ?
@@ -41,7 +35,7 @@ $section1 = $datas['main']['section_1']['data'];
                     <div class="link_wrapper">
                         <a class="project__btn_to_website" href="<?= $value['website_url'] ?>" title="Vers <?= $value['name'] ?>" target="_blank">Voir le
                             site</a>
-                        <a href="/front/index/singleProject?id=<?= $value['id'] ?>" title="Plus de détails sur ce projet">Plus de détails</a>
+                        <a href="/single-project?id=<?= $value['id'] ?>" title="Plus de détails sur ce projet">Plus de détails</a>
                     </div>
                 </div>
 

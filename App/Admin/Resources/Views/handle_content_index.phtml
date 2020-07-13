@@ -60,12 +60,12 @@
 
                                     }?>
                                     <td class="<?= ($key === 'isSuperAdmin') ?  $class : '' ?>">
-                                        <a href="/admin/content/formContent?id=<?= $id ?>&content_name=<?= $this->vars['options']['labels']['technicalName'] ?>&isEdit=true&content_type=<?= $this->vars['options']['content_name'] ?>&content_id=<?= $this->vars['options']['id'] ?>"><?= $value ?></a>
+                                        <a href="/content/form?id=<?= $id ?>&content_name=<?= $this->vars['options']['labels']['technicalName'] ?>&isEdit=true&content_type=<?= $this->vars['options']['content_name'] ?>&content_id=<?= $this->vars['options']['id'] ?>"><?= $value ?></a>
                                     </td>
 
                                 <?php } }?>
                                 <td class="admin_index__to_delete">
-                                    <a href="/admin/content/delete?id=<?= $id ?>&content_name=<?= $this->vars['options']['labels']['technicalName'] ?>">Supprimer</>
+                                    <a href="/content/delete?id=<?= $id ?>&content_name=<?= $this->vars['options']['labels']['technicalName'] ?>">Supprimer</>
                                 </td>
                             </tr>
                         <?php }
@@ -80,7 +80,7 @@
                         <p>Pas de liste d'élément pour le moment...</p>
 
                 <?php } ?>
-                        <a href="/admin/content/formContent?content_name=<?= $this->vars['options']['labels']['technicalName']?>&id=<?= $this->vars['options']['id']?>">Créer un <?= $this->vars['options']['name'] ?? 'contenu' ?></a>
+                        <a href="/content/form?content_name=<?= $this->vars['options']['labels']['technicalName']?>&id=<?= $this->vars['options']['id']?>">Créer un <?= $this->vars['options']['name'] ?? 'contenu' ?></a>
                     </div>
             </section>
 
