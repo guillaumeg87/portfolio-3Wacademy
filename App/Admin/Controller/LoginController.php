@@ -52,6 +52,7 @@ class LoginController extends AbstractController
                         'success'
                     ))->messageBuilder();
 
+                    $this->redirectTo('/admin' , $options);
                     session_start();
                     $this->handleSessionFields($isExist);
 
@@ -74,20 +75,28 @@ class LoginController extends AbstractController
      * Main method for logout from Back office
      */
     public function logout(){
-
         session_start();
         if (!empty($_SESSION)){
             $_SESSION = [];
+            // security improvement
+            // avoid to come back to the previous page
+            $param = session_get_cookie_params();
+            setcookie(
+                session_name(),
+                $param['path'],
+                $param['domain'],
+                $param['secure'],
+                $param['httponly']
+            );
             session_destroy();
-
         }
         $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
             'Déconnexion réussie !',
             'success'
         ))->messageBuilder();
 
-        $this->render(__NAMESPACE__, self::ADMIN_LOGIN_FORM, $options);
-        die;
+        $this->redirectTo('/login-form', $options);
+
     }
 
     /**

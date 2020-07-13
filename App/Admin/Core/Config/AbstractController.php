@@ -26,6 +26,9 @@ use NavigationTrait;
      */
     private $vars = [];
 
+    /**
+     * @param $options
+     */
     public function addRenderOptions($options)
     {
         if(!$this->getNavigation() instanceof FlashMessage){
@@ -39,20 +42,12 @@ use NavigationTrait;
     /**
      * @param $namespace
      * @param $filename
+     * @param array $options
      */
     public function render($namespace, $filename, $options = [])
     {
         $this->addRenderOptions($options);
 
-/* ********************************* */
-        /*
-        $engine = $this->getEngine(ROOT . $this->handleNamespace($namespace)['newDir'] . $filename . '.phtml');
-        $engine->setTags('options', $options);
-
-        $engine->engineRender();
-        $engine->replaceTags();
-*/
-/* ********************************* */
         extract($this->vars);
         ob_start();
 
@@ -60,22 +55,6 @@ use NavigationTrait;
         ob_get_clean();
         require(ROOT . $this->chooseDirectory($namespace) . self::VIEWS_PATH . $this->getLayout($filename) . '.phtml');
 
-}
-
-    private function secure_input($data)
-    {
-        $data = trim($data);
-        $data = stripslashes($data);
-        $data = htmlspecialchars($data);
-        return $data;
-    }
-
-    protected function secure_form($form)
-    {
-        foreach ($form as $key => $value)
-        {
-            $form[$key] = $this->secure_input($value);
-        }
     }
 
     /**
@@ -135,9 +114,6 @@ use NavigationTrait;
         return new QueryBuilder();
     }
 
-    /**
-     * @param $options
-     */
     public function isSessionActive()
     {
         session_start();
@@ -151,15 +127,26 @@ use NavigationTrait;
                 $_SESSION = [];
                 session_destroy();
 
-
-                $this->render(self::ADMIN_CONTROLLER_NAMESPACE, AdminController::ADMIN_LOGIN_FORM, $options);
-                exit;
+                $this->redirectTo('/login-form', $options);
             }
         }
         elseif (!isset($_SESSION['LAST_REQUEST_TIME']) && !isset($_SESSION['login'])){
-            $this->render(self::ADMIN_CONTROLLER_NAMESPACE, AdminController::ADMIN_LOGIN_FORM, $options);
-            exit;
+            $this->redirectTo('/login-form', $options);
         }
 
+    }
+
+    /**
+     * Redirection function
+     * Allow to send flash-message to other controller with the key 'flash-message'
+     * @param string $path
+     * @param array $options
+     */
+    public function redirectTo(string $path, $options = []) {
+        if (isset($options['flash-message']) && !empty($options['flash-message'])) {
+            $_SESSION['flash-message'] = $options['flash-message'];
+        }
+        header_remove();
+        header('Location: ' . $path);
     }
 }

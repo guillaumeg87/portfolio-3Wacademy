@@ -6,7 +6,6 @@ use Admin\Core\QueryBuilder\QueryBuilder;
 use Admin\Core\Traits\Hash;
 use Admin\Core\Traits\RequestDateTrait;
 use Admin\Requests\Content\ContentRequest;
-use Services\Dumper\Dumper;
 
 class ContentController extends AbstractController
 {
@@ -26,8 +25,10 @@ class ContentController extends AbstractController
 
     const USER_FIELDS = ['login', 'password', 'email', 'isSuperAdmin'];
 
-
-    public function index($options = [])
+    /**
+     * @param array $options
+     */
+    public function index(array $options = [])
     {
         $this->isSessionActive();
 
@@ -146,7 +147,7 @@ class ContentController extends AbstractController
 
         $options['form-selector'] = $options['content_name'];
 
-        $this->index($options);
+        $this->redirectTo('/content/index', $options);
     }
 
     /**
@@ -192,12 +193,12 @@ class ContentController extends AbstractController
                         "Le contenu a bien été modifié!",
                         'success'
                     ))->messageBuilder();
+                    if (!empty($options['widget']['content_name']) && $options['widget']['id']) {
 
-
-
-
-
-                    $this->index($options);
+                        $this->redirectTo('/content/index?content_name=' . $options['widget']['content_name'] . '&id=' . $options['widget']['id'], $options);
+                    } else {
+                        $this->index($options);
+                    }
 
                 }
 
@@ -213,15 +214,14 @@ class ContentController extends AbstractController
                 ))->messageBuilder();
 
                 $this->render(__NAMESPACE__, self::HANDLE_CONTENT_FORM, $options);
-
             }
         }
     }
 
     /**
-     * @param $params
+     * @param array $options
      */
-    public function delete($options)
+    public function delete($options = [])
     {
         $this->isSessionActive();
 

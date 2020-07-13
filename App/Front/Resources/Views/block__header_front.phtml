@@ -3,7 +3,6 @@
     //Shortcut in index.phtml $datas = $this->>vars['options']
 
     if (!empty($this->vars['options']['flash-message'])) { ?>
-    <?php \Services\Dumper\Dumper::dump($this->vars['options']['flash-message']); ?>
     <div class="flash-message <?= $this->vars['options']['flash-message']['type-class'] ?>">
         <?php
 

@@ -48,8 +48,10 @@ class Router
             $request->action = self::INSTALL_FORM;
             $request->path = self::ADMIN_PATH;
             $request->params = [];
+
             header('Location: /admin/install/indexForm');
             header_remove();
+
         } else {
 
             $explode_url = array_slice($explode_url, 2);

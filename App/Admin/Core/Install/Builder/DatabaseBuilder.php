@@ -264,8 +264,6 @@ final class DB_conf
         header('Location: /');
         header_remove();
 
-        //$retryInstallation = new InstallController();
-        //$retryInstallation->indexForm($options);
     }
 
     /**

@@ -1,8 +1,9 @@
 <?php
-if (!empty($this->vars['options']['flash-message'])) { ?>
+if (!empty($this->vars['options']['flash-message']) || !empty($_SESSION['flash-message'])) { ?>
     <div class="flash-message <?= $this->vars['options']['flash-message']['type-class'] ?>">
         <?php
-        foreach ($this->vars['options']['flash-message'] as $key){ ?>
+        $flashMessage = $this->vars['options']['flash-message'] ?? $_SESSION['flash-message'];
+        foreach ($flashMessage as $key){ ?>
             <p class="flash-message <?= $key['type-class'] ?>"><?= $key['message'] ?></p>
         <?php }
         ?>
