@@ -57,11 +57,14 @@ const FormBuilderManager = {
             (this.selectors.$formBuilder__loadConfiguration.length > 0 && this.selectors.$formBuilder__updateConfiguration.length > 0)) {
 
             contentType = this.getConfigurationFile(this.selectors.$formBuilder__loadConfiguration);
+            console.log(contentType);
+
             if (contentType === '') {
                 this.showError();
             } else {
+
                 emptySelectValue = !this.selectors.$formBuilder__updateConfiguration.length > 0;
-                let json = require(`../configurations/custom/temp/${contentType}.json`);
+                let json = require(`../../../Configurations/custom/temp/${contentType}.json`);
                 this.fieldsBuilder(json, emptySelectValue);
             }
         }
@@ -69,17 +72,18 @@ const FormBuilderManager = {
             let regex = RegExp(this.regex.settings);
             this.selectors.$formBuilder.classList.forEach(function (elt) {
                 if (regex.test(elt)) {
+                    console.log(contentType);
                     contentType = elt;
                 }
             });
 
             emptySelectValue = !this.selectors.$formBuilder__updateConfiguration.length > 0;
-            let json = require(`../configurations/${contentType}.json`);
+            let json = require(`../../../Configurations/${contentType}.json`);
             this.fieldsBuilder(json, emptySelectValue);
         }
     },
     /**
-     * Event on button 'Add new field' and add fields wich help us to add a new custom field in form
+     * Event on button 'Add new field' and add fields which help us to add a new custom field in form
      */
     addNewField() {
 
@@ -536,7 +540,7 @@ const FormBuilderManager = {
                 defaultField.innerHTML = datas.defaultField;
                 newInput.appendChild(defaultField);
 
-                let jsonOptions = require(`../configurations/custom/taxonomy/taxonomy_list.json`);
+                let jsonOptions = require(`../../../Configurations/custom/taxonomy/taxonomy_list.json`);
                 let option;
                 for (let elt in jsonOptions) {
                     option = document.createElement('option');
