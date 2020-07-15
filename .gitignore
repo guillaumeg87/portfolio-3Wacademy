@@ -8,7 +8,12 @@
 /node_modules
 *.min.css
 *.map
-/App/Services/FormBuilder/configurations/custom/*
-/App/Services/FormBuilder/configurations/custom/temp/*
+/App/Configurations/custom/*
+/App/Configurations/custom/*.json
+/App/Configurations/custom/temp/*
+/App/Configurations/custom/temp/*.json
+!/App/Configurations/custom/user_settings.json
+#/App/Services/FormBuilder/configurations/custom/*
+#/App/Services/FormBuilder/configurations/custom/temp/*
+#!/App/Services/FormBuilder/configurations/custom/user_settings.json
 /App/web/uploads/*
-!/App/Services/FormBuilder/configurations/custom/user_settings.json

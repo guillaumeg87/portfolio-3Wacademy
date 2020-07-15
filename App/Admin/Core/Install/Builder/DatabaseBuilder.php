@@ -20,7 +20,7 @@ class DatabaseBuilder
     const DB_INSTALL = ['Db_name', 'Db_host', 'Db_admin', 'Db_password'];
     const USER_TECHNICAL_NAME = 'user_settings';
     const USER_DISPLAY_NAME = 'Utilisateur';
-    const USER_FIELDS_TABLE = ['login', 'pwd', 'email', 'isSuperAdmin'];
+    const USER_FIELDS_TABLE = ['login', 'pwd', 'email', 'isSuperAdmin', 'createdAt', 'updatedAt'];
     const USER_MENU_COLUMS = [
         'contentTechnicalName' => self::USER_TECHNICAL_NAME,
         'contentDisplayName' => self::USER_DISPLAY_NAME,
