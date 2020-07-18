@@ -6,6 +6,8 @@
 /App/Connection/DB_conf.php
 /App/Connection/Db_config.json
 /node_modules
+/App/Assets/scss/.sass-cache/
+/App/Assets/scss/.sass-cache/*
 *.min.css
 *.map
 /App/Configurations/custom/*
@@ -13,7 +15,5 @@
 /App/Configurations/custom/temp/*
 /App/Configurations/custom/temp/*.json
 !/App/Configurations/custom/user_settings.json
-#/App/Services/FormBuilder/configurations/custom/*
-#/App/Services/FormBuilder/configurations/custom/temp/*
-#!/App/Services/FormBuilder/configurations/custom/user_settings.json
+
 /App/web/uploads/*
