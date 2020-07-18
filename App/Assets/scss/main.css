@@ -1344,18 +1344,18 @@ template {
       margin: 1rem 1%; }
   .front__single_project article .project__content_tag .project__tag {
     margin: 1rem 1%; } }
-.front__main_content .front__main_wrapper {
+.front__main_content .front__error_page_wrapper {
   max-width: 100%;
   width: 100%; }
-  .front__main_content .front__main_wrapper h1 {
+  .front__main_content .front__error_page_wrapper h1 {
     display: block;
     color: orange;
     text-align: center;
     font-size: 20em;
     margin: 0; }
-  .front__main_content .front__main_wrapper p {
+  .front__main_content .front__error_page_wrapper p {
     text-align: center; }
-  .front__main_content .front__main_wrapper a {
+  .front__main_content .front__error_page_wrapper a {
     display: block;
     margin: 5rem auto;
     display: block;
@@ -1368,7 +1368,7 @@ template {
     transition: 0.4s ease;
     border-radius: 5px;
     width: 300px; }
-    .front__main_content .front__main_wrapper a:hover {
+    .front__main_content .front__error_page_wrapper a:hover {
       background-color: white;
       color: orange; }
 

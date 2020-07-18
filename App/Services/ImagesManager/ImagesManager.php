@@ -2,6 +2,7 @@
 
 namespace Services\ImagesManager;
 
+use Services\Dumper\Dumper;
 use Services\FlashMessages\FlashMessage;
 
 class ImagesManager
@@ -35,7 +36,7 @@ class ImagesManager
         }
         else {
             $flashMessage = (new FlashMessage(
-                'Le format de l\'image n\'est aps pris en compte (jpeg, jpg, png, pff)',
+                'Le format de l\'image n\'est aps pris en compte (jpeg, jpg, png, pdf)',
                 'error'
             ))->messageBuilder();
         }
@@ -73,7 +74,7 @@ class ImagesManager
     private function getTargetDirectoryPath($path, $extension)
     {
         $target = $extension === ImagesConstant::LABEL_PDF ? ImagesConstant::DOC_DIR : ImagesConstant::IMAGE_DIR;
-        if (!file_exists($path . ImagesConstant::IMAGE_TARGET_PATH_DIR)) {
+        if (!file_exists($path . ImagesConstant::IMAGE_TARGET_PATH_DIR. $target)) {
 
             mkdir($path . ImagesConstant::IMAGE_TARGET_PATH_DIR . $target, 0777, true);
         }
