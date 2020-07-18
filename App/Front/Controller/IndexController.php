@@ -22,7 +22,7 @@ class IndexController extends AbstractController
     const SINGLE_PROJECT_TEMPLATE = 'front_single_project';
     const SELECT_ONE = 'select_one';
     const CONTENT_NAME = 'project_content';
-
+    const CONF_404 = '404_configuration';
     use PrepareFromConfig;
 
     public function index($options = [])
@@ -165,6 +165,8 @@ class IndexController extends AbstractController
      */
     public function page404($options = [])
     {
+        $options = $this->getConfig($options, self::CONF_404);
+        $options = $this->getServiceManager()->getFrontManager()->getDatas($options);
 
         $this->render(__NAMESPACE__, '404', $options);
     }

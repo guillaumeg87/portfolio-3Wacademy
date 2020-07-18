@@ -16,7 +16,8 @@ final class RoutesConstants
 
         //ADMIN
        '/admin'                 => '/admin',
-        '/content/edit'         => '/admin/content/edit',
+       '/content/create'        => '/admin/content/create',
+       '/content/edit'          => '/admin/content/edit',
        '/content/index'         => '/admin/content/index',
        '/logout'                => '/admin/login/logout',
        '/new-content-type'      => '/admin/formBuilder/index',

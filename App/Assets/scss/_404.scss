@@ -1,0 +1,40 @@
+.front__main_content {
+
+  .front__main_wrapper {
+    max-width: 100%;
+    width: 100%;
+    h1 {
+      display: block;
+      color: $text_primary;
+      text-align: center;
+      font-size: 20em;
+      margin:0;
+    }
+    p {
+      text-align: center;
+    }
+    a {
+      display: block;
+      margin: 5rem auto;
+      @include btn();
+      width: 300px;
+    }
+  }
+}
+
+@media screen and (max-width: 560px) {
+  .front__main_content {
+    .front__main_wrapper {
+
+      h1 {
+        font-size: 10em;
+      }
+      a {
+        display: block;
+        margin: 5rem auto;
+        @include btn();
+        max-width: 200px;
+      }
+    }
+  }
+}

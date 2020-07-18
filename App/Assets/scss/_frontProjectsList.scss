@@ -116,19 +116,15 @@
           border: dashed blue 1px;
           .front__project_list_thumbnail-link{
             display: block;
-
             width: 100%;
             max-height: 450px;
             overflow: hidden;
 
             .front__project_list-thumbnail{
               transition: 0.4s ease;
-
             }
-
           }
         }
-
 
         .front__project_list_card_data {
 
