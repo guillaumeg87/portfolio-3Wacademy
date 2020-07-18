@@ -12,11 +12,11 @@ if (!empty($datas) && isset($datas['main']['section_1']['data'][0])) {
 ?>
 <body class="front__main_content">
 <?php //include("block__header_front.phtml"); ?>
-<main class="front__main_wrapper">
+<main class="front__main_wrapper front__error_page_wrapper">
 
     <h1><?= $content['title'] ?></h1>
     <p><?= html_entity_decode($content['message'], ENT_HTML5) ?></p>
-    <a href="/front/index/index">Retour à l'accueil</a>
+    <a href="/">Retour à l'accueil</a>
 </main>
 
 <?php } else { ?>
