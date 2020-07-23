@@ -133,55 +133,56 @@ class ApiManager
         $body = null;
         // NOTA
         // Dump $data allow to see all the request response elements
+            foreach ($data as $part) {
 
-        foreach ($data as $part) {
+                $chunk = explode(":", $part, 2);
 
-            $chunk = explode(":", $part, 2);
+                if (mb_strtolower($chunk[0]) === 'link') {
 
-            if (mb_strtolower($chunk[0]) === 'link') {
+                    $split = explode(',', trim($chunk[1]));
 
-                $split = explode(',', trim($chunk[1]));
+                    foreach ($split as $link) {
 
-                foreach ($split as $link) {
+                        $explode = explode(';', $link);
+                        $getUrlParams = explode('?', trim(preg_replace('/[">]/', '', $explode[0])));
 
-                    $explode = explode(';', $link);
-                    $getUrlParams = explode('?', trim(preg_replace('/[">]/', '', $explode[0])));
+                        if (preg_match('/first/', $link)) {
 
-                    if (preg_match('/first/', $link)) {
+                            $pagination[0] = $this->formatPaginationLink(
+                                'première page', $getUrlParams[1], 'first');
+                        }
 
-                        $pagination[0] = $this->formatPaginationLink(
-                            'première page', $getUrlParams[1], 'first');
+                        if (preg_match('/prev/', $link)) {
+
+                            $pagination[1] = $this->formatPaginationLink(
+                                'précédente', $getUrlParams[1], 'prev');
+                        }
+
+                        if (preg_match('/next/', $link)) {
+
+                            $pagination[2] = $this->formatPaginationLink(
+                                'suivante', $getUrlParams[1], 'next');
+                        }
+
+                        if (preg_match('/last/', $link)) {
+
+                            $pagination[3] = $this->formatPaginationLink(
+                                'dernière page', $getUrlParams[1], 'last');
+                        }
                     }
 
-                    if (preg_match('/prev/', $link)) {
+                }
+                if (preg_match('/[?[{]/', $chunk[0])) {
+                    $decode = json_decode($chunk[0]);
 
-                        $pagination[1] = $this->formatPaginationLink(
-                            'précédente', $getUrlParams[1], 'prev');
-                    }
-
-                    if (preg_match('/next/', $link)) {
-
-                        $pagination[2] = $this->formatPaginationLink(
-                            'suivante', $getUrlParams[1], 'next');
-                    }
-
-                    if (preg_match('/last/', $link)) {
-
-                        $pagination[3] = $this->formatPaginationLink(
-                            'dernière page', $getUrlParams[1], 'last');
-                    }
+                    $body = (is_array($decode)) ? $chunk[0] : $chunk[0] . ':' . $chunk[1] ;
                 }
 
-            }
-            if (preg_match('/[?[{]/', $chunk[0])) {
-                $body = $chunk[0] . ':' . $chunk[1];
-            }
+                if (preg_match('/sha/', $chunk[0])) {
+                    $body = $chunk[0] . ':' . $chunk[1];
 
-            if (preg_match('/sha/', $chunk[0])) {
-                $body = $chunk[0] . ':' . $chunk[1];
-
+                }
             }
-        }
 
         // Sort link by index
         ksort($pagination);
@@ -208,5 +209,37 @@ class ApiManager
             'path' => $path,
             'class' => $class
         ];
+    }
+
+    public function countCommit()
+    {
+        /**
+         * https://api.github.com/repos/guillaumeg87/portfolio-3Wacademy/commits?per_page=1
+         */
+
+        $page = 1;
+        $count = 0;
+        $url = $this->endpoint . '/repos/' . $this->username . '/portfolio-3Wacademy/commits?per_page=100&page=' . $page;
+        $response = $this->callAPI($url, []);
+
+        while (!empty(json_decode($response['response']))) {
+            $url = $this->endpoint . '/repos/' . $this->username . '/portfolio-3Wacademy/commits?per_page=100&page=' . $page;
+
+            $response = $this->callAPI($url, []);
+
+            $pageResult = count(json_decode($response['response'], true));
+            $results = json_decode($response['response'], true);
+
+            if (empty($results) && $pageResult ===  0) {
+
+                break;
+            }
+            else {
+                $count += $pageResult;
+            }
+
+            $page++;
+        }
+        return $count;
     }
 }

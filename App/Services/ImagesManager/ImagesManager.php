@@ -2,7 +2,6 @@
 
 namespace Services\ImagesManager;
 
-use Services\Dumper\Dumper;
 use Services\FlashMessages\FlashMessage;
 
 class ImagesManager
