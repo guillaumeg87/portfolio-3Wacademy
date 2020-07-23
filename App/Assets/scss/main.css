@@ -382,16 +382,37 @@ template {
   .admin-wrapper .admin-sidebar {
     width: 20%; }
   .admin-wrapper .admin-content {
-    width: 80%; }
+    width: 80%;
+    flex-wrap: wrap; }
+    .admin-wrapper .admin-content .widget-admin {
+      display: inline-block;
+      min-width: 300px;
+      background-color: white;
+      margin: 1rem 2%;
+      padding: 1rem 1%;
+      min-height: 300px; }
+      .admin-wrapper .admin-content .widget-admin .tokenValid {
+        color: forestgreen; }
+      .admin-wrapper .admin-content .widget-admin .tokenNotValid {
+        color: #900; }
+      .admin-wrapper .admin-content .widget-admin .tokenNotValid, .admin-wrapper .admin-content .widget-admin .tokenValid, .admin-wrapper .admin-content .widget-admin .admin__home_commit_count {
+        text-align: center;
+        font-size: 8rem; }
+      .admin-wrapper .admin-content .widget-admin h3 {
+        text-align: center;
+        color: orange; }
+      .admin-wrapper .admin-content .widget-admin li {
+        padding-left: 5%;
+        line-height: 2; }
+        .admin-wrapper .admin-content .widget-admin li::before {
+          display: inline-block;
+          font-family: FontAwesome;
+          content: '\f0da';
+          width: 15px;
+          height: 15px; }
   .admin-wrapper h2 {
     display: block;
     width: 100%; }
-  .admin-wrapper .widget-admin {
-    display: inline-block;
-    min-width: 300px;
-    background-color: white;
-    margin: 1rem 2%;
-    padding: 1rem 1%; }
 
 .adminLogout a {
   font-size: 1.8rem;

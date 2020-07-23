@@ -80,9 +80,15 @@ class ContentRequest extends BaseRequest
     {
 
         $query = $this->dbManager->connection()->prepare($sql);
-        $query->execute([
-            'id' => $data['id']
-        ]);
+
+        if (isset($data['id'])) {
+            $query->execute([
+                'id' => $data['id']
+            ]);
+        }
+        else {
+            $query->execute($data);
+        }
 
         return $query->fetch(PDO::FETCH_ASSOC);
     }
