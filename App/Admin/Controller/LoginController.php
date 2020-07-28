@@ -6,6 +6,7 @@ namespace Admin\Controller;
 
 use Admin\Core\Config\AbstractController;
 use Admin\Requests\LoginRequest;
+use Services\LogManager\LogConstants;
 
 class LoginController extends AbstractController
 {
@@ -13,7 +14,7 @@ class LoginController extends AbstractController
     const ADMIN_LOGIN_FORM = 'admin_login';
     const ADMIN_HOME = 'admin_home';
 
-    const SESSION_FIELDS = ['login', 'password', 'id'];
+    const SESSION_FIELDS = ['login', 'password', 'id', 'isSuperAdmin'];
 
     public function login($options = [])
     {
@@ -59,15 +60,15 @@ class LoginController extends AbstractController
                     $this->render(__NAMESPACE__, self::ADMIN_HOME, $options);
                 }
                 else {
-                    $this->errorLogin($options);
+                    $this->errorLogin($options, $formatedDatas);
                 }
             }
             else {
-                $this->errorLogin($options);
+                $this->errorLogin($options, $formatedDatas);
             }
         }
         else {
-            $this->errorLogin($options);
+            $this->errorLogin($options, $_POST);
         }
     }
 
@@ -94,7 +95,10 @@ class LoginController extends AbstractController
             'Déconnexion réussie !',
             'success'
         ))->messageBuilder();
-
+        $this->getServiceManager()->getLogManager()->log(
+            'User logout',
+            LogConstants::ERROR_APP_LABEL,
+            LogConstants::INFO_LABEL);
         $this->redirectTo('/login-form', $options);
 
     }
@@ -117,8 +121,12 @@ class LoginController extends AbstractController
      * Build response when login and pass word are wrong
      * @param $options
      */
-    private function errorLogin($options){
+    private function errorLogin(array $options, array $datas){
         $_SESSION = [];
+        $this->getServiceManager()->getLogManager()->log(
+            'Admin access: Bad credentials with login :' .  $datas['login'], LogConstants::ERROR_APP_LABEL, LogConstants::WARN_LABEL
+        );
+
         session_destroy();
         $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
             'Les accès sont incorrectes.',

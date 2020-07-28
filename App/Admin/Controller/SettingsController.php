@@ -3,6 +3,7 @@
 namespace Admin\Controller;
 
 use Admin\Core\Config\AbstractController;
+use Admin\Core\Config\CoreConstants;
 use Admin\Core\QueryBuilder\QueryBuilder;
 use Admin\Core\Traits\NavigationTrait;
 use Admin\Requests\Content\ContentRequest;
@@ -168,11 +169,11 @@ class SettingsController extends AbstractController
         $isConfDeleted = false;
         $isTempDeleted = false;
         $isListUpdated = false;
-        $pathConfigFiles = FormBuilderConstants::CUSTOM_APP_PATH
+        $pathConfigFiles = CoreConstants::CUSTOM_APP_PATH
                             . str_replace('..', '', FormBuilderConstants::CUSTOM_CONFIG_DIRECTORY)
                             . $tableName . '.json';
 
-        $pathTempConfig = FormBuilderConstants::CUSTOM_APP_PATH
+        $pathTempConfig = CoreConstants::CUSTOM_APP_PATH
                         . str_replace('..', '',FormBuilderConstants::CUSTOM_TEMPORARY_CONFIG_DIRECTORY)
                         . $tableName . '.json';
 
@@ -200,7 +201,7 @@ class SettingsController extends AbstractController
         $explode = \explode('_', $tableName);
         $contentType = end($explode);
         $save = false;
-        $pathContentList = FormBuilderConstants::CUSTOM_APP_PATH
+        $pathContentList = CoreConstants::CUSTOM_APP_PATH
             . str_replace('..', '', FormBuilderConstants::CUSTOM_CONFIG_DIRECTORY)
             . $contentType . '/' . $contentType . '_list.json';
 

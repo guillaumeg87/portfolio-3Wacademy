@@ -11,6 +11,8 @@ use mysql_xdevapi\Exception;
 use PDO;
 use PDOException;
 use Services\FlashMessages\FlashMessage;
+use Services\LogManager\LogConstants;
+use Services\LogManager\LogManager;
 use Services\Mailer\MailerService;
 
 class DatabaseBuilder
@@ -111,6 +113,10 @@ final class DB_conf
             $this->builder($admin, $db_data);
 
         } catch (\Exception $e) {
+            (new LogManager())->log(
+                '[ Database Builder : Installation ] An error occured during installation process | prepare build'  .  PHP_EOL . $e->getTraceAsString(),
+                LogConstants::ERROR_APP_LABEL,
+                LogConstants::INFO_LABEL);
             $this->installationFailed($e, $db_data);
         }
     }
@@ -154,7 +160,11 @@ final class DB_conf
             ))->messageBuilder();
 
         } catch (\Exception $e) {
-
+            (new LogManager())->log(
+                '[ Database Builder : Installation ] An error occured during installation proces, data base creation | builder'  .  PHP_EOL . $e->getTraceAsString(),
+                LogConstants::ERROR_APP_LABEL,
+                LogConstants::INFO_LABEL);
+            $this->installationFailed($e, $db_data);
             $this->installationFailed($e, $db_data);
 
         }
@@ -216,7 +226,11 @@ final class DB_conf
             $request->createAdminAccount($admin);
 
         } catch (PDOException $e) {
-
+            (new LogManager())->log(
+                '[ Database Builder : Installation ] An error occured during installation process | save admin'  .  PHP_EOL . $e->getTraceAsString(),
+                LogConstants::ERROR_APP_LABEL,
+                LogConstants::INFO_LABEL);
+            $this->installationFailed($e, $db_data);
             $this->installationFailed($e, $db_data);
 
         }
@@ -238,6 +252,11 @@ final class DB_conf
             $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $connection->exec($sql);
         } catch (\Exception $exception) {
+            (new LogManager())->log(
+                '[ Database Builder : Installation ] An error occured during installation process | installationFailed'  .  PHP_EOL . $e->getTraceAsString(),
+                LogConstants::ERROR_PHP_LABEL,
+                LogConstants::INFO_LABEL);
+            $this->installationFailed($e, $db_data);
             throw new Exception(
                 'ERROR : ' . '</br>' .
                 'Code : ' . $e->getCode() .
@@ -248,11 +267,7 @@ final class DB_conf
         }
 
         $options['flash-message'] = (new FlashMessage(
-            'ERROR : ' . '</br>' .
-            'Code : ' . $e->getCode() .
-            'Stack Trace : ' . $e->getTraceAsString() . '</br>' .
-            'Message : ' . $e->getMessage() . '</br>' .
-            'Line : ' . $e->getLine() . '</br>',
+            'Une erreur est survenue pendant l\'installation, veuillez consulter les logs.',
             'error'
         ))->messageBuilder();
         // Deletion of the 2 generated files
@@ -273,12 +288,26 @@ final class DB_conf
      */
     private function generateJsonConfigFile(array $db_data)
     {
+        $jsonArray = [];
         foreach ($db_data as $key => $value) {
             $jsonArray['Database'][$key] = $db_data[$key];
         }
+        try {
 
-        $jsonData = json_encode($jsonArray);
+            if (!empty($jsonArray)) {
+                $jsonData = json_encode($jsonArray);
 
+            } else {
+
+                throw new \Exception();
+            }
+        } catch (\Exception $e){
+            (new LogManager())->log(
+                '[ Database Builder : Installation ] An error occured during installation process | generateJsonConfigFile : $jsonArray is empty' . PHP_EOL . $e->getTraceAsString(),
+                LogConstants::ERROR_PHP_LABEL,
+                LogConstants::INFO_LABEL);
+            $this->installationFailed($e, $db_data);
+        }
         file_put_contents(self::JSON_FILE_DB_CONF, $jsonData);
     }
 

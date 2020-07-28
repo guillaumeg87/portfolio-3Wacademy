@@ -6,6 +6,7 @@ use Admin\Core\QueryBuilder\QueryBuilder;
 use Admin\Core\Traits\Hash;
 use Admin\Core\Traits\RequestDateTrait;
 use Admin\Requests\Content\ContentRequest;
+use Services\LogManager\LogConstants;
 
 class ContentController extends AbstractController
 {
@@ -125,6 +126,9 @@ class ContentController extends AbstractController
         return $formDatas;
     }
 
+    /**
+     * @param array $options
+     */
     public function create($options = [])
     {
         $this->isSessionActive();
@@ -142,7 +146,14 @@ class ContentController extends AbstractController
         try {
             $options['flash-message'][] = $this->saveContent(self::CREATE_LABEL, $formDatas);
         } catch (\Exception $e) {
-            // @TODO
+            $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
+                'Une erreur est survenue, voir les logs',
+                'error'
+            ))->messageBuilder();
+            $this->getServiceManager()->getLogManager()->log(
+                'An error occured when try to edit content : ' . $formDatas['content_name'] . PHP_EOL . $e->getTraceAsString(),
+                LogConstants::ERROR_APP_LABEL,
+                LogConstants::ERROR_LABEL);
         }
 
         $options['form-selector'] = $options['content_name'];
@@ -163,6 +174,7 @@ class ContentController extends AbstractController
             'id'            => $formDatas['content_id'],
             'content_name'  => $formDatas['content_name']
         ];
+        $content = $formDatas['content_id'];
         unset($formDatas['content_id']);
 
         if(preg_match('/^user_?[a-z]/',$formDatas['content_name'])){
@@ -205,14 +217,13 @@ class ContentController extends AbstractController
             } catch (\Exception $e) {
 
                 $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
-                    'ERROR : ' . '</br>' .
-                    'Code : ' . $e->getCode() .
-                    'Stack Trace : ' . $e->getTraceAsString() . '</br>' .
-                    'Message : ' . $e->getMessage() . '</br>' .
-                    'Line : ' . $e->getLine() . '</br>',
+                    'Une erreur est survenue, voir les logs',
                     'error'
                 ))->messageBuilder();
-
+                $this->getServiceManager()->getLogManager()->log(
+                    'An error occured when try to edit content : ' . $content . PHP_EOL . $e->getTraceAsString(),
+                    LogConstants::ERROR_APP_LABEL,
+                    LogConstants::ERROR_LABEL);
                 $this->render(__NAMESPACE__, self::HANDLE_CONTENT_FORM, $options);
             }
         }
@@ -226,6 +237,7 @@ class ContentController extends AbstractController
         $this->isSessionActive();
 
         if (!empty($options) && !empty($options['id'])) {
+            $content = $options['content_name'];
             try {
                 $query = new ContentRequest();
                 $queryBuilder = new QueryBuilder();
@@ -253,13 +265,15 @@ class ContentController extends AbstractController
 
             } catch (\Exception $e) {
                 $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
-                    'ERROR : ' . '</br>' .
-                    'Code : ' . $e->getCode() .
-                    'Stack Trace : ' . $e->getTraceAsString() . '</br>' .
-                    'Message : ' . $e->getMessage() . '</br>' .
-                    'Line : ' . $e->getLine() . '</br>',
+                    'Une erreur est survenue, voir les logs',
                     'error'
                 ))->messageBuilder();
+
+                $this->getServiceManager()->getLogManager()->log(
+                    'An error occured when try to delete content : ' . $content . PHP_EOL . $e->getTraceAsString(),
+                    LogConstants::ERROR_APP_LABEL,
+                    LogConstants::ERROR_LABEL);
+
                 $this->render(__NAMESPACE__, self::HANDLE_CONTENT_INDEX, $options);
 
             }
@@ -274,12 +288,12 @@ class ContentController extends AbstractController
      */
     private function saveContent($method, $params)
     {
+        $content = $params['content_name'];
 
         try {
             $request = new ContentRequest();
 
             $isTableExist = $request->isTableExist($params);
-
             $isSaved = false;
             if ($isTableExist) {
 
@@ -313,13 +327,14 @@ class ContentController extends AbstractController
             }
         } catch (\Exception $e) {
             $flash_message = ($this->getServiceManager()->getFlashMessage(
-                'ERROR : ' . '</br>' .
-                'Code : ' . $e->getCode() .
-                'Stack Trace : ' . $e->getTraceAsString() . '</br>' .
-                'Message : ' . $e->getMessage() . '</br>' .
-                'Line : ' . $e->getLine() . '</br>',
+                'Une erreur est survenue, voir les logss',
                 'error'
             ))->messageBuilder();
+
+            $this->getServiceManager()->getLogManager()->log(
+                'An error occured when try to save content : ' . $content . PHP_EOL . $e->getTraceAsString(),
+                LogConstants::ERROR_APP_LABEL,
+                LogConstants::ERROR_LABEL);
 
         }
         return $flash_message;

@@ -8,6 +8,8 @@ use Admin\Controller\ContentController;
 use Admin\Core\QueryBuilder\QueryBuilder;
 use Admin\Requests\Content\ContentRequest;
 use Services\FormBuilder\Constants\FormBuilderConstants;
+use Services\LogManager\LogConstants;
+use Services\LogManager\LogManager;
 
 
 class FormHydrator
@@ -48,7 +50,11 @@ class FormHydrator
             }
 
         } catch (\Exception $e) {
-            throw new \Exception();
+
+            (new LogManager())->log(
+                '[ FORM HYDRATOR ] An error occured when try to build temporary configuration: ' . PHP_EOL . $e->getTraceAsString(),
+                LogConstants::ERROR_APP_LABEL,
+                LogConstants::ERROR_LABEL);
         }
         return false;
     }

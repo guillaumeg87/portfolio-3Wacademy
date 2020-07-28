@@ -6,7 +6,10 @@ use Admin\Core\Config\AbstractController;
 use Admin\Requests\Content\ContentRequest;
 use Front\Constants\FrontConstants;
 use Front\Traits\PrepareFromConfig;
+use Services\Dumper\Dumper;
 use Services\FormBuilder\Constants\FormBuilderConstants;
+use Services\LogManager\LogConstants;
+use Services\LogManager\LogManager;
 
 /**
  * Class IndexController
@@ -142,8 +145,11 @@ class IndexController extends AbstractController
                     }
                 }
 
-            } catch (\Exception $exception) {
-                //
+            } catch (\Exception $e) {
+               $this->getServiceManager()->getLogManager()->log(
+                    'An error occured in front controller | single project : ' .  PHP_EOL . $e->getTraceAsString(),
+                    LogConstants::ERROR_APP_LABEL,
+                    LogConstants::ERROR_LABEL);
             }
 
         }
@@ -178,6 +184,11 @@ class IndexController extends AbstractController
             'Une erreur est survenue lors de la récupération du contenue depuis l\'API Github (code erreur: ' . $errorCode . ').',
             'error'
         ))->messageBuilder();
+
+        $this->getServiceManager()->getLogManager()->log(
+            'An error occured in front controller | error API Github : ' .  PHP_EOL,
+            LogConstants::ERROR_APP_LABEL,
+            LogConstants::ERROR_LABEL);
 
         $options['redirect'] = true;
         $this->index($options);
@@ -293,7 +304,11 @@ class IndexController extends AbstractController
                     $linkedTaxo[] = $result;
                 }
             } catch (\Exception $e){
-                //
+                $this->getServiceManager()->getLogManager()->log(
+                    '[ FRONT ] An error occured in front/index method' . PHP_EOL . $e->getTraceAsString(),
+                    LogConstants::ERROR_APP_LABEL,
+                    LogConstants::ERROR_LABEL
+                );
             }
 
         }

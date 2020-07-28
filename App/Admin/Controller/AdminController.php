@@ -5,6 +5,7 @@ namespace Admin\Controller;
 use Admin\Core\Config\AbstractController;
 use Admin\Core\Traits\NavigationTrait;
 use Admin\Requests\Content\ContentRequest;
+use Services\LogManager\LogConstants;
 
 class AdminController extends AbstractController
 {
@@ -76,7 +77,11 @@ class AdminController extends AbstractController
             ];
 
         }catch (\Exception $e) {
-            //
+            $this->getServiceManager()->getLogManager()->log(
+                'An error occured during Commit Count | getApiTokenStatus :'  . PHP_EOL . $e->getTraceAsString(),
+                LogConstants::ERROR_APP_LABEL,
+                LogConstants::ERROR_LABEL
+            );
         }
 
         return $options;
@@ -107,7 +112,11 @@ class AdminController extends AbstractController
             ];
 
         }catch (\Exception $e) {
-            //
+            $this->getServiceManager()->getLogManager()->log(
+                'An error occured during Commit Count | getWidgetCommitCount :'  . PHP_EOL . $e->getTraceAsString(),
+                LogConstants::ERROR_APP_LABEL,
+                LogConstants::ERROR_LABEL
+            );
         }
         return $options;
     }
@@ -119,6 +128,7 @@ class AdminController extends AbstractController
         $options = $this->getProjectList($options);
         $options = $this->getTechnoList($options);
         $options = $this->getLangageList($options);
+        $options = $this->getLogInfos($options);
 
         return $options;
     }
@@ -129,6 +139,7 @@ class AdminController extends AbstractController
      */
     private function getProjectList($options):array
     {
+        $result = [];
         try {
             $sql = $this->getQueryBuilder()->buildSql(
                 self::WIDGET_PROJECT_LIST_QUERY_PARAM, self::SELECT_ALL);
@@ -137,7 +148,11 @@ class AdminController extends AbstractController
             $result = $request->selectAll($sql);
 
         }catch (\Exception $e) {
-            //
+            $this->getServiceManager()->getLogManager()->log(
+                'An error occured during Commit Count | getProjectList :'  . PHP_EOL . $e->getTraceAsString(),
+                LogConstants::ERROR_APP_LABEL,
+                LogConstants::ERROR_LABEL
+            );
         }
 
         $options['project_list'] = [
@@ -150,6 +165,7 @@ class AdminController extends AbstractController
 
     private function getTechnoList($options):array
     {
+        $result = [];
         try {
             $sql = $this->getQueryBuilder()->buildSql(
                 self::WIDGET_TECHNO_LIST_QUERY_PARAM, self::SELECT_ALL);
@@ -158,7 +174,11 @@ class AdminController extends AbstractController
             $result = $request->selectAll($sql);
 
         }catch (\Exception $e) {
-            //
+            $this->getServiceManager()->getLogManager()->log(
+                'An error occured during Commit Count | getTechnoList :'  . PHP_EOL . $e->getTraceAsString(),
+                LogConstants::ERROR_APP_LABEL,
+                LogConstants::ERROR_LABEL
+            );
         }
 
         $options['techno_list'] = [
@@ -171,6 +191,7 @@ class AdminController extends AbstractController
 
     private function getLangageList($options):array
     {
+        $result = [];
         try {
             $sql = $this->getQueryBuilder()->buildSql(
                 self::WIDGET_LANGAGE_LIST_QUERY_PARAM, self::SELECT_ALL);
@@ -179,7 +200,11 @@ class AdminController extends AbstractController
             $result = $request->selectAll($sql);
 
         }catch (\Exception $e) {
-            //
+            $this->getServiceManager()->getLogManager()->log(
+                'An error occured during Commit Count | getLangageList :'  . PHP_EOL . $e->getTraceAsString(),
+                LogConstants::ERROR_APP_LABEL,
+                LogConstants::ERROR_LABEL
+            );
         }
 
         $options['langage_list'] = [
@@ -190,4 +215,67 @@ class AdminController extends AbstractController
         return $options;
     }
 
+    private function getLogInfos($options):array
+    {
+        $options['log_infos'] = [
+            'label' => 'Logs Infos',
+            'datas' => $this->getServiceManager()->getLogManager()->logInfos()
+        ];
+
+        return $options;
+    }
+
+    public function downloadLogFile($options)
+    {
+        $this->isSessionActive();
+        if ((bool)$_SESSION['isSuperAdmin']) {
+            $fileType = $options['file'];
+            $fileUrl = LogConstants::LOGS_FILES[$fileType] . $fileType . LogConstants::FILE_SLUG_NAME . LogConstants::FILE_EXTENSION;
+
+            header('Content-Type: application/octet-stream');
+            header("Content-Transfer-Encoding: Binary");
+            header("Content-disposition: attachment; filename=\"" . $fileType . LogConstants::FILE_SLUG_NAME . LogConstants::FILE_EXTENSION . "\"");
+            readfile($fileUrl);
+        }else{
+            $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
+                'Vous n\'avez pas les droits suffisants pour pouvoir faire cette action',
+                'error'
+            ))->messageBuilder();
+        }
+        $this->redirectTo('/admin', $options);
+    }
+
+    /**
+     * Delete Logs files
+     * @param array $options
+     * @throws \Exception
+     */
+    public function clearLogsDirectory($options = [])
+    {
+        $this->isSessionActive();
+
+        if ((bool)$_SESSION['isSuperAdmin']){
+
+            foreach (LogConstants::LOGS_FILES as $key => $value) {
+
+                $file = $value . $key . LogConstants::FILE_SLUG_NAME . LogConstants::FILE_EXTENSION;
+                if (is_file($file)) {
+                    unlink($file);
+                }
+            }
+
+            $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
+                'Les fichiers ont bien été supprimés',
+                'success'
+            ))->messageBuilder();
+
+        }else{
+            $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
+                'Vous n\'avez pas les droits suffisants pour pouvoir faire cette action',
+                'error'
+            ))->messageBuilder();
+        }
+
+        $this->redirectTo('/admin', $options);
+    }
 }

@@ -2,6 +2,9 @@
 
 namespace Services\ApiManager;
 
+use Services\LogManager\LogConstants;
+use Services\LogManager\LogManager;
+
 class ApiManager
 {
     const AUTHORRIZATION_URL = "https://api.github.com/user";
@@ -71,7 +74,7 @@ class ApiManager
     private function callAPI(string $url, array $params = []): array
     {
         $curl = curl_init();
-
+        $this->logRequest($url);
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2);
         curl_setopt($curl, CURLOPT_USERAGENT, $this->username);
@@ -221,8 +224,8 @@ class ApiManager
         $count = 0;
         $url = $this->endpoint . '/repos/' . $this->username . '/portfolio-3Wacademy/commits?per_page=100&page=' . $page;
         $response = $this->callAPI($url, []);
-
         while (!empty(json_decode($response['response']))) {
+
             $url = $this->endpoint . '/repos/' . $this->username . '/portfolio-3Wacademy/commits?per_page=100&page=' . $page;
 
             $response = $this->callAPI($url, []);
@@ -237,9 +240,19 @@ class ApiManager
             else {
                 $count += $pageResult;
             }
-
             $page++;
         }
         return $count;
+    }
+
+    /**
+     * Logging API REQUEST
+     * @param string $url
+     */
+    private function logRequest(string $url){
+        (new LogManager())->log(
+            '[ GITHUB API] Call to :  ' . $url.  PHP_EOL,
+            LogConstants::ERROR_APP_LABEL,
+            LogConstants::INFO_LABEL);
     }
 }
