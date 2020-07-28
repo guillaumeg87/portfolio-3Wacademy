@@ -17,3 +17,6 @@
 !/App/Configurations/custom/user_settings.json
 
 /App/web/uploads/*
+/App/Logs
+/App/Logs/*
+

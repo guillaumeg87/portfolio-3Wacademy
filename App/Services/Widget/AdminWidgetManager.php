@@ -6,6 +6,8 @@ namespace Services\Widget;
 use Admin\Core\QueryBuilder\QueryBuilder;
 use Admin\Requests\Content\ContentRequest;
 use Services\FlashMessages\FlashMessage;
+use Services\LogManager\LogConstants;
+use Services\LogManager\LogManager;
 
 class AdminWidgetManager
 {
@@ -40,13 +42,13 @@ class AdminWidgetManager
             }
         } catch (\Exception $e) {
             $results['flash-message'][] = (new FlashMessage(
-                'ERROR : ' . '</br>' .
-                'Code : ' . $e->getCode() .
-                'Stack Trace : ' . $e->getTraceAsString() . '</br>' .
-                'Message : ' . $e->getMessage() . '</br>' .
-                'Line : ' . $e->getLine() . '</br>',
+                'Une erreur et survenue, veuillez consulter les logs',
                 'error'
             ))->messageBuilder();
+            (new LogManager())->log(
+                '[ WIDGET MANAGER] An error occured when try to get this widget :  ' . $this->contentName .  PHP_EOL . $e->getTraceAsString(),
+                LogConstants::ERROR_APP_LABEL,
+                LogConstants::INFO_LABEL);
         }
         return $results;
     }

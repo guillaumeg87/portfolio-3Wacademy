@@ -5,6 +5,8 @@ namespace Connection;
 
 use mysql_xdevapi\Exception;
 use PDO;
+use Services\LogManager\LogConstants;
+use Services\LogManager\LogManager;
 
 class Db_manager
 {
@@ -71,6 +73,10 @@ class Db_manager
                 $com_bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $com_bdd->exec("SET NAMES UTF8");
             }catch(\Exception $e){
+                (new LogManager())->log(
+                    '[ Db Manager ] An error occured, data base connection'  .  PHP_EOL . $e->getTraceAsString(),
+                    LogConstants::ERROR_APP_LABEL,
+                    LogConstants::INFO_LABEL);
                 throw new Exception('ERROR : ' . '</br>' .
                     'Code : ' . $e->getCode() .
                     'Stack Trace : ' . $e->getTraceAsString() . '</br>' .

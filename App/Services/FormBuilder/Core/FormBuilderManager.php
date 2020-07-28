@@ -8,6 +8,8 @@ use Services\FormBuilder\Constants\FormBuilderConstants;
 use Services\FormBuilder\Core\Entity\InputFields;
 use Services\FormBuilder\Core\Requests\FormBuilderRequest;
 use Services\FormBuilder\Core\Requests\QueryBuilder;
+use Services\LogManager\LogConstants;
+use Services\LogManager\LogManager;
 
 
 class FormBuilderManager
@@ -79,8 +81,15 @@ class FormBuilderManager
 
         try {
             $isTableExist = $this->getFormBuilderRequest()->isTableExist($reformatedDatas['labels'], $optionType);
-        } catch (\PDOException $exception) {
-            throw new \PDOException();
+        } catch (\PDOException $e) {
+            $flashMessage['flash-message'] = (new FlashMessage(
+                'Une erreur est survenue, voir les logs',
+                'error'
+            ))->messageBuilder();
+            (new LogManager())->log(
+                'An error occured in formbuilder : ' .  PHP_EOL . $e->getTraceAsString(),
+                LogConstants::ERROR_APP_LABEL,
+                LogConstants::ERROR_LABEL);
         }
 
         if (!is_array($isTableExist)) {
@@ -115,8 +124,11 @@ class FormBuilderManager
                     );
                 }
 
-            } catch (\PDOException $exception) {
-                throw new \PDOException();
+            } catch (\PDOException $e) {
+                (new LogManager())->log(
+                    '[ FORMBUILDER ] An error occured in formbuilder | sortFormData: ' .  PHP_EOL . $e->getTraceAsString(),
+                    LogConstants::ERROR_APP_LABEL,
+                    LogConstants::ERROR_LABEL);
             }
 
             return [
@@ -221,7 +233,11 @@ class FormBuilderManager
                 }
             }
         } catch (\Exception $e) {
-            throw new Exception($e->getCode() . ' : ' . $e->getMessage() . '</br>' . $e->getTraceAsString());
+            (new LogManager())->log(
+                '[ FORMBUILDER ] An error occured in formbuilder : ' .  PHP_EOL . $e->getTraceAsString(),
+                LogConstants::ERROR_APP_LABEL,
+                LogConstants::ERROR_LABEL);
+            throw new Exception( '[ FORMBUILDER ] An error occured : ' . $e->getMessage() . '</br>' . $e->getTraceAsString());
         }
         return null;
     }
@@ -321,6 +337,10 @@ class FormBuilderManager
         ];
     }
 
+    /**
+     * @return bool|null
+     * @throws \Exception
+     */
     public function updateContentdata()
     {
 
@@ -330,6 +350,10 @@ class FormBuilderManager
         return null;
     }
 
+    /**
+     * @param $datas
+     * @return FormHydrator
+     */
     private function getformHydrator($datas)
     {
         return new FormHydrator($datas);

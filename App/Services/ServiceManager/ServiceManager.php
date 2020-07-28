@@ -10,6 +10,7 @@ use Services\FlashMessages\FlashMessage;
 use Services\FormBuilder\Core\FormBuilderManager;
 use Services\FrontManager\FrontManager;
 use Services\ImagesManager\ImagesManager;
+use Services\LogManager\LogManager;
 use Services\Mailer\MailerService;
 use Services\MenuManager\ContentManager;
 use Services\Templating\Engine\TemplateEngine;
@@ -102,5 +103,10 @@ class ServiceManager
     public function getApiManager($credentials):ApiManager
     {
         return new ApiManager($credentials);
+    }
+
+    public function getLogManager():LogManager
+    {
+        return new LogManager();
     }
 }

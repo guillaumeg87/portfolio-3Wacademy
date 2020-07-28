@@ -30,5 +30,7 @@ final class RoutesConstants
        '/installation'          => '/admin/install/startInstall',
        '/delete-content'        => '/admin/settings/delete',
        '/settings/dangerZone'   => '/admin/settings/dangerZone',
+       '/logs/clear'             => '/admin/admin/clearLogsDirectory',
+       '/admin/logs/download'   => '/admin/admin/downloadLogFile'
    ];
 }

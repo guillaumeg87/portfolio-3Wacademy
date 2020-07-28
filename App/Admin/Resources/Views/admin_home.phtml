@@ -1,73 +1,100 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <?php include("block__admin_head.phtml"); ?>
-    <?php
-    $data = $this->vars['options'];
-    ?>
-    <body>
-        <?php include("block__admin_header.phtml"); ?>
+<?php include("block__admin_head.phtml"); ?>
+<?php
+$data = $this->vars['options'];
+?>
+<body>
+<?php include("block__admin_header.phtml"); ?>
 
-        <main class="admin-wrapper flex">
-            <?php include("block__admin_menu.phtml"); ?>
+<main class="admin-wrapper flex">
+    <?php include("block__admin_menu.phtml"); ?>
 
-            <section class="admin-content flex">
-                    <h2>Vue d'ensemble</h2>
-                    <div class="widget-admin">
-                        <h3><?= $data['github_api_status']['label'] ?></h3>
-                        <p class="<?= $data['github_api_status']['class'] ?>"><?= $data['github_api_status']['status'] ?></p>
-                    </div>
+    <section class="admin-content flex">
+        <h2>Vue d'ensemble</h2>
+        <div class="widget-admin">
+            <h3><?= $data['github_api_status']['label'] ?></h3>
+            <p class="<?= $data['github_api_status']['class'] ?>"><?= $data['github_api_status']['status'] ?></p>
+        </div>
 
-                    <div class="widget-admin">
-                        <h3><?= $data['github_widget']['label'] ?></h3>
-                        <p class="admin__home_commit_count"><?= $data['github_widget']['total'] ?></p>
-                    </div>
-                    <div class="widget-admin">
-                        <h3><?= $data['project_list']['label'] ?></h3>
-                        <ul>
+        <div class="widget-admin">
+            <h3><?= $data['github_widget']['label'] ?></h3>
+            <p class="admin__home_commit_count"><?= $data['github_widget']['total'] ?></p>
+        </div>
+        <div class="widget-admin">
+            <h3><?= $data['project_list']['label'] ?></h3>
+            <ul>
+                <?php
+                if (!empty($data['project_list']['list'])) {
+
+                    foreach ($data['project_list']['list'] as $project => $values) { ?>
+                        <li>
+                            <a href="/content/form?id=<?= $values['id']; ?>&content_name=project_content&isEdit=true&content_type=project_content">
+                                <?= $values['name']; ?></a></li>
                         <?php
-                        if (!empty($data['project_list']['list'])) {
-
-                        foreach ($data['project_list']['list'] as $project => $values) { ?>
-                            <li><a href="/content/form?id=<?= $values['id']; ?>&content_name=project_content&isEdit=true&content_type=project_content">
-                                    <?= $values['name']; ?></a></li>
+                    }
+                }
+                ?>
+            </ul>
+        </div>
+        <div class="widget-admin">
+            <h3><?= $data['techno_list']['label'] ?></h3>
+            <ul>
+                <?php
+                if (!empty($data['techno_list']['list'])) {
+                    foreach ($data['techno_list']['list'] as $techno => $values) { ?>
+                        <li>
+                            <a href="/content/form?id=<?= $values['id']; ?>&content_name=techno_taxonomy&isEdit=true&content_type=techno_taxonomy">
+                                <?= $values['name']; ?></a></li>
                         <?php
-                            }
-                        }
-                        ?>
-                        </ul>
-                    </div>
-                    <div class="widget-admin">
-                        <h3><?= $data['techno_list']['label'] ?></h3>
-                        <ul>
-                            <?php
-                            if (!empty($data['techno_list']['list'])) {
-                                foreach ($data['techno_list']['list'] as $techno => $values) { ?>
-                                    <li><a href="/content/form?id=<?= $values['id']; ?>&content_name=techno_taxonomy&isEdit=true&content_type=techno_taxonomy">
-                                            <?= $values['name']; ?></a></li>
-                                    <?php
-                                }
-                            }
-                            ?>
-                        </ul>
-                    </div>
-                    <div class="widget-admin">
-                        <h3><?= $data['langage_list']['label'] ?></h3>
-                        <ul>
-                            <?php
-                            if (!empty($data['langage_list']['list'])) {
+                    }
+                }
+                ?>
+            </ul>
+        </div>
+        <div class="widget-admin">
+            <h3><?= $data['langage_list']['label'] ?></h3>
+            <ul>
+                <?php
+                if (!empty($data['langage_list']['list'])) {
 
-                                foreach ($data['langage_list']['list'] as $techno => $values) { ?>
-                                    <li><a href="/content/form?id=<?= $values['id']; ?>&content_name=langage_taxonomy&isEdit=true&content_type=langage_taxonomy">
-                                            <?= $values['name']; ?></a></li>
-                                    <?php
-                                }
-                            }
-                            ?>
-                        </ul>
-                    </div>
-            </section>
-        </main>
-        <script src="../../../public/bundle.js"></script>
+                    foreach ($data['langage_list']['list'] as $langages => $values) { ?>
+                        <li>
+                            <a href="/content/form?id=<?= $values['id']; ?>&content_name=langage_taxonomy&isEdit=true&content_type=langage_taxonomy">
+                                <?= $values['name']; ?></a></li>
+                        <?php
+                    }
+                }
+                ?>
+            </ul>
+        </div>
+        <div class="widget-admin">
+            <h3><?= $data['log_infos']['label'] ?></h3>
+            <?php
+            if (!empty($data['log_infos']['datas'])) { ?>
+                <ul>
 
-    </body>
+                    <?php
+                    foreach ($data['log_infos']['datas'] as $logs => $values) { ?>
+
+                        <li><a href="/admin/logs/download?file=<?= $values['file'] ?>" class="<?= $values['class'] ?>">
+                                <?= ucfirst($logs) ?> : <?= $values['size'] ?></a></li>
+                        <?php
+                    }
+                    ?>
+                </ul>
+                <a href="/logs/clear" class="">Vider les fichiers de logs</a>
+
+                <?php
+            } else { ?>
+            <p>Aucun fichier de logs présents.</p>
+            <?php
+            }
+            ?>
+        </div>
+    </section>
+</main>
+<script src="../../../public/bundle.js"></script>
+
+</body>
 </html>
