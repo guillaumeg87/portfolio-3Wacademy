@@ -27,6 +27,7 @@ const FormBuilderManager = {
         $formBuilder: document.querySelector('.formbuilder'),
         $formBuilder__buildNewForm: document.getElementsByClassName('form-init'),
         $formBuilder__loadConfiguration: document.getElementsByClassName('formbuilder-load'),
+        $formBuilder__createConfiguration: document.getElementsByClassName('create_form'),
         $formBuilder__updateConfiguration: document.getElementsByClassName('update_form'),
         $formBuilder__settings: document.getElementsByClassName('settings'),
 
@@ -57,14 +58,18 @@ const FormBuilderManager = {
             (this.selectors.$formBuilder__loadConfiguration.length > 0 && this.selectors.$formBuilder__updateConfiguration.length > 0)) {
 
             contentType = this.getConfigurationFile(this.selectors.$formBuilder__loadConfiguration);
-            console.log(contentType);
 
             if (contentType === '') {
                 this.showError();
             } else {
+                let json = null;
 
+                if (this.selectors.$formBuilder__updateConfiguration.length !== 0) {
+                    json = require(`../../../Configurations/custom/temp/${contentType}.json`);
+                } else if (this.selectors.$formBuilder__createConfiguration.length !== 0) {
+                    json = require(`../../../Configurations/custom/${contentType}.json`);
+                }
                 emptySelectValue = !this.selectors.$formBuilder__updateConfiguration.length > 0;
-                let json = require(`../../../Configurations/custom/temp/${contentType}.json`);
                 this.fieldsBuilder(json, emptySelectValue);
             }
         }
@@ -72,13 +77,13 @@ const FormBuilderManager = {
             let regex = RegExp(this.regex.settings);
             this.selectors.$formBuilder.classList.forEach(function (elt) {
                 if (regex.test(elt)) {
-                    console.log(contentType);
                     contentType = elt;
                 }
             });
 
+
             emptySelectValue = !this.selectors.$formBuilder__updateConfiguration.length > 0;
-            let json = require(`../../../Configurations/${contentType}.json`);
+            let json = require(`../../../Configurations/custom/${contentType}.json`);
             this.fieldsBuilder(json, emptySelectValue);
         }
     },

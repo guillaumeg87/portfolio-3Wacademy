@@ -71,7 +71,14 @@ class ContentController extends AbstractController
         // @TODO au lieu de create ici retourner un message d'erreur
         $options['action'] = $options['isEdit'] ? self::EDIT_LABEL : self::CREATE_LABEL;
 
-        $form = $this->getServiceManager()->getFormBuilderManager($options)->updateContentdata();
+        if($options['action'] === self::EDIT_LABEL) {
+            try {
+                $form = $this->getServiceManager()->getFormBuilderManager($options)->updateContentdata();
+
+            } catch (\Exception $e) {
+                $this->getServiceManager()->getLogManager()->log($e->getTraceAsString(), LogConstants::ERROR_PHP_LABEL, LogConstants::ERROR_LABEL);
+            }
+        }
 
         // Sleep needed for temporary Json configuration file
         sleep(1);
