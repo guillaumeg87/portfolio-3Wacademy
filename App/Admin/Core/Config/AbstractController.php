@@ -4,8 +4,10 @@ namespace Admin\Core\Config;
 
 
 use Admin\Controller\AdminController;
+use Admin\Controller\LoginController;
 use Admin\Core\QueryBuilder\QueryBuilder;
 use Admin\Core\Traits\NavigationTrait;
+use Services\Dumper\Dumper;
 use Services\FlashMessages\FlashMessage;
 use Services\ServiceManager\ServiceManager;
 
@@ -117,23 +119,24 @@ use NavigationTrait;
     public function isSessionActive()
     {
         session_start();
+
         $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
             'Session expirée, veuillez vous connecter pour accéder à l\'admin',
             'error'
         ))->messageBuilder();
-        if ($_SESSION !== [] && !isset($_SESSION['LAST_REQUEST_TIME'])) {
-            if (time() - $_SESSION['LAST_REQUEST_TIME'] > CoreConstants::SESSION_DURATION) {
 
-                $_SESSION = [];
-                session_destroy();
+        if ( (!isset($_SESSION['LAST_REQUEST_TIME']) && null === $_SESSION['LAST_REQUEST_TIME'] && $_SESSION === []) ) {
 
-                $this->redirectTo('/login-form', $options);
-            }
-        }
-        elseif (!isset($_SESSION['LAST_REQUEST_TIME']) && !isset($_SESSION['login'])){
+            $_SESSION = [];
+
+            $this->redirectTo('/login-form', $options);
+            //$this->render('Admin\\Controller', LoginController::ADMIN_LOGIN_FORM, $options);
+        } elseif (isset($_SESSION['LAST_REQUEST_TIME']) && ((time() - $_SESSION['LAST_REQUEST_TIME']) > CoreConstants::SESSION_DURATION)){
+            session_destroy();
+            $_SESSION = [];
+
             $this->redirectTo('/login-form', $options);
         }
-
     }
 
     /**
@@ -143,10 +146,12 @@ use NavigationTrait;
      * @param array $options
      */
     public function redirectTo(string $path, $options = []) {
+
         if (isset($options['flash-message']) && !empty($options['flash-message'])) {
             $_SESSION['flash-message'] = $options['flash-message'];
         }
         header_remove();
-        header('Location: ' . $path);
+        header('Location: ' . $path, true, 301);
+
     }
 }

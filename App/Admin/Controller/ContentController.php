@@ -6,6 +6,7 @@ use Admin\Core\QueryBuilder\QueryBuilder;
 use Admin\Core\Traits\Hash;
 use Admin\Core\Traits\RequestDateTrait;
 use Admin\Requests\Content\ContentRequest;
+use Services\Dumper\Dumper;
 use Services\LogManager\LogConstants;
 
 class ContentController extends AbstractController

@@ -53,7 +53,7 @@ class QueryBuilder
 
                     if (!empty($dataHandler)) {
 
-                        $sql = "UPDATE " .  DB_conf::DB_NAME . '.'. $table_name . " " . $dataHandler . " WHERE id = :id;";
+                        $sql = "UPDATE " .  DB_conf::DB_NAME . '.'. $table_name . " " . $dataHandler . " WHERE id = :id";
                     }
                     break;
 

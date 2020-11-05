@@ -53,11 +53,12 @@ class LoginController extends AbstractController
                         'success'
                     ))->messageBuilder();
 
-                    $this->redirectTo('/admin' , $options);
-                    session_start();
-                    $this->handleSessionFields($isExist);
+                    //session_start();
+                    $_SESSION = $this->handleSessionFields($isExist);
 
-                    $this->render(__NAMESPACE__, self::ADMIN_HOME, $options);
+                    $this->redirectTo('/admin' , $options);
+
+                   // $this->render(__NAMESPACE__, self::ADMIN_HOME, $options);
                 }
                 else {
                     $this->errorLogin($options, $formatedDatas);
@@ -79,18 +80,19 @@ class LoginController extends AbstractController
         session_start();
         if (!empty($_SESSION)){
             $_SESSION = [];
-            // security improvement
-            // avoid to come back to the previous page
-            $param = session_get_cookie_params();
-            setcookie(
-                session_name(),
-                $param['path'],
-                $param['domain'],
-                $param['secure'],
-                $param['httponly']
-            );
-            session_destroy();
+
         }
+        // security improvement
+        // avoid to come back to the previous page
+        $param = session_get_cookie_params();
+        setcookie(
+            session_name(),
+            $param['path'],
+            $param['domain'],
+            $param['secure'],
+            $param['httponly']
+        );
+        session_destroy();
         $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
             'Déconnexion réussie !',
             'success'
@@ -123,11 +125,14 @@ class LoginController extends AbstractController
      */
     private function errorLogin(array $options, array $datas){
         $_SESSION = [];
+
         $this->getServiceManager()->getLogManager()->log(
-            'Admin access: Bad credentials with login :' .  $datas['login'], LogConstants::ERROR_APP_LABEL, LogConstants::WARN_LABEL
+            'Admin access: Bad credentials' .
+            (isset($datas['login']) && !empty($datas['login']) ? 'with login: ' .  $datas['login'] : '') ,
+            LogConstants::ERROR_APP_LABEL, LogConstants::WARN_LABEL
         );
 
-        session_destroy();
+
         $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
             'Les accès sont incorrectes.',
             'error'

@@ -21,7 +21,8 @@ class Autoload{
 
         $nameSpace = explode('\\', $class);
         foreach($nameSpace as $key =>  $value){
-            if(end(array_keys($nameSpace)) !== $key){
+            $ref = array_keys($nameSpace);
+            if(end($ref) !== $key){
                 $nameSpace[$key] = ucfirst($value);
             }
         }

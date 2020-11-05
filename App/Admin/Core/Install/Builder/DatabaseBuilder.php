@@ -209,7 +209,7 @@ final class DB_conf
         }
 */
         $admin = new AdminController();
-        $admin->index([]);
+        $admin->home([]);
     }
 
     /**
