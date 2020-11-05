@@ -22,7 +22,7 @@ class Dispatcher
         $mainPath = explode('?', $this->request->url);
 
         $redirectUrl = $_SERVER['REDIRECT_URL'];
-        if (!empty(RoutesConstants::ROUTE_MAP[$mainPath[0]])) {
+        if (isset($mainPath[0]) && !empty(RoutesConstants::ROUTE_MAP[$mainPath[0]])) {
 
             $this->request->url = (isset($mainPath[1]) && !empty($mainPath[1])) ? RoutesConstants::ROUTE_MAP[$mainPath[0]] . '?' . $mainPath[1] : RoutesConstants::ROUTE_MAP[$mainPath[0]];
         }
@@ -47,8 +47,7 @@ class Dispatcher
 
             header_remove();
             header('Location: /404');
-
-
+            return;
         }
     }
 

@@ -9,19 +9,6 @@ import {Tools} from "../../../Assets/js/tools/tools";
  * @namespace FormBuilderManager
  */
 const FormBuilderManager = {
-    debug: false,
-
-    /**
-     * Log something in console
-     *
-     * @param {string} context
-     * @param {*} message
-     */
-    log(context, message) {
-        if (this.debug) {
-            console.log(context + ': ' + message);
-        }
-    },
 
     selectors: {
         $formBuilder: document.querySelector('.formbuilder'),
@@ -46,14 +33,14 @@ const FormBuilderManager = {
      * Initialize formbuilder
      */
     init() {
-        this.log('form', 'init');
         let emptySelectValue = true;
         let contentType = null;
-
+        let json = null;
         if (this.selectors.$formBuilder__buildNewForm.length > 0) {
-            let json = require('../configurations/init-builder.json');
+            json = require('../configurations/init-builder.json');
             this.fieldsBuilder(json, emptySelectValue);
         }
+
         if ((this.selectors.$formBuilder__loadConfiguration.length > 0 && this.selectors.$formBuilder__updateConfiguration.length === 0) ||
             (this.selectors.$formBuilder__loadConfiguration.length > 0 && this.selectors.$formBuilder__updateConfiguration.length > 0)) {
 
@@ -62,8 +49,6 @@ const FormBuilderManager = {
             if (contentType === '') {
                 this.showError();
             } else {
-                let json = null;
-
                 if (this.selectors.$formBuilder__updateConfiguration.length !== 0) {
                     json = require(`../../../Configurations/custom/temp/${contentType}.json`);
                 } else if (this.selectors.$formBuilder__createConfiguration.length !== 0) {
@@ -80,7 +65,6 @@ const FormBuilderManager = {
                     contentType = elt;
                 }
             });
-
 
             emptySelectValue = !this.selectors.$formBuilder__updateConfiguration.length > 0;
             let json = require(`../../../Configurations/custom/${contentType}.json`);
@@ -709,24 +693,4 @@ const FormBuilderManager = {
 */
 export {FormBuilderManager};
 
-/**
- * Run init function of app
- * when the document is ready
- */
-$(document).ready(function () {
-    FormBuilderManager.init();
 
-    // Checkbox field
-    let checkbox_target = document.querySelectorAll('.update_form input[type="checkbox"]');
-    // improve EVENT here
-    if(checkbox_target){
-        FormBuilderManager.addListListener({
-            callback : 'callback_isChecked_chkbx',
-            type: 'click'
-        }, checkbox_target);
-    }
-
-
-
-
-});

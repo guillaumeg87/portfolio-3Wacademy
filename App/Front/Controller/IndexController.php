@@ -259,7 +259,7 @@ class IndexController extends AbstractController
         if (!empty($toArray) && isset($toArray['fields'])) {
             foreach ($toArray['fields'] as $key => $value) {
 
-                if (preg_match('/[a-zA-Z0-9]+_taxonomy/', $value['label']['labelRef'])) {
+                if (isset($value['label']['labelRef']) && preg_match('/[a-zA-Z0-9]+_taxonomy/', $value['label']['labelRef'])) {
                     $taxoBag[] = $value['label']['labelRef'];
                 }
             }

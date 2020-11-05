@@ -4,7 +4,6 @@ use App\Autoload;
 
 define('WEBROOT', str_replace("web/index.php", "", $_SERVER["SCRIPT_NAME"]));
 define('ROOT', str_replace("web/index.php", "", $_SERVER["SCRIPT_FILENAME"]));
-session_start();
 require_once ('../Autoload.php');
 Autoload::register();
 

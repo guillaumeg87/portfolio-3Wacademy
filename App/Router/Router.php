@@ -55,13 +55,17 @@ class Router
         } else {
 
             $explode_url = array_slice($explode_url, 2);
-            $split = explode('?', $explode_url[1]);
-            $request->action = $split[0];
+            $split = null;
+            if (isset($explode_url[1]) && preg_match('/[a-z-0-9?&=_]+/', $explode_url[1])){
+                $split = isset($explode_url[1]) ? explode('?', $explode_url[1]) : null;
+            }
+
+            $request->action = isset($split[0]) ? $split[0] : $split ;
             $request->params[] = (strpos($url, '?') ? self::urlParams($url) : []);
 
             $request->path = self::FRONT_PATH;
 
-            if (null === $explode_url[0]) {
+            if (!isset($explode_url[0]) || null === $explode_url[0]) {
                 $explode_url[0] = self::INDEX;
                 $request->action = self::INDEX;
             }

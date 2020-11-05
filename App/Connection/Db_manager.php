@@ -41,11 +41,11 @@ class Db_manager
     public function __construct($param = []){
 
         if(empty($param)) {
-
             $this->host     = DB_conf::DB_HOST;
-            $this->name     = DB_conf::DB_NAME;
+            $this->name     = '`' . DB_conf::DB_NAME . '`';
             $this->admin    = DB_conf::DB_ADMIN;
             $this->pwd      = DB_conf::DB_PASSWORD;
+            $this->connection = $this->connection();
         }
         else {
 
@@ -68,10 +68,11 @@ class Db_manager
 
         if(!empty($this->host) && !empty($this->admin) && !empty($this->name)){
             try{
-                $dsn = "mysql:host=" . $this->host . ";dbname=" . $this->name;
+                $dsn = "mysql:host=" . $this->host . ";";
                 $com_bdd = new PDO($dsn, $this->admin, $this->pwd);
                 $com_bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $com_bdd->exec("SET NAMES UTF8");
+                $com_bdd->exec("USE ".$this->name);
             }catch(\Exception $e){
                 (new LogManager())->log(
                     '[ Db Manager ] An error occured, data base connection'  .  PHP_EOL . $e->getTraceAsString(),

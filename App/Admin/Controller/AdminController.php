@@ -35,15 +35,6 @@ class AdminController extends AbstractController
     const SELECT_ONE = 'select_one';
     const SELECT_ALL = 'select_all';
 
-    public function index($options = [])
-    {
-        $this->isSessionActive();
-
-        $options = $this->prepareWidget($options);
-
-        $this->render(__NAMESPACE__, self::ADMIN_HOME, $options);
-    }
-
     public function home($options = [])
     {
         $this->isSessionActive();
@@ -242,7 +233,7 @@ class AdminController extends AbstractController
                 'error'
             ))->messageBuilder();
         }
-        $this->redirectTo('/admin', $options);
+        $this->redirectTo('/admin/', $options);
     }
 
     /**
