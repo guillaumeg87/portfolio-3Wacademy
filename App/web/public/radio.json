@@ -1,0 +1,9 @@
+{
+  "fieldType": "radio",
+  "labelDisplay": "",
+  "type": "radio",
+  "value": "",
+  "checked": false,
+  "name": "",
+  "group": "admin-form"
+}

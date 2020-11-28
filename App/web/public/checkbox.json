@@ -1,0 +1,9 @@
+{
+  "fieldType": "input",
+  "labelDisplay": "",
+  "type": "checkbox",
+  "name": "",
+  "value": false,
+  "checked": false,
+  "group": "admin-form"
+}

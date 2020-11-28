@@ -1,0 +1,70 @@
+{
+  "fieldset": {
+    "id": "",
+    "class": [
+      "admin-form"
+    ],
+    "group": "formbuilder-load"
+  },
+  "legend": {
+    "content": "Nouveau menu principal",
+    "id": "",
+    "class": [],
+    "group": "admin-form"
+  },
+  "fields": [
+    {
+      "label": {
+        "labelDisplay": "Label",
+        "value": "",
+        "id": "",
+        "class": "",
+        "group": "admin-form",
+        "for": "label"
+      },
+      "input": {
+        "labelDisplay": "Label",
+        "type": "text",
+        "name": "label",
+        "value": "",
+        "placeholder": "Home",
+        "id": "",
+        "class": "",
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Route",
+        "value": "",
+        "id": "",
+        "class": "",
+        "group": "admin-form",
+        "for": "route"
+      },
+      "input": {
+        "labelDisplay": "Route",
+        "type": "text",
+        "name": "route",
+        "value": "",
+        "placeholder": "\/index",
+        "id": "",
+        "class": "",
+        "group": "admin-form"
+      }
+    }
+  ],
+  "buttons": [
+    {
+      "button": {
+        "type": "submit",
+        "id": "",
+        "class": [
+          "form-btn-submit"
+        ],
+        "content": "validez",
+        "group": "formbuilder-load"
+      }
+    }
+  ]
+}

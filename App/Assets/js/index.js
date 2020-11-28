@@ -6,7 +6,6 @@ require("../scss/main.scss");
 /****************/
 require("./tools/tools");
 
-
 /********************/
 /*     PAGINATION   */
 /********************/

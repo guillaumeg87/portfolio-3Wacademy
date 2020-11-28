@@ -1,0 +1,62 @@
+{
+  "fieldset": {
+    "id": "",
+    "class": [
+      "admin-form"
+    ],
+    "group": "formbuilder-load"
+  },
+  "legend": {
+    "content": "Nouveau projects tags",
+    "id": "",
+    "class": [],
+    "group": "admin-form"
+  },
+  "fields": [
+    {
+      "label": {
+        "labelDisplay": "Nom",
+        "value": "",
+        "group": "admin-form",
+        "for": "name"
+      },
+      "input": {
+        "labelDisplay": "Nom",
+        "type": "text",
+        "name": "name",
+        "value": "",
+        "placeholder": "",
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Classe css",
+        "value": "",
+        "group": "admin-form",
+        "for": "css_class"
+      },
+      "input": {
+        "labelDisplay": "Classe css",
+        "type": "text",
+        "name": "css_class",
+        "value": "",
+        "placeholder": "",
+        "group": "admin-form"
+      }
+    }
+  ],
+  "buttons": [
+    {
+      "button": {
+        "type": "submit",
+        "id": "",
+        "class": [
+          "form-btn-submit"
+        ],
+        "content": "validez",
+        "group": "formbuilder-load"
+      }
+    }
+  ]
+}

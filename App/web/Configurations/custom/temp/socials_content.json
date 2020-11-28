@@ -1,0 +1,129 @@
+{
+  "fieldset": {
+    "id": "",
+    "class": [
+      "admin-form"
+    ],
+    "group": "formbuilder-load"
+  },
+  "legend": {
+    "content": "Nouveau r\u00e9seaux sociaux",
+    "id": "",
+    "class": [],
+    "group": "admin-form"
+  },
+  "fields": [
+    {
+      "label": {
+        "labelDisplay": "Label",
+        "value": "",
+        "id": "",
+        "class": "",
+        "group": "admin-form",
+        "for": "label"
+      },
+      "input": {
+        "labelDisplay": "Label",
+        "type": "text",
+        "name": "label",
+        "value": "",
+        "placeholder": "Linkedin",
+        "id": "",
+        "class": "",
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Alt logo",
+        "value": "",
+        "id": "",
+        "class": "",
+        "group": "admin-form",
+        "for": "alt_logo"
+      },
+      "input": {
+        "labelDisplay": "Alt logo",
+        "type": "text",
+        "name": "alt_logo",
+        "value": "",
+        "placeholder": "linkedin-guillaume",
+        "id": "",
+        "class": "",
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Lien Profile",
+        "value": "",
+        "id": "",
+        "class": "",
+        "group": "admin-form",
+        "for": "profile_link"
+      },
+      "input": {
+        "labelDisplay": "Lien Profile",
+        "type": "text",
+        "name": "profile_link",
+        "value": "",
+        "placeholder": "https:\/\/url-du-profile.com",
+        "id": "",
+        "class": "",
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Logo r\u00e9seau",
+        "id": "",
+        "class": "",
+        "group": "admin-form",
+        "for": "logo_reseau"
+      },
+      "input": {
+        "labelDisplay": "Logo r\u00e9seau",
+        "path": "",
+        "url": "",
+        "type": "file",
+        "name": "logo_reseau",
+        "id": "",
+        "class": "",
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Icone fontawesome",
+        "value": "",
+        "id": "",
+        "class": "",
+        "group": "admin-form",
+        "for": "fontawesome_icon"
+      },
+      "input": {
+        "labelDisplay": "Icone fontawesome",
+        "type": "text",
+        "name": "fontawesome_icon",
+        "value": "",
+        "placeholder": "&lt;i class=&quot;fab fa-linkedin&quot;&gt;&lt;\/i&gt;",
+        "id": "",
+        "class": "",
+        "group": "admin-form"
+      }
+    }
+  ],
+  "buttons": [
+    {
+      "button": {
+        "type": "submit",
+        "id": "",
+        "class": [
+          "form-btn-submit"
+        ],
+        "content": "validez",
+        "group": "formbuilder-load"
+      }
+    }
+  ]
+}

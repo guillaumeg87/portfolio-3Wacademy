@@ -1,0 +1,109 @@
+{
+  "fieldset": {
+    "id": "",
+    "class": [
+      "admin-form"
+    ],
+    "group": "formbuilder-load"
+  },
+  "legend": {
+    "content": "Nouveau utilisateur",
+    "id": "",
+    "class": [],
+    "group": "admin-form"
+  },
+  "fields": [
+    {
+      "label": {
+        "labelDisplay": "Login",
+        "id": "",
+        "class": "",
+        "value": "",
+        "group": "admin-form",
+        "for": "login"
+      },
+      "input": {
+        "labelDisplay": "Login",
+        "type": "text",
+        "name": "login",
+        "id": "",
+        "class": "",
+        "value": "",
+        "placeholder": "Login",
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Mot de passe",
+        "id": "",
+        "class": "",
+        "value": "",
+        "group": "admin-form",
+        "for": "password"
+      },
+      "input": {
+        "labelDisplay": "Mot de passe",
+        "type": "password",
+        "name": "password",
+        "id": "",
+        "class": "",
+        "value": "",
+        "placeholder": "Mot de passe",
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Email",
+        "id": "",
+        "class": "",
+        "value": "",
+        "group": "admin-form",
+        "for": "email"
+      },
+      "input": {
+        "labelDisplay": "Email",
+        "type": "text",
+        "name": "email",
+        "id": "",
+        "class": "",
+        "value": "",
+        "placeholder": "Email",
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Super Admin",
+        "value": "",
+        "id": "",
+        "class": "",
+        "group": "admin-form",
+        "for": "isSuperAdmin"
+      },
+      "input": {
+        "labelDisplay": "Super Admin",
+        "type": "checkbox",
+        "name": "isSuperAdmin",
+        "value": "",
+        "id": "",
+        "class": "",
+        "group": "admin-form"
+      }
+    }
+  ],
+  "buttons": [
+    {
+      "button": {
+        "type": "submit",
+        "id": "",
+        "class": [
+          "form-btn-submit"
+        ],
+        "content": "validez",
+        "group": "formbuilder-load"
+      }
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "fieldType": "textarea",
+  "labelDisplay": "",
+  "name": "",
+  "value": "",
+  "placeholder": "",
+  "rows": 5,
+  "cols": 80,
+  "group": "admin-form"
+}

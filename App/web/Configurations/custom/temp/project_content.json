@@ -1,0 +1,203 @@
+{
+  "fieldset": {
+    "id": "",
+    "class": [
+      "admin-form"
+    ],
+    "group": "formbuilder-load"
+  },
+  "legend": {
+    "content": "Nouveau projet",
+    "id": "",
+    "class": [],
+    "group": "admin-form"
+  },
+  "fields": [
+    {
+      "label": {
+        "labelDisplay": "Nom",
+        "value": "",
+        "group": "admin-form",
+        "for": "name"
+      },
+      "input": {
+        "labelDisplay": "Nom",
+        "type": "text",
+        "name": "name",
+        "value": "",
+        "placeholder": "",
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Url du site",
+        "value": "",
+        "group": "admin-form",
+        "for": "website_url"
+      },
+      "input": {
+        "labelDisplay": "Url du site",
+        "type": "text",
+        "name": "website_url",
+        "value": "",
+        "placeholder": "",
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Image",
+        "img_path": "",
+        "img_url": "",
+        "group": "admin-form",
+        "for": "img"
+      },
+      "input": {
+        "labelDisplay": "Image",
+        "img_path": "",
+        "img_url": "",
+        "type": "file",
+        "name": "img",
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Langage",
+        "labelRef": "langage_taxonomy",
+        "idRef": 1,
+        "group": "admin-form",
+        "for": "langage"
+      },
+      "entityReference": {
+        "labelDisplay": "Langage",
+        "name": "langage",
+        "labelRef": "langage_taxonomy",
+        "idRef": 1,
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Techno",
+        "labelRef": "techno_taxonomy",
+        "idRef": 2,
+        "group": "admin-form",
+        "for": "techno"
+      },
+      "entityReference": {
+        "labelDisplay": "Techno",
+        "name": "techno",
+        "labelRef": "techno_taxonomy",
+        "idRef": 2,
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Tags",
+        "labelRef": "tags_taxonomy",
+        "idRef": 3,
+        "group": "admin-form",
+        "for": "tags"
+      },
+      "entityReference": {
+        "labelDisplay": "Tags",
+        "name": "tags",
+        "labelRef": "tags_taxonomy",
+        "idRef": 3,
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Type",
+        "labelRef": "type_taxonomy",
+        "idRef": 4,
+        "group": "admin-form",
+        "for": "type"
+      },
+      "entityReference": {
+        "labelDisplay": "Type",
+        "name": "type",
+        "labelRef": "type_taxonomy",
+        "idRef": 4,
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Description courte",
+        "value": "",
+        "group": "admin-form",
+        "for": "short_description"
+      },
+      "textarea": {
+        "labelDisplay": "Description courte",
+        "name": "short_description",
+        "value": "",
+        "placeholder": "",
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Description longue",
+        "value": "",
+        "group": "admin-form",
+        "for": "long_description"
+      },
+      "textarea": {
+        "labelDisplay": "Description longue",
+        "name": "long_description",
+        "value": "",
+        "placeholder": "",
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Date de d\u00e9but",
+        "value": "",
+        "group": "admin-form",
+        "for": "start_date"
+      },
+      "input": {
+        "labelDisplay": "Date de d\u00e9but",
+        "type": "date",
+        "name": "start_date",
+        "value": "",
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Date de fin",
+        "value": "",
+        "group": "admin-form",
+        "for": "date_end"
+      },
+      "input": {
+        "labelDisplay": "Date de fin",
+        "type": "date",
+        "name": "date_end",
+        "value": "",
+        "group": "admin-form"
+      }
+    }
+  ],
+  "buttons": [
+    {
+      "button": {
+        "type": "submit",
+        "id": "",
+        "class": [
+          "form-btn-submit"
+        ],
+        "content": "validez",
+        "group": "formbuilder-load"
+      }
+    }
+  ]
+}

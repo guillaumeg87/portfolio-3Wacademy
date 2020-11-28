@@ -1,0 +1,54 @@
+{
+  "fieldset": {
+    "id": "",
+    "class": ["form_field_choice"],
+    "group": "admin-form"
+  },
+  "select": [
+    {
+      "label": {
+        "content":  "Choisissez un champ",
+        "for": "chooseField",
+        "id": "",
+        "class": [],
+        "group": "form_field_choice"
+      },
+      "select": {
+        "name": "chooseField",
+        "id": "chooseField",
+        "class": [],
+        "defaultField": "-- Choisissez un champ --",
+        "option": "fields-list",
+        "group": "form_field_choice"
+      }
+    }
+  ],
+  "buttons": [
+    {
+      "a": {
+        "type": "submit",
+        "id": "",
+        "class": ["create-field"],
+        "content": "Créer ce champ",
+        "group": "form_field_choice",
+        "eventListener": {
+          "type": "click",
+          "callback": "callback_select_newField_click_btn"
+        }
+      }
+    },
+    {
+      "a": {
+        "type": "reset",
+        "id": "",
+        "class": ["cancel"],
+        "content": "Annuler",
+        "group": "form_field_choice",
+        "eventListener": {
+          "type": "click",
+          "callback": "callback_disabled_addNewField_click_btn"
+        }
+      }
+    }
+  ]
+}

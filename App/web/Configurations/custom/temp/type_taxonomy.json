@@ -1,0 +1,63 @@
+{
+  "fieldset": {
+    "id": "",
+    "class": [
+      "admin-form"
+    ],
+    "group": "formbuilder-load"
+  },
+  "legend": {
+    "content": "Nouveau project type",
+    "id": "",
+    "class": [],
+    "group": "admin-form"
+  },
+  "fields": [
+    {
+      "label": {
+        "labelDisplay": "Type",
+        "value": "",
+        "group": "admin-form",
+        "for": "type"
+      },
+      "input": {
+        "labelDisplay": "Type",
+        "type": "text",
+        "name": "name",
+        "value": "",
+        "placeholder": "Projet perso \/ entreprise",
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Icone",
+        "icon_path": "",
+        "icon_url": "",
+        "group": "admin-form",
+        "for": "icon"
+      },
+      "input": {
+        "labelDisplay": "Icone",
+        "icon_path": "",
+        "icon_url": "",
+        "type": "file",
+        "name": "icon",
+        "group": "admin-form"
+      }
+    }
+  ],
+  "buttons": [
+    {
+      "button": {
+        "type": "submit",
+        "id": "",
+        "class": [
+          "form-btn-submit"
+        ],
+        "content": "validez",
+        "group": "formbuilder-load"
+      }
+    }
+  ]
+}

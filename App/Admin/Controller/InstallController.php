@@ -18,10 +18,7 @@ class InstallController extends AbstractController
      */
     public function indexForm($alert = [])
     {
-
-        //$this->render(__NAMESPACE__, 'installation_form', $alert);die;
         $this->redirectTo('/installation');
-
     }
 
     /**

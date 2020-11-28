@@ -3,11 +3,8 @@
 namespace Admin\Core\Config;
 
 
-use Admin\Controller\AdminController;
-use Admin\Controller\LoginController;
 use Admin\Core\QueryBuilder\QueryBuilder;
 use Admin\Core\Traits\NavigationTrait;
-use Services\Dumper\Dumper;
 use Services\FlashMessages\FlashMessage;
 use Services\ServiceManager\ServiceManager;
 
@@ -19,7 +16,6 @@ class AbstractController
     const FRONT_DIR = 'Front/';
     const ADMIN_DIR = 'Admin/';
     const REGEX_IS_ADMIN = '/\b(Admin)\b/';
-    const ADMIN_CONTROLLER_NAMESPACE = 'Admin/Controller/';
 
 use NavigationTrait;
 
@@ -118,14 +114,14 @@ use NavigationTrait;
 
     public function isSessionActive()
     {
-        session_start();
 
+        $isSession = session_id();
         $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
             'Session expirée, veuillez vous connecter pour accéder à l\'admin',
             'error'
         ))->messageBuilder();
-
-        if ( (!isset($_SESSION['LAST_REQUEST_TIME']) && null === $_SESSION['LAST_REQUEST_TIME'] && $_SESSION === []) ) {
+        if (!empty($_COOKIE['PHPSESSID']) && $_SESSION !== [] && !isset($_SESSION['LAST_REQUEST_TIME'])) {
+            if (time() - $_SESSION['LAST_REQUEST_TIME'] > CoreConstants::SESSION_DURATION) {
 
             $_SESSION = [];
 
@@ -135,8 +131,12 @@ use NavigationTrait;
             session_destroy();
             $_SESSION = [];
 
-            $this->redirectTo('/login-form', $options);
+            $this->redirectTo('/login', $options);
         }
+        elseif (!isset($_SESSION['LAST_REQUEST_TIME']) && !isset($_SESSION['login'])){
+            $this->redirectTo('/login', $options);
+        }
+
     }
 
     /**

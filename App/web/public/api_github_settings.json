@@ -1,0 +1,142 @@
+{
+  "fieldset": {
+    "id": "",
+    "class": [
+      "admin-form"
+    ],
+    "group": "formbuilder-load"
+  },
+  "legend": {
+    "content": "Nouveau api github",
+    "id": "",
+    "class": [],
+    "group": "admin-form"
+  },
+  "fields": [
+    {
+      "label": {
+        "labelDisplay": "username",
+        "value": "",
+        "group": "admin-form",
+        "for": "username"
+      },
+      "input": {
+        "labelDisplay": "username",
+        "type": "text",
+        "name": "username",
+        "value": "",
+        "placeholder": "",
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Url Endpoint",
+        "value": "",
+        "group": "admin-form",
+        "for": "url_endpoint"
+      },
+      "input": {
+        "labelDisplay": "Url Endpoint",
+        "type": "text",
+        "name": "url_endpoint",
+        "value": "",
+        "placeholder": "",
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Client ID",
+        "value": "",
+        "group": "admin-form",
+        "for": "clientId"
+      },
+      "input": {
+        "labelDisplay": "Client ID",
+        "type": "text",
+        "name": "clientId",
+        "value": "",
+        "placeholder": "",
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Client secret",
+        "value": "",
+        "group": "admin-form",
+        "for": "clientSecret"
+      },
+      "input": {
+        "labelDisplay": "Client secret",
+        "type": "text",
+        "name": "clientSecret",
+        "value": "",
+        "placeholder": "",
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Authorization Callback url",
+        "value": "",
+        "group": "admin-form",
+        "for": "authorisation_callback_url"
+      },
+      "input": {
+        "labelDisplay": "Authorization Callback url",
+        "type": "text",
+        "name": "authorisation_callback_url",
+        "value": "",
+        "placeholder": "",
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Password",
+        "value": "",
+        "group": "admin-form",
+        "for": "password"
+      },
+      "input": {
+        "labelDisplay": "Password",
+        "type": "password",
+        "name": "password",
+        "value": "",
+        "placeholder": "",
+        "group": "admin-form"
+      }
+    },
+    {
+      "label": {
+        "labelDisplay": "Token",
+        "value": "",
+        "group": "admin-form",
+        "for": "token"
+      },
+      "input": {
+        "labelDisplay": "Token",
+        "type": "text",
+        "name": "token",
+        "value": "",
+        "placeholder": "",
+        "group": "admin-form"
+      }
+    }
+  ],
+  "buttons": [
+    {
+      "button": {
+        "type": "submit",
+        "id": "",
+        "class": [
+          "form-btn-submit"
+        ],
+        "content": "validez",
+        "group": "formbuilder-load"
+      }
+    }
+  ]
+}

@@ -18,7 +18,7 @@ class LoginController extends AbstractController
 
     public function login($options = [])
     {
-        $this->isSessionActive();
+        $options['flash-message'] = [];
 
         $this->render(__NAMESPACE__, self::ADMIN_LOGIN_FORM, $options);
     }
@@ -81,18 +81,20 @@ class LoginController extends AbstractController
         if (!empty($_SESSION)){
             $_SESSION = [];
 
-        }
-        // security improvement
-        // avoid to come back to the previous page
-        $param = session_get_cookie_params();
-        setcookie(
-            session_name(),
-            $param['path'],
-            $param['domain'],
-            $param['secure'],
-            $param['httponly']
-        );
-        session_destroy();
+        }        // security improvement
+            // avoid to come back to the previous page
+            $param = session_get_cookie_params();
+            setcookie(
+                session_name(),
+                $param['path'],
+                $param['domain'],
+                $param['secure'],
+                $param['httponly']
+            );
+
+            session_unset ();
+            session_destroy();
+
         $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
             'Déconnexion réussie !',
             'success'
@@ -101,7 +103,7 @@ class LoginController extends AbstractController
             'User logout',
             LogConstants::ERROR_APP_LABEL,
             LogConstants::INFO_LABEL);
-        $this->redirectTo('/login-form', $options);
+        $this->redirectTo('/login', $options);
 
     }
 
