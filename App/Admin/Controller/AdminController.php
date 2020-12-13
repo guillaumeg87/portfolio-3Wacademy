@@ -11,7 +11,6 @@ class AdminController extends AbstractController
 {
     use NavigationTrait;
     //TEMPLATE
-    const ADMIN_LOGIN_FORM = 'admin_login';
     const ADMIN_HOME= 'admin_home';
 
     const GITHUB_USER = 'guillaumeg87';
