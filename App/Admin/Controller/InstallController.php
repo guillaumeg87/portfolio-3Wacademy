@@ -18,10 +18,7 @@ class InstallController extends AbstractController
      */
     public function indexForm($alert = [])
     {
-
-        //$this->render(__NAMESPACE__, 'installation_form', $alert);die;
         $this->redirectTo('/installation');
-
     }
 
     /**
@@ -47,7 +44,6 @@ class InstallController extends AbstractController
             foreach (self::FORM_ADMIN_FIELDS as $key) {
                 $options['data'][$key] = $_POST[$key] ?? true;
             }
-            //$this->render(__NAMESPACE__, 'installation_form', $options);
             $this->redirectTo('/installation');
         }
     }

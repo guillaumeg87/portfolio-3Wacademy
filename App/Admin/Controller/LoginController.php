@@ -12,14 +12,12 @@ class LoginController extends AbstractController
 {
     //TEMPLATE
     const ADMIN_LOGIN_FORM = 'admin_login';
-    const ADMIN_HOME = 'admin_home';
 
     const SESSION_FIELDS = ['login', 'password', 'id', 'isSuperAdmin'];
 
     public function login($options = [])
     {
-        $this->isSessionActive();
-
+        $options['deletePHP_SESSION_ID'] = true;
         $this->render(__NAMESPACE__, self::ADMIN_LOGIN_FORM, $options);
     }
 
@@ -33,13 +31,12 @@ class LoginController extends AbstractController
             $formatedDatas = [];
             foreach (self::SESSION_FIELDS as $key) {
                 if($key === 'password'){
-
                     $formatedDatas[$key] = sha1(htmlspecialchars($_POST[$key]));
-
                 }
                 else {
-
-                    $formatedDatas[$key] = htmlspecialchars($_POST[$key]);
+                    if (isset($_POST[$key])){
+                        $formatedDatas[$key] = htmlspecialchars($_POST[$key]);
+                    }
                 }
             }
 
@@ -53,12 +50,20 @@ class LoginController extends AbstractController
                         'success'
                     ))->messageBuilder();
 
-                    //session_start();
-                    $_SESSION = $this->handleSessionFields($isExist);
+                    //session_set_cookie_params(time() + 300,'/','',false,false);
+
+                    $this->getSessionManager()->createSession();
+                    $this->getSessionManager()->setSession($this->handleSessionFields($isExist));
+
+                    $token = sha1(mt_rand(1, 90000) . 'SALT');
+
+                    setcookie(
+                        'PHPSESSID',
+                        $token,
+                        time()+300
+                    );
 
                     $this->redirectTo('/admin' , $options);
-
-                   // $this->render(__NAMESPACE__, self::ADMIN_HOME, $options);
                 }
                 else {
                     $this->errorLogin($options, $formatedDatas);
@@ -77,22 +82,9 @@ class LoginController extends AbstractController
      * Main method for logout from Back office
      */
     public function logout(){
-        session_start();
-        if (!empty($_SESSION)){
-            $_SESSION = [];
 
-        }
-        // security improvement
-        // avoid to come back to the previous page
-        $param = session_get_cookie_params();
-        setcookie(
-            session_name(),
-            $param['path'],
-            $param['domain'],
-            $param['secure'],
-            $param['httponly']
-        );
-        session_destroy();
+        $this->getSessionManager()->removeSession();
+
         $options['flash-message'][] = ($this->getServiceManager()->getFlashMessage(
             'Déconnexion réussie !',
             'success'
@@ -101,6 +93,7 @@ class LoginController extends AbstractController
             'User logout',
             LogConstants::ERROR_APP_LABEL,
             LogConstants::INFO_LABEL);
+        $options['deletePHP_SESSION_ID'] = true;
         $this->redirectTo('/login-form', $options);
 
     }

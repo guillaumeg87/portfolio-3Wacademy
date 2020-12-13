@@ -6,7 +6,6 @@ require("../scss/main.scss");
 /****************/
 require("./tools/tools");
 
-
 /********************/
 /*     PAGINATION   */
 /********************/
@@ -39,7 +38,5 @@ document.addEventListener("DOMContentLoaded", function() {
             }, checkbox_target);
         }
     }
-
-
 });
 
